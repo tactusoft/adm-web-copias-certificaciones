@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es-co" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <style>
+            @font-face {font-family: 'segoeui'; src: url('./webfonts/segoeui.ttf') format('truetype');}
+
+            .body {
+                font-family: segoeui;
+                font-size: 14px;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                text-align: justify;
+            }
+
+            .labelName {
+                font-weight: bold;
+                width: 12%;
+            }
+
+            .tableBordered {
+                font-size: 13px;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                border-right: 1px solid black;
+                border-bottom: 1px solid black;
+                border-collapse: separate;
+                border-spacing: 0px;
+                *border-collapse: expression('separate', cellSpacing = '0px');
+            }
+
+            .tableBordered tbody td, .tableBordered thead th {
+                margin: 0;
+                text-align: center;
+                padding:8px;
+                border-top: 1px solid black;
+                border-left: 1px solid black;
+            }
+
+            .tableBordered thead th {
+                font-weight: bold;
+            }
+
+            .labelName2 {
+                width: 30%;
+            }
+
+            .nopadding-margin-border {
+                padding-left: 0;
+                padding-right: 0;
+                margin-left: 0;
+                margin-right: 0;
+                border: 0;
+            }
+
+            .personName {
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            td {
+                text-align: justify;
+            }
+
+            .rotulo {
+                border: 1px solid #000000;
+                font-size: 8px;
+                margin-bottom: 10px;
+            }
+
+            .rotulo td {
+                text-align: left;
+            }
+
+            .subtitle {
+                font-weight: bold;
+                text-align: center !important;
+            }
+
+            .note {
+                font-size: 13px;
+                font-style: italic;
+            }
+        </style>
+    </head>
+    <body class='body'>
+        <table class='body'>
+            <tbody>
+                <tr>
+                    <td style='width: 50%'></td>
+                    <td style='width: 50%'>
+                        <table class='body rotulo'>
+                            <tbody>
+                                <tr>
+                                    <td class='subtitle' colspan='4'>SUPERINTENDENCIA DE
+                                        INDUSTRIA Y COMERCIO</td>
+                                </tr>
+                                <tr>
+                                    <td class='labelName'>RAD:</td>
+                                    <td><span th:text="${expediente}"></span></td>
+                                    <td class='labelName'>FECHA:</td>
+                                    <td><span th:text="${fecha}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class='labelName'>DEP:</td>
+                                    <td><span th:text="${dependencia}"></span></td>
+                                    <td class='labelName'>EVE:</td>
+                                    <td><span th:text="${evento}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class='labelName'>TRA:</td>
+                                    <td><span th:text="${tramite}"></span></td>
+                                    <td class='labelName'>FOLIOS:</td>
+                                    <td><span th:text="${folios}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class='labelName'>ACT:</td>
+                                    <td colspan='3'><span th:text="${actuacion}"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2'>Se&ntilde;or(a) (es)</td>
+                </tr>
+                <tr>
+                    <td colspan='2'><span class='personName' th:text="${nombre}"></span></td>
+                </tr>
+                <tr>
+                    <td colspan='2'><span th:text="${direccion}"></span></td>
+                </tr>
+                <tr>
+                    <td colspan='2'><span th:text="${region}"></span></td>
+                </tr>
+                <tr>
+                    <td><br />
+                        <table class='body'>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Asunto:</strong></td>
+                                    <td>Radicaci&oacute;n:</td>
+                                    <td><span th:text="${expediente}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Tr&aacute;mite:</td>
+                                    <td><span th:text="${codi_tramite}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Evento:</td>
+                                    <td><span th:text="${codi_evento}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Actuaci&oacute;n:</td>
+                                    <td><span th:text="${codi_actuacion}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Folios:</td>
+                                    <td><span th:text="${folios}"></span></td>
+                                </tr> </tbody>
+                        </table></td>
+                </tr>
+                <tr>
+                    <td colspan='2' class="body"><br />
+                        En relaci&oacute;n a su solicitud de <span th:text="${asunto}"></span>, la Superintendencia de Industria y Comercio le informa que el(los) certificado(s) requerido(s) se encuentra(n) disponible(s) en el portal web de la sede electr&oacute;nica de la entidad, ingresando al enlace <a th:href="${url}" th:text="${url}"></a>, o ingresando al portal web de la entidad, opci&oacute;n "Informaci&oacute;n de Tr&aacute;mites", "Consulta y otros", "De car&aacute;cter general", seleccionando el tr&aacute;mite "Solicitud de <span th:text="${asunto}"></span>". El(los) certificado(s) emitido(s) estar&aacute;(n) disponible(s) en la plataforma &uacute;nicamente por el t&eacute;rmino de dos (2) meses.
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2'> <br />Lo invitamos a evaluar los procesos de solicitud de copias y certificaciones atendidos por la
+                        Superintendencia de Industria y Comercio, en el portal web de la entidad, ingresando a la opci&oacute;n notificaciones,
+                        seleccionando "Encuesta de Satisfacción", o ingresando directamente al enlance <a href="https://www.sic.gov.co/notificaciones/encuesta-de-satisfaccion">https://www.sic.gov.co/notificaciones/encuesta-de-satisfaccion</a>.</td>
+                </tr>
+                <tr>
+                    <td colspan='2'><br /> <br />Atentamente,<br /></td>
+                </tr>
+                <tr>
+                    <td colspan='2'><br /> <strong>CENTRO DE
+                            DOCUMENTACI&Oacute;N E INFORMACI&Oacute;N<br />SUPERINTENDENCIA DE
+                            INDUSTRIA Y COMERCIO
+                        </strong></td>
+                </tr>
+                <tr>
+                    <td colspan='2' class='note'><br /> <br /> <strong>Nota:</strong>
+                        Las decisiones de los tr&aacute;mites y los procesos adelantados por
+                        la Superintendencia de Industria y Comercio ser&aacute;n adoptadas
+                        dentro de los t&eacute;rminos estipulados en las disposiciones
+                        legales que los regulen, atendiendo el debido proceso.</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

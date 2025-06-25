@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<body>
+	<ui:composition
+		template="./../../WEB-INF/webparts/notificationmain.xhtml">
+		<ui:param name="title" value="Detalle solicitud" />
+		<ui:define name="mainContent">
+			<h:form id="frmDetalleValidationSolicitud">
+				<h:panelGroup layout="block" styleClass="col" id="pnlTabla">
+					<fieldset>
+						<legend> Detalles de la solicitud -
+							#{notificationProcessBean.tramiteSolicitud.ano_radi}-#{notificationProcessBean.tramiteSolicitud.stringNume_radi}
+						</legend>
+
+						<div class="row">
+
+							<div class="col-sm-3 form-group">
+								<label class="control-label">Tipo documento</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="far fa-address-book"></i></span>
+									</div>
+									<p:inputText class="form-control" readonly="true"
+										value="#{notificationProcessBean.tramiteSolicitud.tipoDcoumento}"></p:inputText>
+								</div>
+							</div>
+							<div class="col-sm-3 form-group">
+								<label class="control-label">Número de documento</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-address-card"></i></span>
+									</div>
+									<p:inputText class="form-control" readonly="true"
+										value="#{notificationProcessBean.tramiteSolicitud.numeroIdentificacion}">
+										<f:convertNumber type="number" groupingUsed="true"
+											minFractionDigits="0" pattern="#00000000" />
+									</p:inputText>
+								</div>
+							</div>
+
+							<div class="col form-group">
+								<label class="control-label">Solicitante</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-address-card"></i></span>
+									</div>
+									<p:inputText class="form-control" readonly="true"
+										value="#{notificationProcessBean.tramiteSolicitud.nombreSolicitante}" />
+								</div>
+							</div>
+
+						</div>
+
+
+						<h:panelGroup styleClass="row"
+							rendered="#{not notificationProcessBean.mostrarAprobar}">
+							<div class="col-sm form-group">
+								<label class="control-label">Funcionario</label>
+								<div class="input-group">
+									<div class="input-group-prepend required">
+										<span class="input-group-text"><i
+											class="fas fa-chevron-right fa-fw"></i></span>
+									</div>
+									<p:selectOneMenu id="idFuncionario" class="form-control"
+										filter="true" filterMatchMode="contains" autoWidth="false"
+										value="#{notificationProcessBean.idFuncionario}">
+										<p:ajax
+											listener="#{notificationProcessBean.onChangeDependencyFuncionario}"
+											update="pnlTabla" process="@form" />
+										<f:selectItem itemLabel="-- Seleccione opción --">
+
+										</f:selectItem>
+										<f:selectItems
+											value="#{notificationProcessBean.listaAdscritos}" var="entry"
+											itemValue="#{entry.idenPers}" itemLabel="#{entry.nombre}">
+										</f:selectItems>
+									</p:selectOneMenu>
+								</div>
+							</div>
+						</h:panelGroup>
+						<h:panelGroup styleClass="row"
+							rendered="#{not notificationProcessBean.mostrarAprobar}">
+							<div class="col form-group">
+								<label class="control-label">Observaciones</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"> <i
+											class="fab fa-stack-exchange fa-fw"></i>
+										</span>
+									</div>
+									<p:inputTextarea rows="3" id="tbObservaciones"
+										class="form-control" maxlength="500" autoResize="false"
+										value="#{notificationProcessBean.observaciones}">
+									</p:inputTextarea>
+								</div>
+							</div>
+						</h:panelGroup>
+
+						<p:ajaxStatus>
+
+							<f:facet name="default">
+								<div class="row">
+									<h:panelGroup styleClass="col form-group"
+										style="text-align: right"
+										rendered="#{not notificationProcessBean.mostrarAprobar}">
+										<p:commandLink styleClass="btn btn-primary"
+											validateClient="true" oncomplete="removeUIClasess();"
+											update="frmDetalleValidationSolicitud"
+											actionListener="#{notificationProcessBean.asignarFuncionario}">
+											<f:param name="validate" value="true" />
+											<i class="fas fa-user-cog"></i> Asignar Solicitud
+                                            </p:commandLink>
+									</h:panelGroup>
+									<h:panelGroup styleClass="col form-group"
+										style="text-align: right"
+										rendered="#{notificationProcessBean.mostrarAprobar}">
+										<p:commandLink styleClass="btn btn-primary"
+											validateClient="true" oncomplete="removeUIClasess();"
+											update="frmDetalleValidationSolicitud"
+											actionListener="#{notificationProcessBean.aprobarAutenticacion}">
+											<f:param name="validate" value="true" />
+											<i class="fas fa-check-circle"></i> Aprobar Autenticación Digital
+                                            </p:commandLink>
+									</h:panelGroup>
+									<h:panelGroup styleClass="col form-group"
+										style="text-align: center"
+										rendered="#{notificationProcessBean.mostrarAprobar}">
+										<p:commandLink styleClass="btn btn-primary"
+											validateClient="true" oncomplete="removeUIClasess();"
+											update="frmDetalleValidationSolicitud"
+											actionListener="#{notificationProcessBean.rechazarAutenticacion}">
+											<f:param name="validate" value="true" />
+											<i class="fas fa-times-circle"></i> Rechazar Autenticación Digital
+                                            </p:commandLink>
+									</h:panelGroup>
+									<h:panelGroup styleClass="col form-group"
+										style="text-align: left">
+										<p:commandLink styleClass="btn btn-primary" title="Volver"
+											process="@this"
+											actionListener="#{notificationProcessBean.removerSolicitudAsignada}"
+											action="/view/notification/inboxnotify.xhtml?faces-redirect=true">
+											<f:ajax render=":frmInboxSolicitudes:inboxNotificationtable" />
+											<i class="fa fa-backward"></i> Volver
+                                            </p:commandLink>
+									</h:panelGroup>
+								</div>
+							</f:facet>
+
+							<f:facet name="start">
+								<div class='alert alert-warning' align="center">
+									<div class="spinner-border" role="status">
+										<span class="sr-only">Procesando...</span>
+									</div>
+									Procesando...
+								</div>
+							</f:facet>
+							<f:facet name="complete">
+								<div class="row">
+									<h:panelGroup styleClass="col form-group"
+										style="text-align: right"
+										rendered="#{not notificationProcessBean.mostrarAprobar}">
+										<p:commandLink styleClass="btn btn-primary"
+											validateClient="true" oncomplete="removeUIClasess();"
+											update="frmDetalleValidationSolicitud"
+											actionListener="#{notificationProcessBean.asignarFuncionario}">
+											<f:param name="validate" value="true" />
+
+											<i class="fas fa-user-cog"></i> Asignar Solicitud
+                                            </p:commandLink>
+									</h:panelGroup>
+									<h:panelGroup styleClass="col form-group"
+										style="text-align: right"
+										rendered="#{notificationProcessBean.mostrarAprobar}">
+										<p:commandLink styleClass="btn btn-primary"
+											validateClient="true" oncomplete="removeUIClasess();"
+											update="frmDetalleValidationSolicitud"
+											actionListener="#{notificationProcessBean.aprobarAutenticacion}">
+											<f:param name="validate" value="true" />
+
+											<i class="fas fa-check-circle"></i> Aprobar Autenticación Digital
+                                            </p:commandLink>
+									</h:panelGroup>
+									<h:panelGroup styleClass="col form-group"
+										style="text-align: center"
+										rendered="#{notificationProcessBean.mostrarAprobar}">
+										<p:commandLink styleClass="btn btn-primary"
+											validateClient="true" oncomplete="removeUIClasess();"
+											update="frmDetalleValidationSolicitud"
+											actionListener="#{notificationProcessBean.rechazarAutenticacion}">
+											<f:param name="validate" value="true" />
+
+											<i class="fas fa-times-circle"></i> Rechazar Autenticación Digital
+                                            </p:commandLink>
+									</h:panelGroup>
+									<h:panelGroup styleClass="col form-group"
+										style="text-align: left">
+										<p:commandLink styleClass="btn btn-primary" title="Volver"
+											process="@this"
+											actionListener="#{notificationProcessBean.removerSolicitudAsignada}"
+											action="/view/notification/inboxnotify.xhtml?faces-redirect=true">
+											<f:ajax render=":frmInboxSolicitudes:inboxNotificationtable" />
+											<i class="fa fa-backward"></i> Volver
+                                            </p:commandLink>
+									</h:panelGroup>
+								</div>
+							</f:facet>
+						</p:ajaxStatus>
+						<p:messages id="msgAsignacion" />
+						<br></br>
+						<p:dataTable resizableColumns="false"
+							emptyMessage="No hay solicitudes pendientes." rowIndexVar="_row"
+							paginator="true" rows="5"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+							rowsPerPageTemplate="5,10,15" id="inboxNotificationtable"
+							var="detallesSolicitud"
+							value="#{notificationProcessBean.tramiteSolicitud.detalles}">
+
+							<p:column headerText="#" width="5%" class="row-index"
+								exportable="false">
+								<h:outputText value="#{_row + 1}" />
+							</p:column>
+
+							<p:column headerText="Tipo de Copia" class="text-center"
+								width="25%">
+								<h:outputText
+									value="#{detallesSolicitud.tipo_certifica_descripcion}" />
+							</p:column>
+							<p:column headerText="Descripción" class="text-center">
+								<h:outputText escape="false"
+									value="#{utility.replaceNewLines(detallesSolicitud.observaciones)}" />
+							</p:column>
+							<p:column headerText="Acto" class="text-center" width="15%">
+								<h:outputText value="#{detallesSolicitud.variableAdicional1} " />
+								<h:outputText value="#{detallesSolicitud.variableAdicional2} " />
+								<h:outputText value="#{detallesSolicitud.fechaAdicional1}" />
+							</p:column>
+						</p:dataTable>
+
+					</fieldset>
+					<br></br>
+					<h:panelGroup rendered="#{notificationProcessBean.mostrarAprobar}">
+						<fieldset id="attachmentsTable">
+							<legend> Archivos cargados </legend>
+
+							<p:dataTable resizableColumns="false"
+								emptyMessage="No se han adjuntado archivo." rowIndexVar="_row"
+								id="tblAttachments" var="listaAttachments"
+								rowKey="#{listaAttachments.fileName}"
+								value="#{notificationProcessBean.listaAdjunto}">
+
+								<p:column headerText="#" width="3%" class="row-index"
+									exportable="false">
+									<h:outputText value="#{_row + 1}" />
+								</p:column>
+
+								<p:column headerText="Archivo" class="text-center" width="35%">
+									<h:outputText value="#{listaAttachments.fileName}" />
+								</p:column>
+								<p:column headerText="Tipo" class="text-center" width="35%">
+									<h:outputText value="#{listaAttachments.fileExtension}" />
+								</p:column>
+
+								<p:column headerText="Tamaño" class="text-center" width="25%">
+									<h:outputText value="#{listaAttachments.fileSize} MB" />
+								</p:column>
+
+								<p:column headerText="Acciones" width="8%">
+									<p:commandButton id="downloadLink" value="Descargar"
+										ajax="false" styleClass="btn btn-primary"
+										actionListener="#{downloadFilesBean.descargarAdjunto(listaAttachments.path,listaAttachments.fileName)}">
+										<p:fileDownload value="#{downloadFilesBean.download}" />
+									</p:commandButton>
+								</p:column>
+
+							</p:dataTable>
+						</fieldset>
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

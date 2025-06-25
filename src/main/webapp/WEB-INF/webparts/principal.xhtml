@@ -1,0 +1,435 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="jakarta.tags.core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>#{title} | Sistema de Solicitud de Copias y
+		Certificaciones</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<meta charset="utf-8" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description"
+		content="Sistema de Solicitud de Copias y Certificaciones SIC" />
+	<meta name="author" content="Superintendencia de Industria y Comercio" />
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['img/favicon.ico']}" />
+	<link rel="stylesheet"
+		href="#{facesContext.externalContext.requestContextPath}/jakarta.faces.resource/fontawesome.min.css.xhtml?ln=css" />
+	<link rel="stylesheet"
+		href="#{facesContext.externalContext.requestContextPath}/jakarta.faces.resource/bootstrap.min.css.xhtml?ln=css" />
+	<link rel="stylesheet"
+		href="#{facesContext.externalContext.requestContextPath}/jakarta.faces.resource/default.css.xhtml?ln=css&amp;v=#{initParam['CopiasyCertificaciones.Version']}" />
+	<link rel="stylesheet"
+		href="#{facesContext.externalContext.requestContextPath}/jakarta.faces.resource/govco.css.xhtml?ln=css" />
+	<c:if test="#{login != null}">
+		<h:outputStylesheet name="css/login.css" />
+	</c:if>
+
+
+
+	<h:outputScript library="js" name="jquery.mask.min.js" />
+	<h:outputScript library="js" name="bootstrap.bundle.min.js" />
+	<h:outputScript library="js"
+		name="bs-custom-file-input.js?v=#{initParam['CopiasyCertificaciones.Version']}" />
+	<h:outputScript library="js"
+		name="site.js?v=#{initParam['CopiasyCertificaciones.Version']}" />
+</h:head>
+<h:body>
+	<p:importEnum
+		type="co.gov.sic.copiasycertificaciones.enums.TipoTramite"
+		var="TipoTramite" allSuffix="ALL_ENUM_VALUES" />
+
+	<nav class="navbar fixed-top navbar-expand-lg navbar-gov-co"> <!--  -->
+
+	<div class="container-fluid navbar-gov-co-pri">
+		<!--  -->
+		<div class="navbar-logo float-left">
+			<a class="navbar-brand" href="utils.getServerWebUrl()+'/'"> <img
+				src="https://cdn.www.gov.co/assets/images/logo.png" height="30"
+				alt="Logo Gov.co" />
+			</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarCollapsible" aria-controls="navbarCollapsible"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		</div>
+		<div class="collapse navbar-collapse navbar-first-menu float-right">
+			<div class="nav-primary mx-auto">
+				<ul class="navbar-nav ml-auto nav-items nav-items-desktop"></ul>
+			</div>
+			<div class="nav-item-primary ml-auto mr-2">
+				<span class="govco-icon govco-icon-language-en-n lang-govco ml-3"></span>
+			</div>
+		</div>
+
+	</div>
+	<div class="navbar-nav navbar-notifications" id="notificationHeader"></div>
+
+
+	<div class="container" style="margin-top: 35px">
+		<div class="topMenu" style="margin-top: 35px">
+			<ul>
+				<li><a target="_blank" href="http://www.sic.gov.co">Superintendencia
+						de Industria y Comercio</a></li>
+				<li><a target="_blank"
+					href="http://www.sic.gov.co/en/international-community-home"
+					hreflang="en">International Community</a></li>
+				<li><a target="_blank"
+					href="http://www.sic.gov.co/hora-legal-colombiana"> Hora legal</a></li>
+				<li><a target="_blank" href="http://www.sic.gov.co/empleo">
+						Empleos</a></li>
+				<li><a
+					href="https://servicioslinea.sic.gov.co/servilinea/ServiLinea/DenunciaCorrupcion/control/DenunciaCorrupcion.php"
+					target="_blank">Denuncias por corrupción</a></li>
+				<li><a target="_blank"
+					href="http://www.sic.gov.co/servicios-de-informacion-al-ciudadano">Atención
+						al ciudadano</a></li>
+				<li><a target="_blank" href="http://www.sic.gov.co/ayuda">Ayuda</a></li>
+				<li class="last"><a target="_blank"
+					href="http://www.sic.gov.co/glosario">Glosarios</a></li>
+			</ul>
+		</div>
+		<div class="navbar-brand">
+			<a class="navbar-brand-logo" title="Ir a Inicio"
+				data-toggle="tooltip" data-placement="left"
+				href="#{navegaUsuarioMB.redirectToHome(true, request.contextPath)}"></a><a
+				class="navbar-brand-name" title="Ir a Inicio" data-toggle="tooltip"
+				data-placement="right"
+				href="#{navegaUsuarioMB.redirectToHome(true, request.contextPath)}">Solicitud de
+				Copias y Certificaciones <span class="subtitle"> <i
+					class="fas fa-chevron-right"></i> #{title}
+			</span>
+			</a>
+		</div>
+		<a target="_blank"
+			title="Ir a Ministerio de Comercio, Industria y Turismo"
+			data-toggle="tooltip" data-placement="right"
+			href="https://www.mincit.gov.co" id="logominco"><img
+			src="#{resource['img/logo-mincomercio.png']}" style="height: 40px;"
+			alt="Ministerio Comercio, Industria y Turismo"></img></a>
+	</div>
+
+
+
+	</nav>
+
+
+	<h:panelGroup class="navbar fixed-top navbar-expand-lg"
+		style="margin-top: 128px;" rendered="#{loginBean.loggedIn}"
+		layout="block">
+		<div class="container">
+			<div class="main-menu shadow-sm-strong">
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="menu-collapse" aria-controls="menu-collapse"
+					aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="navbar-collapse" id="menu-collapse">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item"><p:link outcome="/view/tramites/menu"
+								class="nav-link">
+                                    Inicio
+                                </p:link></li>
+						<li class="nav-item"><p:link outcome="/view/tramites/listado"
+								class="nav-link">
+                                    Mi Lista de Solicitudes
+                                </p:link></li>
+						<li class="nav-item dropdown #{renderMenuItemLista}"><a
+							class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false"> Trámites
+								Disponibles</a>
+							<div class="dropdown-menu">
+								<p:link outcome="/view/tramites/CertificadoDIS"
+									class="dropdown-item">
+									<i class="fas fa-gavel fa-fw mr-2"></i> #{TipoTramite.CERTIFICADO_SANCIONES.descripcion}
+                                    </p:link>
+
+								<p:link outcome="/view/tramites/SolicitudCopias"
+									class="dropdown-item">
+									<i class="far fa-copy fa-fw mr-2"></i> #{TipoTramite.COPIAS_SIMPLES.descripcion}
+                                    </p:link>
+
+								<p:link outcome="/view/tramites/ListadosInf"
+									class="dropdown-item">
+									<i class="fas fa-info fa-fw mr-2"></i> #{TipoTramite.LISTADOS_INFORMACION.descripcion}
+                                    </p:link>
+							</div></li>
+					</ul>
+					<h:form id="formLogout" class="form-inline my-2 my-md-0">
+						<a class="nav-link"><i class="fas fa-user-circle mr-1"></i>
+							#{loginBean.getDatosSesion().persona.fullName} </a>
+						<p:commandLink id="btnLogout" styleClass="nav-link linkLogOut"
+							oncomplete="removeUIClasess();"
+							action="#{loginBean.cerrarSesion}">
+                                Cerrar Sesión
+                            </p:commandLink>
+					</h:form>
+				</div>
+			</div>
+		</div>
+	</h:panelGroup>
+	<div class="container px-5" style="margin-top: 10px;" id="mainBody">
+		<ui:insert name="mainContent" rendered="#{loginBean.loggedIn}"></ui:insert>
+	</div>
+
+	<h:panelGroup layout="block">
+		<div style="float: both; height: 200px; margin-top: 50px;">
+
+			<footer class="gov-co-footer">
+			<div class="gov-co-footer-presetacion gov-co-footer-tramites">
+				<div class="gov-co-footer-autoridad">
+					<div class="footer-titulo">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col">
+									<h5 class="titulo-sede-gov-co">Sistema de copias y
+										certificaciones - SIC</h5>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="footer-logo-autoridad">
+						<div class="containder-fluid">
+							<div class="row">
+								<div class="col">
+									<div class="logo-gov-co">
+										<a href="https://www.sic.gov.co"
+											title="Ir al Inicio del portal SIC"> <img
+											src="#{resource['img/images/logo-sic-footer.png']}"
+											aria-hidden="true" alt="Imagen logo de la SIC" width="280px" />
+											<span class="sr-only">Logo de la Superintencia de
+												Industria y Comercio</span>
+
+
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="footer-presentacion">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col">
+									<h5 class="sub-titulo-sede-gov-co">Sede principal</h5>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="contenido-sede-gov-co gov-detalles">
+										<p>Carrera 13 No. 27 - 00, Pisos 1 y 3</p>
+										<p>Horario de Atenci&oacute;n Presencial: Lunes a Viernes
+											de 8:00 a.m a 4:30 p.m</p>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="contenido-sede-gov-co gov-detalles">
+										<p>Tel&eacute;fono Conmutador: +57 (1) 587 00 00 -
+											Bogot&aacute; - L&iacute;nea Gratuita Nacional: 01 8000
+											910165</p>
+										<p>Contact center +57 (1) 592 0400</p>
+										<p>Correo Institucional: contactenos@sic.gov.co</p>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="gov-co-redes-sociales">
+										<a class="gov-co-link-presentacion"
+											href="https://www.facebook.com/Superintendenciadeindustriaycomercio/"
+											target="_blank"> <img
+											src=" #{resource['img/images/redes/icono-footer-facebook.png']}">
+										</img> Facebook
+										</a> <a class="gov-co-link-presentacion"
+											href="https://www.instagram.com/superintendencia_sic/"
+											target="_blank"> <img
+											src="#{resource['img/images/redes/icono-footer-instagram.png']}">
+										</img> Instagram
+										</a> <a class="gov-co-link-presentacion"
+											href="https://twitter.com/sicsuper" target="_blank"> <img
+											src="#{resource['img/images/redes/icono-footer-twitter.png']}">
+										</img> Twitter
+										</a> <a class="gov-co-link-presentacion"
+											href="https://www.youtube.com/channel/UC2-SvnOPldLjx4QT7HTCoyw"
+											target="_blank"> <img
+											src="#{resource['img/images/redes/icono-footer-youtube.png']}">
+										</img> Youtube
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="footer-politicas poli-tramites">
+						<div class="container-fluid">
+							<div class="row p-0">
+								<div class="col p-0">
+									<div class="gov-co-politicas">
+										<a class="goc-co-link-poli"
+											href="https://www.sic.gov.co/politica-privacidad"
+											target="_blank"> Pol&iacute;tica de uso de contenido
+											p&aacute;gina web</a> <a class="goc-co-link-poli"
+											href="https://www.sic.gov.co/sites/default/files/documentos/072020/Pol%C3%ADtica%20de%20Tratamiento%20de%20Datos%20Personales%20-%20SIC.pdf"
+											target="_blank">Pol&iacute;ticas de datos </a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="gov-co-footer-pie">
+
+				<div class="gov-co-footer-venta">
+					<img class="img-fluid gov-co-logo-pie-mesa"
+						src="#{resource['img/images/colombiaco_Mesa de trabajo_1.png']}" />
+					<img class="img-fluid gov-co-logo-pie-blanco"
+						src="#{resource['img/images/logo.svg']}" />
+				</div>
+			</div>
+			</footer>
+		</div>
+	</h:panelGroup>
+
+
+	<!--
+        <footer id="main-footer">
+            <div class="inner_medium #{login}">
+                <div class="container px-5">
+                    <div class="row">
+                        <div class="col">
+                            <h5>TEMAS</h5>
+                            <ul class="sic_lista_footer">
+                                <li><a target="_blank"
+                                       href="http://www.sic.gov.co/proteccion-del-consumidor">Protección
+                                        del Consumidor</a></li>
+                                <li><a target="_blank"
+                                       href="http://www.sic.gov.co/proteccion-de-la-competencia">Protección
+                                        de la Competencia</a></li>
+                                <li><a target="_blank"
+                                       href="http://www.sic.gov.co/propiedad-Industrial">Propiedad
+                                        Industrial</a></li>
+                                <li><a target="_blank"
+                                       href="http://www.sic.gov.co/reg-tecnicos-y-metrologia-legal">Registros
+                                        Técnicos y Metrología Legal</a></li>
+                                <li><a target="_blank"
+                                       href="http://www.sic.gov.co/proteccion-de-datos-personales">Protección
+                                        de Datos Personales</a></li>
+                                <li><a target="_blank"
+                                       href="http://www.sic.gov.co/camaras-de-comercio">Cámaras de
+                                        Comercio</a></li>
+                                <li><a target="_blank"
+                                       href="http://www.sic.gov.co/nuestra-entidad">Nuestra Entidad</a></li>
+                                <li><a target="_blank"
+                                       href="http://www.sic.gov.co/normatividad">Normativa</a></li>
+                            </ul>
+                        </div>
+                        <div class="col">
+                            <h5>DE INTERÉS</h5>
+                            <ul>
+                                <li><a target="_blank"
+                                       href="http://www.anticorrupcion.gov.co/">Portal
+                                        Anticorrupción</a></li>
+                                <li><a
+                                        href="http://www.mincit.gov.co/publicaciones/15396/tratados_de_libre_comercio"
+                                        target="_blank">Tratado de Libre Comercio</a></li>
+                                <li><a href="http://antv.gov.co/" target="_blank">Televisión
+                                        Digital Terrestre</a></li>
+                                <li><a href="http://www.procuraduria.gov.co/"
+                                       target="_blank">Procuraduría General</a></li>
+                            </ul>
+                        </div>
+                        <div class="col">
+                            <h5>Líneas de Atención</h5>
+                            <ul>
+                                <li>Contact Center: (571) 5 92 04 00</li>
+                                <li>Conmutador: (571) 5 87 00 00</li>
+                                <li>Línea Gratuita Nacional: 01 8000 910 165</li>
+                                <li><a target="_blank"
+                                       href="http://www.sic.gov.co/ubicacion-geografica">Cobertura
+                                        Nacional</a></li>
+                            </ul>
+                        </div>
+                        <div class="col">
+                            <h5>Sede Principal</h5>
+                            <ul>
+                                <li>Cra 13 No. 27-00 Pisos 1 y 3, Bogotá - Colombia</li>
+                                <li>Horario de Atención:<br />Lunes a Viernes de 8:00 a.m.
+                                    a 4:30 p.m.
+                                </li>
+                                <li>Código Postal: 110311</li>
+                                <li>NIT: 800.176.089-2</li>
+                            </ul>
+                            <ul class="redes">
+                                <li><a
+                                        href="http://www.facebook.com/Superintendenciadeindustriaycomercio"
+                                        target="_blank"
+                                        title="Siga de cerca nuestras publicaciones en Facebook"
+                                        data-toggle="tooltip" data-placement="bottom"><i
+                                            class="fab fa-facebook-square fa-2x" aria-hidden="true"></i></a></li>
+                                <li><a
+                                        href="https://twitter.com/intent/user?screen_name=sicsuper"
+                                        target="_blank"
+                                        title="Comente y comparta en Twitter los temas de la entidad"
+                                        data-toggle="tooltip" data-placement="bottom"><i
+                                            class="fab fa-twitter fa-2x" aria-hidden="true"></i></a></li>
+                                <li><a
+                                        href="http://www.youtube.com/user/superintendencia2011?feature=mhee"
+                                        target="_blank"
+                                        title="Descubra los videos de la Entidad en YouTube"
+                                        data-toggle="tooltip" data-placement="bottom"><i
+                                            class="fab fa-youtube fa-2x" aria-hidden="true"></i></a></li>
+                                <li><a
+                                        href="https://www.linkedin.com/company/superintendencia-de-industria-y-comercio/"
+                                        target="_blank" title="Conéctese con nosotros en LinkedIn"
+                                        data-toggle="tooltip" data-placement="bottom"><i
+                                            class="fab fa-linkedin fa-2x" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="inner_bottom">
+                <div class="container text-center">
+                    <ul>
+                        <li><a href="http://www.sic.gov.co/politica-privacidad">Política
+                                de uso de Contenidos página Web</a></li>
+                        <li><a href="http://www.sic.gov.co/politica-editorial">
+                                Política editorial</a></li>
+                        <li><a href="http://www.sic.gov.co/ley-de-proteccion-de-datos">
+                                Aviso de privacidad</a></li>
+                        <li><a href="mailto:#{loginBean.EMAIL_SOPORTE}">#{loginBean.EMAIL_SOPORTE}</a>
+                        </li>
+                        <li class="last"><a href="mailto:notificacionesjud@sic.gov.co">notificacionesjud@sic.gov.co</a></li>
+                    </ul>
+                    <ul>
+                        <li>Sistema de Solicitud de Copias y Certificaciones Versión: #{initParam['CopiasyCertificaciones.Version']}</li>
+                        <li>Ultima Actualización: #{initParam['CopiasyCertificaciones.FechaActualizacion']}</li>
+                        <li><a target="_blank" href="http://www.sic.gov.co">Superintendencia de Industria y Comercio</a></li>
+                        <li class="last"><i class="fas fa-copyright" aria-hidden="true"></i> 2021</li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+        
+        -->
+	<p:dialog widgetVar="dlgProcessing" modal="true" draggable="false"
+		showHeader="false" positionType="absolute" position="center center"
+		closable="false" resizable="false">
+		<div class='logo-processing text-center'>
+			<div class="spinner-border" role="status">
+				<span class="sr-only">Procesando...</span>
+			</div>
+		</div>
+	</p:dialog>
+	<p:ajaxStatus oncomplete="removeUIClasess();" />
+</h:body>
+
+</html>

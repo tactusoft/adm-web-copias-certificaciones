@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <body>
+        <ui:composition template="./../../WEB-INF/webparts/solicitudesmain.xhtml">
+            <ui:param name="title" value="Adjuntos radicado" />
+            <ui:define name="mainContent">
+                <h:form id="frmVerAdjuntos">       
+                    <h:panelGroup layout="block"
+                                  styleClass="col" id="pnlTabla">
+                        <fieldset>
+                            <legend>
+                                Adjuntos del radicado - #{requestManagementBean.tramiteSolicitud.ano_radi}-#{requestManagementBean.tramiteSolicitud.nume_radi}
+                            </legend>
+                            
+                            <div class="row">
+                                <div class="col form-group" align="center">
+                                    <p:commandLink ajax="true"
+                                                   styleClass="btn btn-primary"
+                                                   title="Volver"
+                                                   process="@this"
+                                                    action="/view/requests/detalletramite.xhtml?faces-redirect=true">                                        
+                                        <i class="fa fa-backward"></i> Volver
+                                    </p:commandLink>
+                                </div>
+                            
+                            
+                            <p:dataTable resizableColumns="false"
+                                         emptyMessage="No hay adjuntos."
+                                         rowIndexVar="_row"
+                                         paginator="true"
+                                         rows="5"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                                         rowsPerPageTemplate="5,10"
+                                         id="tableAdjuntos"
+                                         var="listaAdjuntos"
+                                         value="#{requestManagementBean.listaAdjuntos}">
+                                
+                                 <p:column headerText="#" width="5%"
+                                          class="row-index" exportable="false">
+                                    <h:outputText value="#{_row + 1}" />                                    
+                                </p:column>
+                                
+                                <p:column headerText="Nombre Archivo" width="45%"
+                                          class="row-index" exportable="false">
+                                    <h:outputText value="#{listaAdjuntos.nombreArchivoRadicado}" />                                    
+                                </p:column>
+                                <p:column headerText="Fecha digitalización" width="30%"
+                                          class="row-index" exportable="false">
+                                    <h:outputText value="#{listaAdjuntos.fechaDigitalizacion}" />                                    
+                                </p:column>                               
+                                
+                                
+                                <p:column headerText="Acciones" width="8%">
+                                     
+                                    <h:outputLink value = "#{requestManagementBean.showAdjuntoENVisor()}" 
+                                                  styleClass="btn btn-outline-primary btn-sm btn-block border-0 no-shadow"
+                                                  target="_blank" 
+                                                  title="Ver Adjuntos">
+                                                  <i class="fas fa-paperclip"></i>
+                                        
+                                    </h:outputLink> 
+                                </p:column>
+                                
+                            </p:dataTable>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <p:dataTable resizableColumns="false"
+                                                 emptyMessage="No se han hecho comentarios."
+                                                 rowIndexVar="_row"
+                                                 id="tblComments"
+                                                 var="listaComentarios"
+                                                 value="#{requestManagementBean.listaComentarios}">
+
+                                        <p:column headerText="#" width="10%"
+                                                  class="row-index" exportable="false">
+                                            <h:outputText value="#{_row + 1}" />
+                                        </p:column>
+
+                                        <p:column headerText="Cons." class="text-center" width="15%">
+                                            <h:outputText value="#{listaComentarios.cons_obse}" />
+                                        </p:column>
+                                        <p:column headerText="Cometario / Observacion" class="text-center" width="75%">
+                                            <h:outputText value="#{listaComentarios.text_obse}" />
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </h:panelGroup>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
+

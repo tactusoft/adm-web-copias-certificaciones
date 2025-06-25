@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <body>
+        <ui:composition template="./../../WEB-INF/webparts/solicitudesmain.xhtml">
+            <ui:param name="title" value="Detalle solicitud" />
+            <ui:define name="mainContent">
+                <h:form id="frmProrrogarSolicitud">
+                    <h:panelGroup layout="block"
+                                  styleClass="col" id="pnlTabla">
+                        <fieldset>
+                            <legend>
+                                Solicitar prorroga - #{requestManagementBean.tramiteSolicitud.ano_radi}-#{requestManagementBean.tramiteSolicitud.nume_radi}
+                            </legend>                           
+                            
+                            <div class="row">
+                                <div class="col">
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-info-circle fa-fw fa-lg mr-2"></i><strong>
+                                         Ingrese los motivos por los cuales se solicita la prórroga
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            <div class="row">                               
+
+                                <div class="col form-group">
+                                    <label class="control-label">Observaciones</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text">
+                                                <i class="fab fa-stack-exchange fa-fw"></i>
+                                            </span>
+                                        </div>
+                                        <p:inputTextarea rows="3" id="tbObservaciones" class="form-control" maxlength="600" autoResize="false" disabled="false"
+                                                         value="#{requestManagementBean.observaciones}">
+                                        </p:inputTextarea>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <h:panelGroup layout="block"
+                                              styleClass="col" id="attachmentsTable">
+                                    <p:fileUpload listener="#{requestManagementBean.handleFileUpload}" 
+                                                  mode="advanced"                                                              
+                                                  dragDropSupport="false"
+                                                  multiple="true"
+                                                  rendered="true"
+                                                  sizeLimit="10485760"
+                                                  update="attachmentsTable"
+                                                  fileLimit="10"
+                                                  auto="true"
+                                                  value="Anexar"
+                                                  label="Anexar"
+                                                  skinSimple="true"
+                                                  allowTypes="/(\.|\/)(pdf)$/" />
+
+                                    <div class="row">   
+                                        <div class="col">  <p:messages id="msAttachments"/>
+                                        </div>
+                                    </div>
+                                    <fieldset>
+                                        <legend>
+                                            Total adjuntos (#{requestManagementBean.listaAdjuntoCompletarSolicitud.size()}) - Tamaño total  (#{requestManagementBean.totalAttachmentSize} MB)
+                                        </legend>
+
+
+                                        <p:dataTable resizableColumns="false"
+                                                     emptyMessage="No se han adjuntado archivo."
+                                                     rowIndexVar="_row"
+                                                     id="tblAttachments"
+                                                     var="listaAttachments"
+                                                     value="#{requestManagementBean.listaAdjuntoCompletarSolicitud}">
+                                            <p:column headerText="#" width="3%"
+                                                      class="row-index" exportable="false">
+                                                <h:outputText value="#{_row + 1}" />
+                                            </p:column>
+
+                                            <p:column headerText="Archivo" class="text-center" width="35%">
+                                                <h:outputText value="#{listaAttachments.fileName}" />
+                                            </p:column>
+                                            <p:column headerText="Tipo" class="text-center" width="35%">
+                                                <h:outputText value="#{listaAttachments.fileExtension}" />
+                                            </p:column>
+
+                                            <p:column headerText="Tamaño" class="text-center" width="25%">
+                                                <h:outputText value="#{listaAttachments.fileSize} MB" />
+                                            </p:column>
+
+
+                                            <p:column headerText="Acciones" width="7%"
+                                                      class="text-center align-middle">
+                                                <p:commandLink
+                                                    styleClass="btn btn-outline-danger btn-sm btn-block border-0 no-shadow"
+                                                    title="Eliminar adjunto" process="@this"
+                                                    action="#{requestManagementBean.EliminarAdjunto(listaAttachments)}"
+                                                    update=":frmProrrogarSolicitud:attachmentsTable">
+                                                    <i class="fas fa-times"></i>
+                                                </p:commandLink>
+                                            </p:column>
+
+                                        </p:dataTable>
+
+                                        <br/>
+                                        <p:ajaxStatus>
+                                            <f:facet name="default">
+                                                <div class="row">
+                                                    <div class="col form-group" align="right">
+                                                        <p:commandLink styleClass="btn btn-primary " disabled="false"
+                                                                       validateClient="true" oncomplete="removeUIClasess();"
+                                                                       update="frmProrrogarSolicitud"
+                                                                       actionListener="#{requestManagementBean.ProrrogaSolicitud}">
+
+                                                            <f:param name="validate" value="true"/>
+
+                                                            <i class="fas fa-list"></i> Solicitar Prórroga
+                                                        </p:commandLink>
+                                                    </div>
+                                                    <div class="col form-group" align="left">
+                                                        <p:commandLink ajax="true"
+                                                                       styleClass="btn btn-primary"
+                                                                       title="Volver"
+                                                                       process="@this" 
+                                                                       action="/view/requests/detalletramite.xhtml?faces-redirect=true"
+                                                                       actionListener="#{requestManagementBean.limpiarForm}">
+                                                            <f:ajax render=":frmDetalleValidationSolicitud:tblDetalleExpediente" />
+                                                            <i class="fa fa-backward"></i> Volver al blotter
+                                                        </p:commandLink>
+                                                    </div>
+                                                </div>
+                                            </f:facet>
+                                            <f:facet name="start">
+                                                <div class='alert alert-warning' align="center">
+                                                    <div class="spinner-border" role="status">
+                                                        <span class="sr-only">Procesando...</span>
+                                                    </div> Procesando...
+                                                </div>
+                                            </f:facet>
+                                            <f:facet name="complete">
+                                                <div class="row">
+                                                    <div class="col form-group" align="right">
+                                                        <p:commandLink styleClass="btn btn-primary " disabled="false"
+                                                                       update="frmProrrogarSolicitud"   
+                                                                       validateClient="true" oncomplete="removeUIClasess();"
+                                                                       actionListener="#{requestManagementBean.ProrrogaSolicitud}">
+                                                            <f:param name="validate" value="true"/>
+
+                                                            <i class="fas fa-list"></i> Solicitar Prórroga
+                                                        </p:commandLink>
+                                                    </div>
+                                                    <div class="col form-group" align="left">
+                                                        <p:commandLink ajax="true"
+                                                                       styleClass="btn btn-primary"
+                                                                       title="Volver"
+                                                                       process="@this"  action="/view/requests/detalletramite.xhtml?faces-redirect=true"
+                                                                       actionListener="#{requestManagementBean.limpiarForm}">
+                                                            <f:ajax render=":frmDetalleValidationSolicitud:tblDetalleExpediente" />
+                                                            <i class="fa fa-backward"></i> Volver al blotter
+                                                        </p:commandLink>
+                                                    </div>
+                                                </div>
+                                            </f:facet>
+                                        </p:ajaxStatus>
+
+                                    </fieldset>
+                                </h:panelGroup>
+                            </div>                            
+                        </fieldset>
+                    </h:panelGroup>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

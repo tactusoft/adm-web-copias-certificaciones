@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es-co" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>
+        </title>
+    </head>
+    <body>
+        <div style='background-color: #EDEDF0; border: 1px solid #232331;'>
+            <img style='height: 60px; float: left;'
+                 alt="Superintendencia de Industria y Comercio"
+                 src="https://aplicaciones.sic.gov.co/CopiasyCertificaciones/resources/img/logo-sic-horizontal-2020.png" />
+            <img
+                style='height: 53px; float: right; margin-top: 4px; margin-right: 4px'
+                alt="El progeso es de todos - MINCOMERCIO" title="MINCOMERCIO"
+                src="https://aplicaciones.sic.gov.co/CopiasyCertificaciones/resources/img/logo-mincomercio.png" />
+            <h3 style='background-color: #232331; color: #ffffff; margin-top: 61px; padding-left: 15px; padding-right: 15px;'>
+                SERVICIOS EN LINEA - EXPEDICI&Oacute;N DE COPIAS SIMPLES Y AUTENTICAS
+            </h3>
+            <div style='padding: 15px; padding-top: 10px;'>
+                <p>
+                    Estimado(a): <h3 style='text-transform: uppercase; color: #2A2D82'
+                        th:text='${nombre}'></h3>
+                    <br />                        
+                        Le ha sido asignado el asunto No <h3 style='text-transform: uppercase; color: #2A2D82'
+                        th:text='${nume_radi}'></h3> con fecha de asignacion <h3 style='text-transform: uppercase; color: #2A2D82'
+                        th:text='${fechaasignacion}'></h3> el documento ha sido asignado por <h3 style='text-transform: uppercase; color: #2A2D82'
+                        th:text='${quienAsigna}'></h3> por lo cual solicitamos su colaboraci&oacute;n  para atenderlo oportunamente                    
+                </p>
+            </div>
+        </div>
+    </body>
+</html>

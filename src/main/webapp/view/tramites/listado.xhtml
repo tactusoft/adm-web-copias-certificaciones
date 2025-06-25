@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui">
+    <body>
+        <ui:composition template="./../../WEB-INF/webparts/principal.xhtml">
+            <ui:param name="title" value="Mi Lista de Solicitudes (#{listadoBean.listaTramitesUsua.size()})" />
+            <ui:define name="mainContent">
+                <h:form>
+                    <p:importEnum type="co.gov.sic.copiasycertificaciones.enums.EstadoTramite" var="EstadoTramite" allSuffix="ALL_ENUM_VALUES" />
+                    <p:importEnum type="co.gov.sic.copiasycertificaciones.enums.TipoTramite" var="TipoTramite" allSuffix="ALL_ENUM_VALUES" />
+                    <p:importEnum type="co.gov.sic.copiasycertificaciones.enums.TipoAmbienteEnum" var="TipoAmbienteEnum" allSuffix="ALL_ENUM_VALUES" />
+                    <div class="row" sstyle="margin-bottom: -50px;margin-top: 40px">
+                        <div class="col"> <ui:include src="./../../WEB-INF/webparts/avisoLegalDesistimento.xhtml">
+                            </ui:include>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">  <p:messages/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p:dataTable  var="tramite" value="#{listadoBean.listaTramitesUsua}" paginatorPosition="bottom" rows="10" paginator="true"
+                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                          currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                                          rowsPerPageTemplate="10,15,20" rowIndexVar="_row"
+                                          emptyMessage="No se hallaron registros">
+                                <p:column headerText="#" width="4%"
+                                          class="row-index" exportable="false">
+                                    <h:outputText value="#{_row + 1}" />
+                                </p:column>
+                                <p:column headerText="Id Trámite" class="text-center" width="8%">
+                                    <h:outputText value="#{tramite.idtramite}" />
+                                </p:column>
+                                <p:column headerText="Tipo Trámite" class="text-center">
+                                    <h:outputText value="#{tramite.idtiposolicitud.descripcion}" />
+                                </p:column>
+                                <p:column headerText="Fecha Solicitud" class="text-center" width="12%">
+                                    <h:outputText value="#{utility.tryFormatVisualDate(tramite.fecha_creacion)}" />
+                                </p:column>
+                                <p:column headerText="Radicado" class="text-center" width="9%">
+                                    <h:outputText value="#{tramite.ano_radi}-#{tramite.stringNume_radi}" rendered="#{tramite.nume_radi != null and tramite.nume_radi gt 0}"/>
+                                </p:column>
+                                <p:column headerText="Valor Total" class="text-center"  width="9%">
+                                    <div class="font-weight-bolder color-money text-right">
+                                        <h:outputText value="#{utility.tryFormatCurrencyNumber(tramite.valor_total, true)}" rendered="#{tramite.valor_total != null and tramite.valor_total gt 0}"/>
+                                    </div>
+                                </p:column>
+                                <p:column headerText="Estado" class="text-center" width="13%">
+                                    <h:outputText value="#{tramite.estado.description2}"/>
+                                </p:column>
+                                <p:column headerText="Acciones" class="text-center" width="10%">
+
+
+                                    <h:panelGroup layout="block"
+                                                  id="pnlOtros"
+                                                  styleClass="row"
+                                                  rendered="#{ not listadoBean.validaTipoTramiteCopiaSimple(tramite)}">
+                                        <p:commandLink styleClass="btn btn-sm btn-success btn-block" process="@this" oncomplete="goToPSE();" onclick="PF('dlgProcessing').show();" rendered="#{tramite.estado == EstadoTramite.PRESENTADO  and tramite.idtiposolicitud != TipoTramite.LISTADOS_INFORMACION and tramite.idtiposolicitud != TipoTramite.CORRECCION_REPRESENTACION_CAMARAS}"
+                                                       update="@form" actionListener="#{listadoBean.nextInvoiceId(tramite)}">
+                                            <i class="fas fa-credit-card fa-lg fa-fw mr-2" aria-hidden="true"></i>
+                                            Pagar en línea
+                                        </p:commandLink>
+                                        <p:commandLink styleClass="btn btn-sm btn-warning btn-block" process="@this" onclick="PF('dlgProcessing').show();" rendered="false"
+                                                       update="@form" actionListener="#{listadoBean.reintentarPago(tramite)}">
+                                            <i class="fas fa-redo fa-lg fa-fw mr-2" aria-hidden="true"></i>
+                                            Reintentar Pago
+                                        </p:commandLink>
+                                        <p:commandLink styleClass="btn btn-sm btn-secondary btn-block" process="@this" onclick="PF('dlgProcessing').show();" rendered="#{listadoBean.AMBIENTE_ACTIVO != TipoAmbienteEnum.PRODUCCION and tramite.estado == EstadoTramite.PRESENTADO and tramite.idtiposolicitud != TipoTramite.LISTADOS_INFORMACION and tramite.idtiposolicitud != TipoTramite.CORRECCION_REPRESENTACION_CAMARAS}" ajax="true"
+                                                       update="@form" actionListener="#{procesarPagoBean.simularPago(tramite)}">
+                                            <i class="fas fa-credit-card fa-lg fa-fw mr-2" aria-hidden="true"></i>
+                                            Simular Pago Exitoso
+                                        </p:commandLink>
+
+
+                                        <p:commandLink styleClass="btn btn-sm btn-warning btn-block" process="@this" onclick="PF('dlgProcessing').show();hideProcessing();" 
+                                                       rendered="#{tramite.estado == EstadoTramite.FINALIZADO or (tramite.estado == EstadoTramite.RADICADO_ENTRADA and (tramite.idtiposolicitud == TipoTramite.LISTADOS_INFORMACION or tramite.idtiposolicitud == TipoTramite.CORRECCION_REPRESENTACION_CAMARAS))}" 
+                                                       ajax="false"
+                                                       update="@form" actionListener="#{listadoBean.descargarExpediente(tramite)}">
+                                            <i class="fas fa-file-download fa-lg fa-fw mr-2"></i>
+                                            Descargar
+                                        </p:commandLink>      
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup layout="block"
+                                                id="pnlSimples"
+                                                styleClass="row"
+                                                rendered="#{listadoBean.validaTipoTramiteCopiaSimple(tramite)}">
+
+                                        <p:commandLink styleClass="btn btn-sm btn-warning btn-block" process="@this" onclick="PF('dlgProcessing').show();hideProcessing();" 
+                                                       rendered="#{ tramite.estado == EstadoTramite.ASIGNADA or tramite.estado == EstadoTramite.RTA_SOLICITANTE  or   tramite.estado == EstadoTramite.RADICADO_ENTRADA}" 
+                                                       ajax="false"
+                                                       update="@form" actionListener="#{listadoBean.descargarExpediente(tramite)}">
+                                            <i class="fas fa-file-download fa-lg fa-fw mr-2"></i>
+                                            Descargar
+                                        </p:commandLink>
+
+                                        <p:commandLink styleClass="btn btn-sm btn-secondary btn-block" process="@this" onclick="PF('dlgProcessing').show();" 
+                                                       rendered="#{listadoBean.AMBIENTE_ACTIVO != TipoAmbienteEnum.PRODUCCION and  tramite.estado == EstadoTramite.COTIZACION_ENVIADA }" ajax="true"
+                                                       update="@form" actionListener="#{procesarPagoBean.simularPago(tramite)}">
+                                            <i class="fas fa-credit-card fa-lg fa-fw mr-2" aria-hidden="true"></i>
+                                            Simular Pago Exitoso
+                                        </p:commandLink>
+
+                                        <p:commandLink styleClass="btn btn-sm btn-warning btn-block"
+                                                       process="@this" 
+                                                       onclick="PF('dlgProcessing').show();hideProcessing();" 
+                                                       rendered="#{tramite.estado == EstadoTramite.COMPLEMENTAR}" 
+                                                       ajax="false"
+                                                       update="@form"                                                   
+                                                       action="/view/requester/rtacomplemento.xhtml?faces-redirect=true"
+                                                       actionListener="#{requestManagementBean.complementarInformacionSolicitante(tramite)}">
+                                            <i class="fas fa-plus fa-lg fa-fw mr-2"></i>
+                                            Complementar
+                                        </p:commandLink>
+
+                                        <p:commandLink styleClass="btn btn-sm btn-warning btn-block"
+                                                       process="@this" 
+                                                       onclick="PF('dlgProcessing').show();hideProcessing();" 
+                                                       rendered="#{tramite.estado == EstadoTramite.FINALIZADO}" 
+                                                       ajax="false"
+                                                       update="@form"                                                   
+                                                       action="/view/requester/downloadfiles.xhtml?faces-redirect=true"
+                                                       actionListener="#{downloadFilesBean.cfgTramite(tramite)}">
+                                            <i class="fas fa-file-download fa-lg fa-fw mr-2"></i>
+                                            Descargar
+                                        </p:commandLink>
+
+                                        <p:commandLink styleClass="btn btn-sm btn-success btn-block"
+                                                       process="@this" 
+                                                       onclick="PF('dlgProcessing').show();"
+                                                       oncomplete="goToPSE();"
+                                                       rendered="#{tramite.estado == EstadoTramite.COTIZACION_ENVIADA}"
+                                                       update="@form"
+                                                       actionListener="#{listadoBean.nextInvoiceId(tramite)}">
+                                            <i class="fas fa-credit-card fa-lg fa-fw mr-2" aria-hidden="true"></i>
+                                            Pagar en línea
+                                        </p:commandLink>
+
+                                    </h:panelGroup>
+                                    
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                    <ui:include src="./../../WEB-INF/webparts/formPago.xhtml" rendered="#{listadoBean.tramiteSeleccionado != null}">
+                        <ui:param name="currentBean" value="#{listadoBean}" />
+                    </ui:include>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

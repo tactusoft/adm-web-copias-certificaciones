@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es-co" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Responder Complementar Solicitud</title>
+        <style>
+            @font-face {font-family: 'segoeui'; src: url('./webfonts/segoeui.ttf') format('truetype');}
+
+            .body {
+                font-family: segoeui;
+                font-size: 14px;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                text-align: justify;
+            }
+
+            .labelName {
+                font-weight: bold;
+                width: 12%;
+            }
+
+            .tableBordered {
+                font-size: 13px;
+                margin: 0 10px;
+                padding: 0;
+                width: 100%;
+                border-right: 1px solid black;
+                border-bottom: 1px solid black;
+                border-collapse: separate;
+                border-spacing: 0px;
+                *border-collapse: expression('separate', cellSpacing = '0px');
+            }
+
+            .tableBordered tbody td, .tableBordered thead th {
+                margin: 0;
+                text-align: center;
+                padding:8px;
+                border-top: 1px solid black;
+                border-left: 1px solid black;
+            }
+
+            .tableBordered thead th {
+                font-weight: bold;
+            }
+
+            .labelName2 {
+                width: 30%;
+            }
+
+            .nopadding-margin-border {
+                padding-left: 0;
+                padding-right: 0;
+                margin-left: 0;
+                margin-right: 0;
+                border: 0;
+            }
+
+            .personName {
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            td {
+                text-align: justify;
+            }
+
+            .rotulo {
+                border: 1px solid #000000;
+                font-size: 8px;
+                margin-bottom: 10px;
+            }
+
+            .rotulo td {
+                text-align: left;
+            }
+
+            .subtitle {
+                font-weight: bold;
+                text-align: center !important;
+            }
+
+            .note {
+                font-size: 13px;
+                font-style: italic;
+            }
+        </style>
+    </head>
+    <body class='body'>
+        <table class='body'>
+            <tbody>
+                <tr>
+                    <td style='width: 50%'></td>
+                    <td style='width: 50%'>
+                        <table class='body rotulo'>
+                            <tbody>
+                                <tr>
+                                    <td class='subtitle' colspan='4'>SUPERINTENDENCIA DE
+                                        INDUSTRIA Y COMERCIO</td>
+                                </tr>
+                                <tr>
+                                    <td class='labelName'>RAD:</td>
+                                    <td><span th:text="${expediente}"></span></td>
+                                    <td class='labelName'>FECHA:</td>
+                                    <td><span th:text="${fecha}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class='labelName'>DEP:</td>
+                                    <td><span th:text="${dependencia}"></span></td>
+                                    <td class='labelName'>EVE:</td>
+                                    <td><span th:text="${evento}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class='labelName'>TRA:</td>
+                                    <td><span th:text="${tramite}"></span></td>
+                                    <td class='labelName'>FOLIOS:</td>
+                                    <td><span th:text="${folios}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class='labelName'>ACT:</td>
+                                    <td colspan='3'><span th:text="${actuacion}"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2'>Se&ntilde;or(a) (es)</td>
+                </tr>
+                <tr>
+                    <td colspan='2'><span class='personName' th:text="${depe_resp}"></span></td>
+                </tr>
+                <tr>
+                    <td><br />
+                        <table class='body'>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Asunto:</strong></td>
+                                    <td>Radicaci&oacute;n:</td>
+                                    <td><span th:text="${expediente}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Tr&aacute;mite:</td>
+                                    <td><span th:text="${codi_tramite}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Evento:</td>
+                                    <td><span th:text="${codi_evento}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Actuaci&oacute;n:</td>
+                                    <td><span th:text="${codi_actuacion}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Folios:</td>
+                                    <td><span th:text="${folios}"></span></td>
+                                </tr> </tbody>
+                        </table></td>
+                </tr>
+                <tr>
+                    <td colspan='2' class="body"><br />
+                        
+                        En atenci&oacute;n a la solicitud radicada en &eacute;sta Superintendencia bajo el n&uacute;mero <strong><span th:text="${expediente}"></span></strong>, 
+                        detallo la siguiente informaci&oacute;n solicitada:
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' class="body"><br />
+                        <span th:text="${observaciones}"></span>
+                        <br />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan='2'><br />Atentamente,<br /></td>
+                </tr>
+
+                <tr>
+                    <td colspan='2'><br /> <strong><span th:text="${nombre}"></span>
+                        </strong></td>
+                </tr>
+                <tr>
+                    <td colspan='2'>Este documento fue firmado electrónicamente</td>
+                </tr>
+                <tr>
+                    <td colspan='2'>desde el Sistema de Trámites Código: 846687229</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,245 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <body>
+        <ui:composition template="./../../WEB-INF/webparts/principal.xhtml">
+            <ui:param name="title" value="Solicitud Corrección" />
+            <ui:define name="mainContent">
+
+                <table class="tableTitle" style="margin-bottom: -50px;margin-top: 40px">
+                    <tbody>
+                        <tr>
+                            <td class="tableTitle-icon">
+                                <div class="card-small card-green d-inline-block">
+                                    <div class="card-icon-icon">
+                                        <span class="fa-stack fa-stack-custom">
+                                            <i class="far fa-file fa-stack-2x"></i>
+                                            <i class="fas fa-info fa-stack-1x"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="tableTitle-text">
+                                <h3><h:outputText value="Solicitud de #{listadosInfoBean.tipoTramite.descripcion}"/></h3>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h:form id="frmWizard">
+                    <div class="five-steps green current-step step-1" id="divStepMenu">
+                        <p:steps activeIndex="0" id="stepsMenu">
+                            <p:menuitem value="Aviso Legal" id="stepsMenuItem1" />
+                            <p:menuitem value="Datos Personales" id="stepsMenuItem2" />
+                            <p:menuitem value="Datos Solicitud" id="stepsMenuItem3"/>
+                            <p:menuitem value="Confirmación" id="stepsMenuItem4"/>
+                            <p:menuitem value="Pago" id="stepsMenuItem5"/>
+                        </p:steps>
+                    </div>
+                    <p:wizard id="wizardDemanda" onback="onback()" flowListener="#{listadosInfoBean.procesoFlujo}" showNavBar="false" showStepStatus="false" backLabel="Anterior" nextLabel="Siguiente" widgetVar="wizardwv">
+                        <p:tab id="legal">
+                            <ui:include src="./../../WEB-INF/webparts/avisoLegalDatosPersonales.xhtml"  />
+                            <div class="row">
+                                <div class="col">  <p:messages/>
+                                </div>
+                            </div>
+                        </p:tab>
+                        <p:tab id="personal" >
+                            <div class="row">
+                                <div class="col">  <p:messages/>
+                                </div>
+                            </div>
+                            <ui:include src="./../../WEB-INF/webparts/datosUsuario.xhtml"  />
+                        </p:tab>
+                        <p:tab id="solicitudes" >
+                            <div class="row">
+                                <div class="col">
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-info-circle fa-fw fa-lg mr-2"></i> Puede agregar hasta un <strong>máximo de #{listadosInfoBean.numMaxSolicitudes} solicitudes</strong>. Si requiere solicitudes adicionales debe realizar un nuevo trámite.<br/>
+                                        <ui:include src="./../../WEB-INF/webparts/avisoCamposRequeridos.xhtml"  />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="py-3 px-1">
+                                <div class="row">
+                                    <div class="col form-group">
+                                        <label class="control-label">Tema al que está relacionando la solicitud</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend required">
+                                                <span class="input-group-text"><i class="far fa-bookmark fa-fw"></i></span>
+                                            </div>
+                                            <p:selectOneMenu id="ddlTema" class="form-control" required="#{request.getParameter('validate')}" autoWidth="false" disabled="#{not listadosInfoBean.showPanelAgregar}"
+                                                             requiredMessage="El Tema es requerido." value="#{listadosInfoBean.tema}">
+                                                <f:selectItem itemLabel="-- Seleccione opción --"></f:selectItem>
+                                                <f:selectItems value="#{listadosInfoBean.listaTemas}" var="entry"
+                                                               itemValue="#{entry.codigo}" itemLabel="#{entry.valor}"></f:selectItems>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col form-group">
+                                        <label class="control-label">Descripción de la Solicitud</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend required">
+                                                <span class="input-group-text"><i class="fab fa-stack-exchange fa-fw"></i></span>
+                                            </div>
+                                            <p:inputTextarea requiredMessage="La Descripción de la Solicitud es requerida." required="#{request.getParameter('validate')}" rows="3" id="tbObservaciones" class="form-control" maxlength="200" autoResize="false" disabled="#{not listadosInfoBean.showPanelAgregar}"
+                                                             value="#{listadosInfoBean.observaciones}">
+                                            </p:inputTextarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">  <p:messages/>
+                                    </div>
+                                </div>
+                                <h:panelGroup layout="block"
+                                              styleClass="row mb-3">
+                                    <div class="col"></div>
+                                    <div class="col form-group">
+                                        <p:commandLink styleClass="btn btn-warning btn-block mt-3" disabled="#{not listadosInfoBean.showPanelAgregar}"
+                                                       validateClient="true" oncomplete="removeUIClasess();"
+                                                       update="wizardDemanda"
+                                                       actionListener="#{listadosInfoBean.addRowTable}">
+                                            <f:param name="validate" value="true"/>
+                                            Agregar Solicitud <i class="fas fa-level-down-alt ml-3"></i>
+                                        </p:commandLink>
+                                    </div>
+                                    <div class="col"></div>
+                                </h:panelGroup>
+                                <div class="row">
+                                    <h:panelGroup layout="block"
+                                                  styleClass="col" id="pnlTabla">
+                                        <fieldset>
+                                            <legend>
+                                                Solicitudes Agregadas (#{listadosInfoBean.listaDetalles.size()})
+                                            </legend>
+                                            <p:dataTable resizableColumns="false"
+                                                         emptyMessage="No se han agregado solicitudes." rowIndexVar="_row"
+                                                         id="datosListFormularioCertificaciones"
+                                                         var="listaCertifica"
+                                                         value="#{listadosInfoBean.listaDetalles}"
+                                                         >
+                                                <p:column headerText="#" width="3%"
+                                                          class="row-index" exportable="false">
+                                                    <h:outputText value="#{_row + 1}" />
+                                                </p:column>
+                                                <p:column headerText="Tema" class="text-center" width="20%">
+                                                    <h:outputText value="#{listaCertifica.tipo_certifica_descripcion}" />
+                                                </p:column>
+                                                <p:column headerText="Descripción" class="text-center">
+                                                    <h:outputText value="#{listaCertifica.observaciones}" />
+                                                </p:column>
+                                                <p:column headerText="Acciones" width="7%"
+                                                          class="text-center align-middle">
+                                                    <p:commandLink
+                                                        styleClass="btn btn-outline-danger btn-sm btn-block border-0 no-shadow"
+                                                        title="Eliminar esta solicitud" process="@this"
+                                                        action="#{listadosInfoBean.eliminarDetalle(listaCertifica)}"
+                                                        update=":frmWizard:wizardDemanda">
+                                                        <i class="fas fa-times"></i>
+                                                    </p:commandLink>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </fieldset>
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+                        </p:tab>
+
+                        <p:tab id="confirmacion">
+                            <div class="row">
+                                <div class="col">  <p:messages/>
+                                </div>
+                            </div>
+                            <div class="py-0 px-1">
+                                <div class="row">
+                                    <div class="col">
+                                        <fieldset>
+                                            <legend>
+                                                Solicitudes Agregadas (#{listadosInfoBean.listaDetalles.size()})
+                                            </legend>
+                                            <p:dataTable resizableColumns="false"
+                                                         emptyMessage="No se han agregado solicitudes." rowIndexVar="_row"
+                                                         id="confirmListFormularioCertificaciones"
+                                                         var="listaCertifica"
+                                                         value="#{listadosInfoBean.listaDetalles}"
+                                                         >
+                                                <p:column headerText="#" width="3%"
+                                                          class="row-index" exportable="false">
+                                                    <h:outputText value="#{_row + 1}" />
+                                                </p:column>
+                                                <p:column headerText="Tema" class="text-center" width="20%">
+                                                    <h:outputText value="#{listaCertifica.tipo_certifica_descripcion}" />
+                                                </p:column>
+                                                <p:column headerText="Descripción" class="text-center">
+                                                    <h:outputText value="#{listaCertifica.observaciones}" />
+                                                </p:column>
+                                            </p:dataTable>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col text-center mt-4"> 
+                                        <div class="alert alert-warning">
+                                            <div class="custom-control custom-checkbox">
+                                                <h:selectBooleanCheckbox id="aceptoSolicitud" class="custom-control-input" value="#{listadosInfoBean.aceptoSolicitud}">
+                                                </h:selectBooleanCheckbox>
+                                                <label class="custom-control-label font-weight-bolder" for="frmWizard:aceptoSolicitud">Confirmo que los datos solicitados son correctos</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p:tab>
+                        <p:tab id="pago">
+                            <div class="row mt-3">
+                                <div class="offset-2 col-8">
+                                    <div class="card border-success shadow-sm bg-success-light">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col text-center"> 
+                                                    <h4 class="text-success mb-2">
+                                                        <i class="fas fa-check-circle fa-2x mb-3"></i><br/>
+                                                        El registro de su solicitud se ha realizado de manera exitosa.
+                                                    </h4>
+                                                    <div class="text-center mt-3">
+                                                        <strong>Número de Radicación</strong>
+                                                        <div class="font-weight-bolder color-money mb-2" style="font-size: 32px;">
+                                                            #{listadosInfoBean.numeroRadicacion}
+                                                        </div>
+                                                        <p:link styleClass="btn btn-primary" outcome="listado">Ir a Mi lista de Solicitudes <i class="fas fa-long-arrow-alt-right ml-2"></i>
+                                                        </p:link>
+                                                    </div>
+                                                </div>
+                                                <div class="col"> 
+                                                    <h5 class="card-title text-success mt-2 mb-2">Información acerca del costo de la solicitud</h5>
+                                                    <p class="card-text">
+                                                        El proceso de busqueda de la información solicitada se realiza de forma manual en algunos casos, ya que depende de la complejidad y ubicaciones de los expedientes, por lo que la Superintendencia de Industria y Comercio dispone de maximo diez (10) días hábiles, siguientes a la recepción de la petición, para informar el resultado.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">  <p:messages/>
+                                </div>
+                            </div>
+                        </p:tab>
+                    </p:wizard>
+                    <ui:include src="./../../WEB-INF/webparts/botonesWizard.xhtml">
+                        <ui:param name="currentBean" value="#{listadosInfoBean}" />
+                    </ui:include>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

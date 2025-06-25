@@ -1,0 +1,37 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="https://jakarta.ee/jsf/facelets"
+	xmlns:h="https://jakarta.ee/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="https://jakarta.ee/jsf/core">
+	<div class="alert alert-warning p-0">
+		<table>
+			<tbody>
+				<tr>
+					<td class="td-info"><i class="fas fa-info-circle fa-3x"></i></td>
+					<td class="p-3 td-info2">
+						<h5 class="mb-3">Consulta de trámites</h5>
+						<p class="mb-3">Es posible que los documentos que va a
+							solicitar ya se encuentren disponibles de manera pública y
+							gratuita, razón por la cual se facilita acceso al sistema de
+							consultas de trámites externo de la SIC.</p>
+						<p>Usted podrá realizar esta consulta por cualquiera de los
+							siguientes filtros:
+						<ol>
+							<li>Año y Número de radicado.</li>
+							<li>Número y Año de Acto Administrativo.</li>
+							<li>Por Tipo y Número de identificación.</li>
+						</ol>
+						</p>
+						<p>
+							Si desea realizar una consulta haga click en este <a
+								href="http://serviciospub.sic.gov.co/Sic2/Tramites/Radicacion/Radicacion/Consultas/ConsultaRadicacion.php"
+								target="popup"
+								onclick="window.open('http://serviciospub.sic.gov.co/Sic2/Tramites/Radicacion/Radicacion/Consultas/ConsultaRadicacion.php', 'popup', 'width=600,height=600,scrollbars=yes,resizable=yes'); return false;">
+								enlace</a>.
+						</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</ui:composition>

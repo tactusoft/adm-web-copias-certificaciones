@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                            https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+	version="6.0">
+
+	<!-- Página por defecto -->
+	<welcome-file-list>
+		<welcome-file>view/login.xhtml</welcome-file>
+	</welcome-file-list>
+
+	<context-param>
+		<param-name>jakarta.faces.PROJECT_STAGE</param-name>
+		<param-value>Production</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>jakarta.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>server</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>none</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>primefaces.FONT_AWESOME</param-name>
+		<param-value>false</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>CopiasyCertificaciones.Version</param-name>
+		<param-value>3.0.0</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>CopiasyCertificaciones.FechaActualizacion</param-name>
+		<param-value>04-06-2025</param-value>
+	</context-param>
+	
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Area del coordinador</web-resource-name>
+			<url-pattern>view/notification/*</url-pattern>
+			<url-pattern>view/reports/*</url-pattern>
+			<url-pattern>view/errors/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>COORDINADOR_SCC</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Area del funcionario</web-resource-name>
+			<url-pattern>view/requests/*</url-pattern>
+			<url-pattern>view/reports/*</url-pattern>
+			<url-pattern>view/errors/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>RESPONSABLE_SCC</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Area del funcionario</web-resource-name>
+			<url-pattern>view/otc/*</url-pattern>
+			<url-pattern>view/errors/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>VENTANILLA_SE</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+</web-app>

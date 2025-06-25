@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="es" xmlns="https://www.w3.org/1999/xhtml"
+	xmlns:h="https://jakarta.ee/jsf/html"
+	xmlns:f="https://jakarta.ee/jsf/core"
+	xmlns:ui="https://jakarta.ee/jsf/facelets"
+	xmlns:c="https://jakarta.ee/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+<body>
+	<ui:composition
+		template="./../../WEB-INF/webparts/notificationmain.xhtml">
+		<ui:param name="title" value="Administración de parámetros" />
+		<ui:define name="mainContent">
+			<h:panelGroup>
+				<fieldset>
+					<legend> Detalles cámara de comercio -
+						#{cCParametrosBean.currentCamara.numeroDocumento} </legend>
+				</fieldset>
+				<p:tabView effect="fold">
+					<p:tab title="Representante Legal">
+						<h:form id="frmRLegal">
+							<div class="row">
+								<div class="col-lg-6 form-group">
+									<label class="control-label">Nombre Cámara</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><i
+												class="far fa-address-book"></i></span>
+										</div>
+										<p:inputText class="form-control" readonly="false"
+											disabled="true"
+											value="#{cCParametrosBean.currentCamara.nombre}">
+										</p:inputText>
+									</div>
+								</div>
+								<div class="col-sm-2 form-group">
+									<label class="control-label">Tipo documento</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><i
+												class="far fa-address-book"></i></span>
+										</div>
+										<p:inputText class="form-control" readonly="true"
+											disabled="false"
+											value="#{cCParametrosBean.currentCamara.tipoDocumento}">
+										</p:inputText>
+									</div>
+								</div>
+								<div class="col-sm-4 form-group">
+									<label class="control-label">Numero documento</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><i
+												class="far fa-address-book"></i></span>
+										</div>
+										<p:inputText class="form-control" readonly="true"
+											disabled="false"
+											value="#{cCParametrosBean.currentCamara.numeroDocumento}">
+										</p:inputText>
+									</div>
+								</div>
+							</div>
+							<br />
+							<div class="card shadow-sm-strong">
+								<div class="card-header text-center">Representante legal</div>
+								<div class="card-body text-body ">
+									<div class="row">
+
+										<div class="col-sm-2 form-group">
+											<label class="control-label">Tipo documento</label>
+											<div class="input-group">
+												<div class="input-group-prepend required">
+													<span class="input-group-text"><i
+														class="fas fa-address-card"></i></span>
+												</div>
+												<p:inputText class="form-control" readonly="false"
+													disabled="false"
+													value="#{cCParametrosBean.currentCamara.representante.tipoDocumento}">
+												</p:inputText>
+											</div>
+										</div>
+										<div class="col-sm-2 form-group">
+											<label class="control-label">Numero de documento</label>
+											<div class="input-group">
+												<div class="input-group-prepend required">
+													<span class="input-group-text"><i
+														class="far fa-address-book"></i></span>
+												</div>
+												<p:inputText class="form-control" readonly="false"
+													disabled="false"
+													value="#{cCParametrosBean.currentCamara.representante.numeroDocumento}">
+												</p:inputText>
+											</div>
+										</div>
+
+										<div class="col-lg-4 form-group">
+											<label class="control-label">Nombres y apellidos</label>
+											<div class="input-group">
+												<div class="input-group-prepend required">
+													<span class="input-group-text"><i
+														class="far fa-id-badge"></i></span>
+												</div>
+												<p:inputText class="form-control" readonly="false"
+													disabled="false"
+													value="#{cCParametrosBean.currentCamara.representante.nombre}">
+												</p:inputText>
+											</div>
+										</div>
+
+										<div class="col-lg-4 form-group">
+											<label class="control-label">Cargo</label>
+											<div class="input-group">
+												<div class="input-group-prepend required">
+													<span class="input-group-text"><i
+														class="fas fa-people-carry"></i></span>
+												</div>
+												<p:inputText class="form-control" readonly="false"
+													disabled="false"
+													value="#{cCParametrosBean.currentCamara.representante.cargo}">
+												</p:inputText>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-2 form-group">
+											<label class="control-label">Tipo documento
+												delegación </label>
+											<div class="input-group">
+												<div class="input-group-prepend required">
+													<span class="input-group-text"><i
+														class="far fa-file-alt"></i></span>
+												</div>
+												<p:inputText class="form-control" readonly="false"
+													disabled="false"
+													value="#{cCParametrosBean.currentCamara.representante.nombreActaDelegacion}">
+												</p:inputText>
+											</div>
+										</div>
+
+
+										<div class="col-sm-2 form-group">
+											<label class="control-label">#{cCParametrosBean.currentCamara.representante.nombreActaDelegacion}</label>
+											<div class="input-group">
+												<div class="input-group-prepend required">
+													<span class="input-group-text"><i
+														class="far fa-newspaper"></i></span>
+												</div>
+												<p:inputText class="form-control" readonly="false"
+													disabled="false"
+													value="#{cCParametrosBean.currentCamara.representante.numeroActaDelegacion}">
+												</p:inputText>
+											</div>
+										</div>
+										<div class="col-sm-4 form-group">
+											<label class="control-label">Fecha
+												#{cCParametrosBean.currentCamara.representante.nombreActaDelegacion}</label>
+											<div class="input-group">
+												<div class="input-group-prepend required">
+													<span class="input-group-text"><i
+														class="far fa-calendar-check"></i></span>
+												</div>
+
+
+
+												<p:calendar id="tbFechaActo" showOtherMonths="true"
+													autocomplete="off" pattern="dd/MM/yyyy"
+													placeholder="dd/mm/aaaa" disabled="false" locale="es"
+													class="form-control"
+													value="#{cCParametrosBean.currentCamara.representante.fechaActaDelegacion}">
+
+												</p:calendar>
+												<h:outputScript>$( function() {
+                                                $("input[name$='tbFechaActo_input']").datepicker("option", "maxDate", +0);
+                                                });  </h:outputScript>
+
+
+											</div>
+										</div>
+										<div class="col-sm-4 form-group">
+											<p:commandButton value="Guardar"
+												styleClass="btn btn-lg btn-primary btn-block mt-4 mb-2 float-left"
+												actionListener="#{cCParametrosBean.updateSaveRLegal}"
+												update="frmRLegal" oncomplete="removeUIClasess();" />
+										</div>
+
+									</div>
+
+
+
+								</div>
+
+							</div>
+
+						</h:form>
+					</p:tab>
+					<p:tab title="Secretarios">
+
+					</p:tab>
+					<p:tab title="Suplentes">
+
+					</p:tab>
+				</p:tabView>
+			</h:panelGroup>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

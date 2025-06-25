@@ -1,0 +1,166 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="https://jakarta.ee/jsf/facelets"
+	xmlns:h="https://jakarta.ee/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="https://jakarta.ee/jsf/core">
+	<div class="row">
+		<div class="col">
+			<div class="alert alert-warning">
+				<i class="fas fa-info-circle fa-fw fa-lg mr-2"></i>Por favor
+				verifique que todos los datos que se muestran a continuación son
+				correctos, en caso contrario por favor diríjase a este <a
+					href="#{navegaUsuarioMB.redireccionServiciosLinea(false, false)}"
+					target="_blank">enlace</a> e ingrese con el mismo usuario y
+				contraseña de este portal, allí podrá realizar las modificaciones
+				pertinentes. <strong>Tenga en cuenta que todos los procesos
+					de contacto, notificación y respuesta serán enviados según los
+					datos presentados</strong>.
+			</div>
+		</div>
+	</div>
+	<div class="py-3 px-1">
+		<div class="row">
+			<div class="col-3 form-group">
+				<label class="control-label">Tipo de Identificación</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i
+							class="far fa-address-card fa-fw"></i></span>
+					</div>
+					<div class="form-control form-control-static ui-state-disabled">
+						#{loginBean.getDatosSesion().persona.tipoDocumentoDesc}</div>
+				</div>
+			</div>
+			<div class="col-3 form-group">
+				<label class="control-label">Número de Identificación</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i
+							class="far fa-address-card fa-fw"></i></span>
+					</div>
+					<div class="form-control form-control-static ui-state-disabled">
+						#{utility.tryFormatCurrencyNumber(loginBean.getDatosSesion().persona.numeroDocumento,
+						false)}</div>
+				</div>
+			</div>
+			<h:panelGroup layout="block" styleClass="col form-group"
+				rendered="#{!loginBean.getDatosSesion().persona.esEmpresa}">
+				<label class="control-label">Primer Nombre</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i
+							class="fas fa-chevron-right fa-fw"></i></span>
+					</div>
+					<div class="form-control form-control-static ui-state-disabled">
+						#{loginBean.getDatosSesion().persona.natural.primerNombre}</div>
+				</div>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="col form-group"
+				rendered="#{!loginBean.getDatosSesion().persona.esEmpresa}">
+				<label class="control-label">Segundo Nombre</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i
+							class="fas fa-chevron-right fa-fw"></i></span>
+					</div>
+					<div class="form-control form-control-static ui-state-disabled">
+						#{loginBean.getDatosSesion().persona.natural.segundoNombre}</div>
+				</div>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="col form-group"
+				rendered="#{loginBean.getDatosSesion().persona.esEmpresa}">
+				<label class="control-label">Razón Social</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i
+							class="fas fa-chevron-right fa-fw"></i></span>
+					</div>
+					<div class="form-control form-control-static ui-state-disabled">
+						#{loginBean.getDatosSesion().persona.empresa.razonSocial}</div>
+				</div>
+			</h:panelGroup>
+		</div>
+		<div class="row">
+			<h:panelGroup layout="block" styleClass="col form-group"
+				rendered="#{!loginBean.getDatosSesion().persona.esEmpresa}">
+				<label class="control-label">Primer Apellido</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i
+							class="fas fa-chevron-right fa-fw"></i></span>
+					</div>
+					<div class="form-control form-control-static ui-state-disabled">
+						#{loginBean.getDatosSesion().persona.natural.primerApellido}</div>
+				</div>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="col form-group"
+				rendered="#{!loginBean.getDatosSesion().persona.esEmpresa}">
+				<label class="control-label">Segundo Apellido</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i
+							class="fas fa-chevron-right fa-fw"></i></span>
+					</div>
+					<div class="form-control form-control-static ui-state-disabled">
+						#{loginBean.getDatosSesion().persona.natural.segundoApellido}</div>
+				</div>
+			</h:panelGroup>
+			<div class="col form-group">
+				<label class="control-label">Correo Electrónico</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i
+							class="far fa-envelope fa-fw"></i></span>
+					</div>
+					<div class="form-control form-control-static ui-state-disabled">
+						#{loginBean.userEmail}</div>
+				</div>
+			</div>
+			<div class="col form-group">
+				<label class="control-label">Teléfono</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i
+							class="fas fa-phone-alt fa-fw"></i></span>
+					</div>
+					<div class="form-control form-control-static ui-state-disabled">
+						#{loginBean.userTelefono}</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col form-group">
+				<label class="control-label">Dirección</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i
+							class="fas fa-map-marker-alt fa-fw"></i></span>
+					</div>
+					<div class="form-control form-control-static ui-state-disabled">
+						#{loginBean.userDireccion}</div>
+				</div>
+			</div>
+			<div class="col form-group">
+				<label class="control-label">Ciudad</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i
+							class="fas fa-map-marked-alt fa-fw"></i></span>
+					</div>
+					<div class="form-control form-control-static ui-state-disabled">
+						#{loginBean.userCiudad}</div>
+				</div>
+			</div>
+			<div class="col form-group">
+				<label class="control-label">Departamento</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="far fa-map fa-fw"></i></span>
+					</div>
+					<div class="form-control form-control-static ui-state-disabled">
+						#{loginBean.userRegion}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</ui:composition>

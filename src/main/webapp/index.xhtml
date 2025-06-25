@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Demo PF 14 + Jakarta 10</title>
+</h:head>
+<h:body>
+    <h:form>
+        <p:inputText value="#{helloBean.name}" placeholder="Tu nombre" />
+        <p:commandButton value="Saludar" action="#{helloBean.sayHello}" update="msg"/>
+        <p:outputLabel id="msg" value="#{helloBean.message}" styleClass="mt-3"/>
+    </h:form>
+</h:body>
+</html>

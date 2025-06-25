@@ -1,0 +1,227 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="jakarta.tags.core"
+	xmlns:p="http://primefaces.org/ui"
+	template="./../WEB-INF/webparts/principal_login.xhtml">
+	<ui:param name="login" value="inner_medium_login" />
+	<ui:define name="mainContent">
+		<div class="row">
+			<div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 form-group">
+				<div class="card shadow-sm-strong">
+					<div class="card-body">
+						<h5 class="card-title text-left">Qué puedo hacer?</h5>
+						<div class="row no-gutters">
+							<div class="col form-group">
+								<p class="card-text">Esta es la lista de trámites que
+									actualmente se encuentran disponibles, mediante el acceso a
+									nuestra Sede Electrónica:</p>
+							</div>
+						</div>
+						<div class="row no-gutters">
+							<div class="col-4">
+								<img src="#{resource['img/Question.png']}" class="cardImg"></img>
+							</div>
+							<div class="col-8">
+
+								<ul class="fa-ul">
+									<ui:repeat var="subitem" value="#{loginBean.tramitesActivos}">
+										<li><span class="fa-li"><i class="fas fa-check"></i></span>
+											#{subitem.idtiposolicitud.descripcion}</li>
+									</ui:repeat>
+
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 form-group">
+				<div class="card shadow-sm-strong">
+					<div class="card-body">
+						<h5 class="card-title text-left">Validación de Código y
+							Estado de Trámite</h5>
+						<div class="row no-gutters">
+							<div class="col">
+								<p>El validador documental permite verificar la autenticidad
+									de los documentos emitidos por la Superintendencia de Industria
+									y Comercio o consultar el estado del trámite.</p>
+								<p>
+									Introduzca el <strong>número del código de barras</strong> que
+									se encuentra en la parte superior del documento que desea
+									validar o consultar:
+								</p>
+								<p class="text-center">
+									<i class="fas fa-barcode fa-6x"></i>
+								</p>
+								<h:form id="validationForm">
+									<div class="input-group input-group-sm mt-4">
+										<div class="input-group-prepend">
+											<span class="input-group-text">CB</span>
+										</div>
+										<p:inputText value="#{loginBean.codigo1}" id="tbCod1"
+											maxlength="5" placeholder="XXXXX"
+											styleClass="form-control text-center" />
+										<div class="input-group-append">
+											<span class="input-group-text">-</span>
+										</div>
+										<p:inputText value="#{loginBean.codigo2}" id="tbCod2"
+											maxlength="2" placeholder="XX"
+											styleClass="form-control text-center" style="max-width:60px" />
+										<div class="input-group-append">
+											<span class="input-group-text">-</span>
+										</div>
+										<p:inputText value="#{loginBean.codigo3}" id="tbCod3"
+											maxlength="5" placeholder="XXXXX"
+											styleClass="form-control text-center" />
+									</div>
+									<div class="row mt-2">
+										<div class="col text-center">
+											<p:messages id="msgCodigo" for="validationForm"
+												globalOnly="false" />
+										</div>
+									</div>
+									<div class="row mt-4">
+										<div class="col">
+											<p:commandButton value="Validar Código"
+												styleClass="btn btn-sm btn-success btn-block"
+												update="validationForm" action="#{loginBean.validarCodigo}"
+												oncomplete="removeUIClasess();" />
+										</div>
+										<div class="col">
+											<p:commandButton value="Ver Estado"
+												styleClass="btn btn-sm btn-warning btn-block"
+												update="validationForm"
+												action="#{loginBean.consultarEstado}"
+												oncomplete="removeUIClasess();" />
+										</div>
+										<div class="col">
+											<p:fileUpload listener="#{loginBean.handleFileUpload}"
+												mode="advanced" dragDropSupport="false" multiple="true"
+												rendered="true" sizeLimit="1000000000000"
+												update="validationForm" fileLimit="10" auto="true"
+												value="Validar Archivo" label="Validar Archivo"
+												skinSimple="true" allowTypes="/(\.|\/)(pdf)$/" />
+										</div>
+									</div>
+								</h:form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 form-group">
+				<h:form id="loginForm" class="form-signin" prependId="false">
+					<div class="card shadow-sm-strong">
+						<div class="card-body text-center">
+							<h5 class="card-title text-left">Autenticación</h5>
+							<div class="row no-gutters">
+								<div class="col form-group">
+									<p class="card-text text-left">
+										Si usted no dispone de un usuario para acceder, puede
+										registrarse en este <a
+											href="#{navegaUsuarioMB.redireccionServiciosLinea(true, false)}"
+											target="_blank">enlace</a> y luego usar las mismas
+										credenciales para acceder.
+									</p>
+								</div>
+							</div>
+							<div class="row no-gutters">
+								<div class="col-4">
+									<img src="#{resource['img/Users.png']}" class="cardImg"></img>
+								</div>
+								<div class="col-8 px-4">
+									<label for="milogin" class="sr-only">Usuario</label>
+									<div class="input-group input-group-user" data-toggle="tooltip"
+										data-placement="right" title="Digite su nombre de usuario">
+										<div class="input-group-prepend input-group-text required"
+											aria-required="true" data-toggle="tooltip"
+											data-placement="left" title="Digite su nombre de usuario">
+											<i class="fa fa-user fa-fw" aria-hidden="true"></i>
+										</div>
+										<p:inputText value="#{loginBean.logi_usua}" id="user"
+											maxlength="20" styleClass="form-control"
+											placeholder="Usuario..." required="true"
+											requiredMessage="El nombre de usuario es requerido." />
+									</div>
+									<label for="mipass" class="sr-only">Contraseña</label>
+									<div class="input-group input-group-pass"
+										title="Digite su contraseña" data-toggle="tooltip"
+										data-placement="right">
+										<div class="input-group-prepend input-group-text required"
+											aria-required="true" title="Digite su contraseña"
+											data-toggle="tooltip" data-placement="left">
+											<i class="fa fa-key fa-fw" aria-hidden="true"></i>
+										</div>
+										<p:password value="#{loginBean.pass_usua}" id="pass"
+											maxlength="32" styleClass="form-control" required="true"
+											placeholder="Contraseña..."
+											requiredMessage="La contraseña es requerida." />
+									</div>
+									<div class="my-3 text-center">
+										<a
+											href="#{navegaUsuarioMB.redireccionServiciosLinea(false, true)}"
+											target="_blank">He olvidado mi contraseña y/o usuario</a>
+									</div>
+									<p:messages id="messagesLogin" showDetail="true"
+										globalOnly="false" />
+									<p:ajaxStatus>
+										<f:facet name="default">
+											<p:commandButton value="Iniciar Sesión"
+												styleClass="btn btn-lg btn-primary btn-block mt-4 mb-2"
+												update="loginForm" action="#{loginBean.validar}"
+												process="@this" oncomplete="removeUIClasess();" ajax="false" />
+
+										</f:facet>
+										<f:facet name="start">
+											<div class='alert alert-warning'>
+												<div class="spinner-border" role="status">
+													<span class="sr-only">Procesando...</span>
+												</div>
+												Procesando...
+											</div>
+										</f:facet>
+										<f:facet name="complete">
+											<c:if test="#{loginBean.loggedIn == false}">
+												<p:commandButton value="Iniciar Sesión"
+													styleClass="btn btn-lg btn-primary btn-block mt-4 mb-2"
+													update="loginForm" action="#{loginBean.validar}"
+													process="@this" oncomplete="removeUIClasess();"
+													ajax="false" />
+											</c:if>
+											<c:if test="#{loginBean.loggedIn }">
+												<div class='alert alert-success'>
+													<i class='fas fa-check fa-2x fa-fw'></i> Verificado...
+												</div>
+
+
+												<c:choose>
+													<c:when
+														test="#{loginBean.codigoRol == loginBean.rolCoordinador() }">
+														<h:outputScript>window.location = 'notification/inboxnotify.xhtml?faces-redirect=true';</h:outputScript>
+													</c:when>
+													<c:when
+														test="#{loginBean.codigoRol == loginBean.rolFuncionario()}">
+														<h:outputScript>window.location = 'requests/missolicitudes.xhtml?faces-redirect=true';</h:outputScript>
+													</c:when>
+													<c:when
+														test="#{loginBean.codigoRol == loginBean.rolVentanilla()}">
+														<h:outputScript>window.location = 'otc/overthecounter.xhtml?faces-redirect=true';</h:outputScript>
+													</c:when>
+													<c:otherwise>
+														<h:outputScript>window.location = 'tramites/menu.xhtml?faces-redirect=true';</h:outputScript>
+													</c:otherwise>
+												</c:choose>
+											</c:if>
+										</f:facet>
+									</p:ajaxStatus>
+								</div>
+							</div>
+						</div>
+					</div>
+				</h:form>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

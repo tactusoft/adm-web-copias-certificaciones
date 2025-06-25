@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es-co" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>
+        </title>
+    </head>
+    <body>
+        <div style='background-color: #EDEDF0; border: 1px solid #232331;'>
+            <img style='height: 60px; float: left;'
+                 alt="Superintendencia de Industria y Comercio"
+                 src="https://aplicaciones.sic.gov.co/CopiasyCertificaciones/resources/img/logo-sic-horizontal-2020.png" />
+            <img
+                style='height: 53px; float: right; margin-top: 4px; margin-right: 4px'
+                alt="El progeso es de todos - MINCOMERCIO" title="MINCOMERCIO"
+                src="https://aplicaciones.sic.gov.co/CopiasyCertificaciones/resources/img/logo-mincomercio.png" />
+            <h3 style='background-color: #232331; color: #ffffff; margin-top: 61px; padding-left: 15px; padding-right: 15px;'>
+                SERVICIOS EN LINEA - SISTEMA DE SOLICITUD DE COPIAS Y CERTIFICACIONES
+            </h3>
+            <div style='padding: 15px; padding-top: 10px;'>
+                <p>
+                    Se&ntilde;or(a): <h3 style='text-transform: uppercase; color: #2A2D82'
+                                         th:text='${Solicitante}'>
+                    </h3>
+                    <h3 style='font-weight: bold; color: #2A2D82;'  th:text='${email}'>
+                        
+                    </h3>                    
+                </p>
+
+                <p>
+                    <strong>Asunto:&nbsp;</strong> 
+                    <table style='background-color: #D8D8D8; border: 1px solid #2A2D82; margin-bottom: 15px; margin-top: 15px;'>
+                        <tr>
+                            <td
+                                style='font-weight: bold; color: #2A2D82; padding-right: 10px; padding-left: 10px;'>
+                                Radicaci&oacute;:
+                            </td>
+                            <td>
+                                <span style='font-weight: bold; padding-right: 10px' th:text="${expediente}"/>                                
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td
+                                style='font-weight: bold; color: #2A2D82; padding-right: 10px; padding-left: 10px;'>
+                                Tr&aacute;mite:
+                            </td>
+                            <td>
+                                <span style='font-weight: bold; padding-right: 10px' th:text="${tramite}"/>                                
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td
+                                style='font-weight: bold; color: #2A2D82; padding-right: 10px; padding-left: 10px;'>
+                                Evento:
+                            </td>
+                            <td>
+                                <span style='font-weight: bold; padding-right: 10px' th:text="${evento}"/>                                
+                            </td>                            
+                        </tr>
+
+                        <tr>
+                            <td
+                                style='font-weight: bold; color: #2A2D82; padding-right: 10px; padding-left: 10px;'>
+                                Actuaci&oacute;n:
+                            </td>
+                            <td>
+                                <span style='font-weight: bold; padding-right: 10px' th:text="${actuacion}"/>
+                                
+                            </td>                            
+                        </tr>
+
+                    </table>
+                </p>
+
+                <br/>
+                <p>
+                    Estimado(a) Se&ntilde;or(a):                    
+                </p>
+                <p>
+
+                   El estado de su solicitud ha cambio al estado <strong>Solicitud paga</strong>. Por favor ingrese al link (link que lo lleva al módulo de copias) para darle seguimiento. 
+
+                </p>
+           
+                <br/>
+                <br/>
+                <br/>
+                
+                <p>
+                    <br /> Atentamente,<br />
+                </p>
+                <p>
+                    <br /> 
+                    <strong><span th:text="${firma}"></span></strong>
+                    <h3>
+                        COORDINADORA GRUPO NOTIFICACIONES Y CERTIFICACIONES
+                    </h3>
+                </p>
+                
+            </div>
+        </div>
+    </body>
+</html>

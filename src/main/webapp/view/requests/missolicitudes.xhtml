@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<body>
+	<ui:composition
+		template="./../../WEB-INF/webparts/solicitudesmain.xhtml">
+		<ui:param name="title" value="Mis Solicitudes" />
+		<ui:define name="mainContent">
+			<h:form id="frmMyRequests">
+				<p:poll interval="120"
+					listener="#{requestManagementBean.getMyAssignedRequest}"
+					update="myRequestTable" />
+				<h:panelGroup layout="block" styleClass="col" id="panelBlotter">
+					<div class="row">
+						<fieldset>
+							<legend> Mis solicitudes </legend>
+							<p:ajaxStatus>
+								<f:facet name="default">
+									<div class="row">
+										<div class="col form-group" align="right">
+											<p:commandLink ajax="true" styleClass="btn btn-primary"
+												actionListener="#{requestManagementBean.getMyAssignedRequest}"
+												title="Actualizar vista" update="myRequestTable">
+												<f:param name="validate" value="true" />
+												<i class="fa fa-sync-alt"></i>
+                                                    Actualizar
+                                                </p:commandLink>
+										</div>
+									</div>
+								</f:facet>
+								<f:facet name="start">
+									<div class='alert alert-warning' align="center">
+										<div class="spinner-border" role="status">
+											<span class="sr-only">Actualizando datos...</span>
+										</div>
+										Actualizando datos...
+									</div>
+								</f:facet>
+								<f:facet name="complete">
+									<div class="row">
+										<div class="col form-group" align="right">
+											<p:commandLink ajax="true" styleClass="btn btn-primary"
+												actionListener="#{requestManagementBean.getMyAssignedRequest}"
+												title="Actualizar vista" update="myRequestTable">
+												<f:param name="validate" value="true" />
+												<i class="fa fa-sync-alt"></i>
+                                                    Actualizar
+                                                </p:commandLink>
+										</div>
+									</div>
+								</f:facet>
+							</p:ajaxStatus>
+							<div class="row">
+								<div class="col">
+									<h:outputText
+										value="Nota: Existen novedades en los radicados, por favor revisar los resaltados con color rojo!"
+										style="color: red;"
+										rendered="#{requestManagementBean.habilitaNota}" />
+									<br /> <br />
+								</div>
+							</div>
+							<p:dataTable resizableColumns="false"
+								emptyMessage="No hay solicitudes pendientes." rowIndexVar="_row"
+								paginator="true" rows="5"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+								rowsPerPageTemplate="5,10,15" id="myRequestTable"
+								var="myRequests"
+								value="#{requestManagementBean.listaSolicitudes}">
+								<p:column headerText="#" width="3%" class="row-index"
+									exportable="false">
+									<h:outputText value="#{_row + 1}"
+										style="#{myRequests.notificacion ? 'color:red' : ''}" />
+									<h:outputText value="!" style="color: red;"
+										rendered="#{myRequests.notificacion}" />
+								</p:column>
+
+								<p:column headerText="Id" filterBy="#{myRequests.idtramite}"
+									filterMatchMode="contains" class="text-center" width="5%">
+									<h:outputText value="#{myRequests.idtramite}" />
+									<p:inputText value="#{myRequests.idtramite}" id="hiddenfield"
+										type="hidden" />
+								</p:column>
+
+								<p:column headerText="Año" filterBy="#{myRequests.ano_radi}"
+									filterMatchMode="contains" class="text-center" width="5%">
+									<h:outputText value="#{myRequests.ano_radi}" />
+								</p:column>
+
+								<p:column filterBy="#{myRequests.nume_radi}"
+									filterMatchMode="contains" headerText="# Rad."
+									class="text-center" width="5%">
+									<h:outputText value="#{myRequests.nume_radi}"
+										rendered="#{not myRequests.notificacion}" />
+									<h:outputText value="#{myRequests.nume_radi}"
+										style="color: red;" rendered="#{myRequests.notificacion}" />
+								</p:column>
+
+								<p:column filterBy="#{myRequests.fecha_creacion}"
+									sortBy="#{myRequests.fecha_creacion}"
+									headerText="Fecha Radicación" class="text-center"
+									id="fechaCreacion" width="17%">
+									<h:outputText value="#{myRequests.fecha_creacion}">
+										<f:convertDateTime type="localDateTime"
+											pattern="yyyy-MM-dd HH:mm" locale="es" />
+									</h:outputText>
+
+								</p:column>
+
+								<p:column filterBy="#{myRequests.tipoDcoumento}"
+									filterMatchMode="contains" headerText="Tipo doc"
+									class="text-center" width="10%">
+									<h:outputText value="#{myRequests.tipoDcoumento}" />
+								</p:column>
+
+								<p:column headerText="# Documento" class="text-center"
+									width="10%" filterBy="#{myRequests.numeroIdentificacion}"
+									sortBy="#{myRequests.numeroIdentificacion}"
+									id="numeroDocumento">
+									<h:outputText value="#{myRequests.numeroIdentificacion}">
+										<f:convertNumber locale="es" type="number"
+											minFractionDigits="0" pattern="##########" />
+									</h:outputText>
+
+								</p:column>
+
+								<p:column headerText="Solicitante" class="text-center"
+									width="20%" filterMatchMode="contains"
+									filterBy="#{myRequests.nombreSolicitante}">
+									<h:outputText value="#{myRequests.nombreSolicitante}" />
+								</p:column>
+
+								<p:column headerText="Estado" class="text-center" width="20%"
+									filterMatchMode="contains"
+									filterBy="#{myRequests.estado.description}">
+									<h:outputText value="#{myRequests.estado.description}" />
+								</p:column>
+
+								<p:column headerText="Acciones" width="8%"
+									class="text-center align-middle">
+
+									<p:commandLink ajax="false"
+										styleClass="btn btn-outline-primary btn-sm btn-block border-0 no-shadow"
+										title="Ver detalle de la solicitud" process="@this"
+										action="/view/requests/detalletramite.xhtml?faces-redirect=true"
+										actionListener="#{requestManagementBean.setTramite(myRequests.idtramite)}">
+                                            Detalles 
+                                            <f:param name="id"
+											value="#{myRequests.idtramite}" />
+										<i class="fa fa-bars"></i>
+									</p:commandLink>
+
+								</p:column>
+
+							</p:dataTable>
+
+
+
+						</fieldset>
+					</div>
+				</h:panelGroup>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

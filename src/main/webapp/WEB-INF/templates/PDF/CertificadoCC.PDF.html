@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es-co" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>CAMARAS DE COMERCIO</title>
+        <style>
+            @font-face {font-family: 'segoeui'; src: url('./webfonts/segoeui.ttf') format('truetype');}
+            @font-face {font-family: 'seguisb'; src: url('./webfonts/seguisb.ttf') format('truetype');}
+            .body {
+                font-family: segoeui;
+                font-size: 14px;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                text-align: justify;
+                line-height: 1.5;
+            }
+            .tableBordered {
+                font-size: 13.5px;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                border-right: 1px solid #333333;
+                border-bottom: 1px solid #333333;
+                border-collapse: separate;
+                border-spacing: 0px;
+                *border-collapse: expression('separate', cellSpacing = '0px');
+            }
+            .tableBordered tbody td, .tableBordered thead th {
+                margin: 0;
+                text-align: center;
+                padding:3px;
+                border-top: 1px solid #333333;
+                border-left: 1px solid #333333;
+                font-weight: normal;
+            }
+            .tableBordered thead th {
+                font-family: seguisb;
+                font-weight:  bold;
+            }
+            .nopadding-margin-border {
+                padding-left: 0;
+                padding-right: 0;
+                margin-left: 0;
+                margin-right: 0;
+                border: 0;
+            }
+            td {
+                text-align: justify;
+            }
+            .subtitle {
+                font-size: 15px;
+                text-align: center !important;
+            }
+            .firma {
+                font-size: 15px;
+                padding-top: 30px;
+                text-align: center !important;
+            }
+            .legal {
+                font-size: 9px;
+                padding-top: 10px;
+                text-align: center !important;
+            }
+            .grafo{
+                width:230px;
+            }
+        </style>
+    </head>
+    <body class='body'>
+        <table class='body'>
+            <tr>
+                <td colspan="3"  class="subtitle">EL(LA) SECRETARIO(A) GENERAL AD-HOC DE LA SUPERINTENDENCIA DE INDUSTRIA Y COMERCIO<br /><br />CERTIFICA</td>
+            </tr>
+            <tr>
+                <td colspan="3" ><br />
+                    <p th:text="${texto_informativo}"></p></td>
+            </tr>
+            <tr>
+                <td colspan="3" >
+                    <p th:text="${texto_informativo2}"></p></td>
+            </tr>
+            <tr>
+                <td colspan="3" >
+                    <p th:text="${texto_informativo3}"></p></td>
+            </tr>
+            <tr>
+                <td colspan="3" >
+                    <p th:text="${texto_informativo5}"></p></td>
+            </tr>
+            <tr>
+                <td colspan="3" >
+                    <p th:text="${texto_informativo4}"></p></td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: center"><br /><br />
+                    <table class='tableBordered'>
+                        <thead>
+                            <tr>
+                                <th rowspan='2'>Nombre del Suplente</th>
+                                <th rowspan='2' style='width:20%'>Identificaci&oacute;n</th>
+                                <th rowspan='2' style='width:21%'>Cargo</th>
+                                <th colspan='2' style='width:23%'>Acta de Delegaci&oacute;n</th>
+                            </tr>
+                            <tr>
+                                <th style='width:8%'>N&uacute;mero</th>
+                                <th style='width:15%'>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="detalle : ${detalles}">
+                                <td th:text="${detalle.nombre}"></td>
+                                <td th:text="${detalle.tipoDocumento} + ' ' + ${detalle.numeroDocumentoDesc}"></td>
+                                <td th:text="${detalle.cargo}"></td>
+                                <td th:text="${detalle.numeroActaDelegacion}"></td>
+                                <td th:text="${detalle.fechaActaDelegacion}"></td>
+                            </tr>
+                        </tbody>
+                    </table><br /><br /><br /></td>
+            </tr>
+            <tr>
+                <td colspan="3" >Se expide en Bogot&aacute; el d&iacute;a <span th:text="${dia}"></span> del mes de <span th:text="${mes}"></span> del a&ntilde;o <span th:text="${anio}"></span>.
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" class="firma">
+                    <img class="grafo" th:src="${ruta_img_firma}" /><br />
+                    <span th:text="${nombre_secretario}"></span><br />
+                    <span style="font-size: 13px;" th:text="${cargo_secretario}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:22%"></td>
+                <td class="legal">
+                    <span th:text="${texto_legal}"></span></td>
+                <td style="width:22%"></td>
+            </tr>
+        </table>
+    </body>
+</html>

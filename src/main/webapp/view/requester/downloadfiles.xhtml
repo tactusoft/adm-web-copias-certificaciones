@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <body>
+        <ui:composition template="./../../WEB-INF/webparts/principal.xhtml">
+            <ui:param name="title" value="Detalle solicitud" />
+            <ui:define name="mainContent">
+                <h:form id="frmRtaComple">       
+                    <h:panelGroup layout="block"
+                                  styleClass="col" id="pnlTabla">
+                        <fieldset>
+                            <legend>
+                                Descargar archivos de la solicitud - #{downloadFilesBean.tramite.ano_radi}-#{downloadFilesBean.tramite.nume_radi}
+                            </legend>
+                            
+                            
+                            <p:dataTable resizableColumns="false"
+                                         emptyMessage="No hay adjuntos."
+                                         rowIndexVar="_row"
+                                         paginator="true"
+                                         rows="5"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                                         rowsPerPageTemplate="5,10"
+                                         id="tableAdjuntos"
+                                         var="listaAdjuntos"
+                                         value="#{downloadFilesBean.listaAdjuntos}">
+                                
+                                 <p:column headerText="#" width="5%"
+                                          class="row-index" exportable="false">
+                                    <h:outputText value="#{_row + 1}" />                                    
+                                </p:column>
+                                
+                                <p:column headerText="Nombre Archivo" width="45%"
+                                          class="row-index" exportable="false">
+                                    <h:outputText value="#{listaAdjuntos.fileName}" />                                    
+                                </p:column>
+                                <p:column headerText="Tipo de archivo" width="30%"
+                                          class="row-index" exportable="false">
+                                    <h:outputText value="#{listaAdjuntos.fileExtension}" />                                    
+                                </p:column>                               
+                                
+                                
+                                <p:column headerText="Acciones" width="8%">
+                                     <p:commandButton id="downloadLink" 
+                                                         value="Descargar" 
+                                                         ajax="false"
+                                                         styleClass="btn btn-primary"
+                                                         actionListener="#{downloadFilesBean.descargarAdjunto(listaAdjuntos.path,listaAdjuntos.fileName)}">
+                                         <p:fileDownload value="#{downloadFilesBean.download}" />
+                                        </p:commandButton>
+                                </p:column>
+                                
+                            </p:dataTable>
+                            
+                            
+                        </fieldset>
+                    </h:panelGroup>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

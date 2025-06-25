@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <body>
+
+        <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                        xmlns:h="http://xmlns.jcp.org/jsf/html"
+                        xmlns:p="http://primefaces.org/ui"
+                        xmlns:f="http://xmlns.jcp.org/jsf/core">
+            <div class="row">
+                <div class="col">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle fa-fw fa-lg mr-2"></i>
+                        Por favor ingrese el tipo y numero de documento del solicitante y valide con el sus datos personales.
+                        Si el solicitante no dispone de un usuario, puede registrarlo en este <a href="#{navegaUsuarioMB.redireccionServiciosLinea(true, false)}" target="_blank">enlace</a>.
+                    </div>
+                </div>
+            </div>
+
+
+
+            <h:form id="frmPersonalData">
+                <h:panelGroup layout="block"
+                              styleClass="col" id="pnlPersonalData">
+                    <div class="row">
+                        <div class="col-sm-3 form-group">
+                            <label class="control-label">Tipo documento</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend required">
+                                    <span class="input-group-text"><i class="far fa-address-book"></i></span>
+                                </div>
+                                <p:selectOneMenu  id="idTipoDocumento" 
+                                                  class="form-control" 
+                                                  filter="true" 
+                                                  filterMatchMode="contains" 
+                                                  autoWidth="false" 
+                                                  disabled="false"
+                                                  value="#{overTheCounterBean.tipoDocumento}">
+                                    <p:ajax listener="#{overTheCounterBean.onChangeTipoDocumento}" update="pnlPersonalData" process="@form" />
+                                    <f:selectItem itemLabel="-- Seleccione opción --">
+                                    </f:selectItem>
+                                    <f:selectItems value="#{overTheCounterBean.listaTipoDocumentos}" var="entry"
+                                                   itemValue="#{entry.codigo}" itemLabel="#{entry.valor}">
+                                    </f:selectItems>
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label class="control-label">Número de documento</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend required">
+                                    <span class="input-group-text"><i class="fas fa-address-card"></i></span>
+                                </div>
+                                <p:inputText class="form-control" readonly="false" value="#{overTheCounterBean.numeroIdentificacion}">
+                                    <f:convertNumber type="number" groupingUsed="true"  minFractionDigits="0" pattern="#00000000"/>
+                                    <p:ajax  update="pnlPersonalData" process="@form" />
+                                </p:inputText>                                
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3 form-group">
+                            <label class="control-label">Solicitante</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-envelope-square"></i>                                            
+                                    </span>
+                                </div>
+                                <p:inputText class="form-control" readonly="true" value="#{overTheCounterBean.fullName}"></p:inputText>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 form-inline">
+                            <div class="input-group">
+                                <p:commandLink styleClass="btn btn-primary"
+                                               disabled="false"
+                                               validateClient="true" oncomplete="removeUIClasess();"
+                                               update="frmPersonalData"   
+                                               actionListener="#{overTheCounterBean.onChangeDocumentNumber}">
+                                    <f:param name="validate" value="true"/>
+                                    <i class="fas fa-user-cog"></i> Consultar
+                                    <p:ajax  listener="#{overTheCounterBean.onChangeDocumentNumber}" update="frmPersonalData" process="@form" />
+                                </p:commandLink>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3 form-group">
+                            <label class="control-label">Email</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-envelope-square"></i>                                            
+                                    </span>
+                                </div>
+                                <p:inputText class="form-control" readonly="true" value="#{overTheCounterBean.email}"></p:inputText>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label class="control-label">Telefono</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-envelope-square"></i>                                            
+                                    </span>
+                                </div>
+                                <p:inputText class="form-control" readonly="true" value="#{overTheCounterBean.telefono}"></p:inputText>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label class="control-label">Dirección</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-envelope-square"></i>                                            
+                                    </span>
+                                </div>
+                                <p:inputText class="form-control" readonly="true" value="#{overTheCounterBean.direccion}"></p:inputText>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3 form-group">
+                            <label class="control-label">Ciudad</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-envelope-square"></i>                                            
+                                    </span>
+                                </div>
+                                <p:inputText class="form-control" readonly="true" value="#{overTheCounterBean.codigoCiudadDesc}"></p:inputText>
+                            </div>
+                        </div>
+                    </div>
+
+                </h:panelGroup>               
+            </h:form>
+
+        </ui:composition>
+
+    </body>
+</html>

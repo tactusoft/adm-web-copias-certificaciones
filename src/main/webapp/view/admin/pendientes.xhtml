@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <body>
+        <ui:composition template="./../../WEB-INF/webparts/principal.xhtml">
+            <ui:param name="title" value="Solicitudes Pagadas Pendientes de Finalizar(#{pendientesBean.listaTramitesUsua.size()})" />
+            <ui:define name="mainContent">
+                <h:form>
+                    <p:importEnum type="co.gov.sic.copiasycertificaciones.enums.EstadoTramite" var="EstadoTramite" allSuffix="ALL_ENUM_VALUES" />
+                    <p:importEnum type="co.gov.sic.copiasycertificaciones.enums.TipoTramite" var="TipoTramite" allSuffix="ALL_ENUM_VALUES" />
+                    <p:importEnum type="co.gov.sic.copiasycertificaciones.enums.TipoAmbienteEnum" var="TipoAmbienteEnum" allSuffix="ALL_ENUM_VALUES" />
+                    <div class="row">
+                        <div class="col">  <p:messages/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p:dataTable  var="tramite" value="#{pendientesBean.listaTramitesUsua}" paginatorPosition="bottom" rows="10" paginator="true"
+                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                          currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                                          rowsPerPageTemplate="10,15,20" rowIndexVar="_row"
+                                          emptyMessage="No se existen registros pendientes.">
+                                <p:column headerText="#" width="3%"
+                                          class="row-index" exportable="false">
+                                    <h:outputText value="#{_row + 1}" />
+                                </p:column>
+                                <p:column headerText="Id Trámite" class="text-center" width="5%">
+                                    <h:outputText value="#{tramite.idtramite}" />
+                                </p:column>
+                                <p:column headerText="Tipo Trámite" class="text-center" width="25%">
+                                    <h:outputText value="#{tramite.idtiposolicitud.descripcion}" />
+                                </p:column>
+                                <p:column headerText="Fecha Solicitud" class="text-center" width="12%">
+                                    <h:outputText value="#{utility.tryFormatVisualDate(tramite.fecha_creacion)}" />
+                                </p:column>
+                                <p:column headerText="Radicado" class="text-center" width="9%">
+                                    <h:outputText value="#{tramite.ano_radi}-#{tramite.nume_radi}" rendered="#{tramite.nume_radi != null and tramite.nume_radi gt 0}"/>
+                                </p:column>
+                                <p:column headerText="Solicitante" class="text-center" >
+                                    <h:outputText value="#{tramite.nombreSolicitante}"/><br/>
+                                    <h:outputText value="#{tramite.tipoDcoumento}"/> <h:outputText value=" #{tramite.numeroIdentificacion}"/>
+                                </p:column>
+                                <p:column headerText="Estado" class="text-center" width="12%">
+                                    <h:outputText value="#{tramite.estado.description2}"/>
+                                </p:column>
+                                <p:column headerText="Acciones" class="text-center" width="10%">
+                                    <p:commandLink styleClass="btn btn-sm btn-warning btn-block" process="@this" onclick="PF('dlgProcessing').show();"
+                                                   update="@form" actionListener="#{pendientesBean.reintentarPago(tramite)}">
+                                        <i class="fas fa-redo fa-lg fa-fw mr-2" aria-hidden="true"></i><br/>
+                                        Finalizar
+                                    </p:commandLink>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

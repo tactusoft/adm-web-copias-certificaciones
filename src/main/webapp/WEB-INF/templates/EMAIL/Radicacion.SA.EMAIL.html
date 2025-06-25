@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es-co" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>
+        </title>
+    </head>
+    <body>
+        <div style='background-color: #EDEDF0; border: 1px solid #232331;'>
+            <img style='height: 60px; float: left;'
+                 alt="Superintendencia de Industria y Comercio"
+                 src="https://aplicaciones.sic.gov.co/CopiasyCertificaciones/resources/img/logo-sic-horizontal-2020.png" />
+            <img
+                style='height: 53px; float: right; margin-top: 4px; margin-right: 4px'
+                alt="El progeso es de todos - MINCOMERCIO" title="MINCOMERCIO"
+                src="https://aplicaciones.sic.gov.co/CopiasyCertificaciones/resources/img/logo-mincomercio.png" />
+            <h3
+                style='background-color: #232331; color: #ffffff; margin-top: 61px; padding-left: 15px; padding-right: 15px;'>SERVICIOS EN LINEA - EXPEDICI&Oacute;N DE COPIAS SIMPLES Y AUTENTICAS</h3>
+            <div style='padding: 15px; padding-top: 10px;'>
+                <p>
+                    Se&ntilde;or(a)(es): <br />
+                    <h3 style='text-transform: uppercase; color: #2A2D82'
+                        th:text='${nombre}'></h3>
+                    <br /> 
+                    En relaci&oacute;n a su solicitud de <span th:text="${asunto}"></span>, la Superintendencia de Industria y Comercio le informa que el(los) certificado(s) requerido(s) se encuentra(n) disponible(s) en el portal web del SISTEMA DE SOLICITUD DE COPIAS de la entidad, ingresando a este <a th:href="${url}">enlance</a>, o ingresando al portal web de la entidad, opci&oacute;n "Informaci&oacute;n de Tr&aacute;mites", "Consulta y otros", "De car&aacute;cter general", seleccionando el tr&aacute;mite "Solicitud de <span th:text="${asunto}"></span>". El(los) certificado(s) emitido(s) estar&aacute;(n) disponible(s) en la plataforma &uacute;nicamente por el t&eacute;rmino de dos (2) meses.
+                    <br />
+                </p>
+                <table
+                    style='background-color: #D8D8D8; border: 1px solid #2A2D82; margin-bottom: 15px; margin-top: 15px;'>
+                    <tr>
+                        <td
+                            style='font-weight: bold; color: #2A2D82; padding-right: 10px; padding-left: 10px;'>Expediente:</td>
+                        <td><span style='font-weight: bold; padding-right: 10px'
+                                  th:text="${expediente}"></span></td>
+                        <td
+                            style='font-weight: bold; color: #2A2D82; padding-right: 10px; padding-left: 10px;'>Fecha:</td>
+                        <td><span style='font-weight: bold; padding-right: 10px'
+                                  th:text="${fecha}"></span></td>
+                    </tr>
+
+                    <tr>
+                        <td
+                            style='font-weight: bold; color: #2A2D82; padding-right: 10px; padding-left: 10px;'>Dependencia:</td>
+                        <td colspan='3'><span style='padding-right: 10px'
+                                              th:text="${dependencia}"></span></td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='font-weight: bold; color: #2A2D82; padding-right: 10px; padding-left: 10px;'>Tr&aacute;mite:</td>
+                        <td colspan='3'><span style='padding-right: 10px'
+                                              th:text="${tramite}"></span></td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='font-weight: bold; color: #2A2D82; padding-right: 10px; padding-left: 10px;'>Evento:</td>
+                        <td colspan='3'><span style='padding-right: 10px'
+                                              th:text="${evento}"></span></td>
+                    </tr>
+                    <tr>
+                        <td
+                            style='font-weight: bold; color: #2A2D82; padding-right: 10px; padding-left: 10px;'>Actuaci&oacute;n:</td>
+                        <td colspan='3'><span style='padding-right: 10px'
+                                              th:text="${actuacion}"></span></td>
+                    </tr>
+                </table>
+                <p>
+                    Adjunto encontrar&aacute; el documento de la comunicaci&oacute;n que
+                    contiene la toda la informaci&oacute;n correspondiente a su
+                    solicitud, as&iacute; como todos los documentos generados.
+                </p>
+                <p>
+                    <br /> Atentamente,<br />
+                </p>
+                <p>
+                    <br /> <strong>CENTRO DE NOTIFICACIONES <br />SUPERINTENDENCIA
+                        DE INDUSTRIA Y COMERCIO
+                    </strong>
+                </p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <body>
+        <ui:composition template="./../../WEB-INF/webparts/principal.xhtml">
+            <ui:param name="title" value="Confirmacion Pago" />
+            <ui:define name="mainContent">
+                <h:form>
+                    <div class="row" style="margin-bottom: -50px;margin-top: 40px">
+                        <div class="col form-group"> 
+                            <h3 class="mb-4">Resultado de la transacción</h3>
+                            #{confirmarPagoBean.transactionState}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">  <p:messages/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group"> 
+                            <p:link styleClass="btn btn-primary" outcome="listado">
+                                Ir a Mi Lista de Solicitudes <i class="fas fa-long-arrow-alt-right ml-2"></i>
+                            </p:link>
+                        </div>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

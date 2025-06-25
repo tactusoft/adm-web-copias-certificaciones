@@ -1,0 +1,66 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="https://jakarta.ee/jsf/facelets"
+	xmlns:h="https://jakarta.ee/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="https://jakarta.ee/jsf/core">
+	<div class="row mt-3">
+		<div class="col">
+			<div class="card border-success shadow-sm bg-success-light">
+				<div class="card-body">
+					<div class="row">
+						<div class="col text-center">
+							<h4 class="text-success mb-2">
+								<i class="fas fa-check-circle fa-2x mb-4"></i><br /> El registro
+								de su solicitud se ha realizado de manera exitosa.
+							</h4>
+							<div class="text-center mt-5">
+								<strong>Valor Total a Pagar</strong>
+								<div class="font-weight-bolder color-money mb-2"
+									style="font-size: 32px;">
+									#{utility.tryFormatCurrencyNumber(currentBean.valorTotalPagar,
+									true)}</div>
+							</div>
+						</div>
+						<div class="col">
+							<h5 class="card-title text-success">Proceder a Pagar</h5>
+							<p class="card-text">Puede realizar el pago en línea ahora,
+								será direccionado a la pasarela de pagos de la entidad y cuando
+								finalice el pago de forma exitosa, sus certificados estarán
+								disponibles para descarga y también será notificado a su
+								dirección de correo electrónico registrado.</p>
+							<p:commandLink styleClass="btn btn-success btn-block btn-lg mt-4"
+								process="@this" oncomplete="goToPSE();"
+								onclick="PF('dlgProcessing').show();" update="@form"
+								actionListener="#{currentBean.nextInvoiceId(currentBean.tramiteSeleccionado)}">
+								<i class="fas fa-credit-card fa-lg fa-fw mr-2"
+									aria-hidden="true"></i>
+                                Pagar en línea
+                            </p:commandLink>
+							<ui:include src="formPago.xhtml"
+								rendered="#{currentBean.idCurrentInvoice != null}">
+								<ui:param name="currentBean" value="#{currentBean}" />
+							</ui:include>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card border-primary shadow-sm bg-info-light">
+				<div class="card-body">
+					<h5 class="card-title text-primary">Pagar en otro momento</h5>
+					<p class="card-text">Si lo prefiere puede realizar el pago de
+						la solicitud en cualquier otro momento desde su lista de
+						solicitudes.</p>
+					<ui:include src="avisoLegalDesistimento.xhtml">
+					</ui:include>
+					<div class="text-center">
+						<p:link styleClass="btn btn-primary" outcome="listado">Ir a Mi lista de Solicitudes <i
+								class="fas fa-long-arrow-alt-right ml-2"></i>
+						</p:link>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</ui:composition>

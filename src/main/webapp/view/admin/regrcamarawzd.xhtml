@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <body>
+        <ui:composition template="./../../WEB-INF/webparts/notificationmain.xhtml">
+            <ui:param name="title" value="Administración de parámetros" />
+            <ui:define name="mainContent">
+                <table class="tableTitle">
+                    <tbody>
+                        <tr>
+                            <td class="tableTitle-icon">
+                                <div class="card-small card-yellow d-inline-block">
+                                    <div class="card-icon-icon">
+                                        <i class="far fa-copy"></i>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="tableTitle-text">
+                                <h3><h:outputText value="Registro de cámaras de comercio"/></h3>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h:form id="frmWizardCamaras">
+                    <div class="three-steps blue-light current-step step-1" id="divStepMenu">
+                        <p:steps activeIndex="0" id="stepsMenu">
+                            <p:menuitem value="Datos generales" id="stepsMenuItem1" />
+                            <p:menuitem value="Funcionarios" id="stepsMenuItem2" />                            
+                            <p:menuitem value="Resultado" id="stepsMenuItem3"/>
+                        </p:steps>
+                    </div>
+
+                    <p:wizard  id="wizardCamaras" 
+                               onback="onback()" 
+                               flowListener="#{cCParametrosBean.processWorkFlow}" 
+                               showNavBar="false" showStepStatus="false"
+                               backLabel="Anterior" 
+                               nextLabel="Siguiente" 
+                               widgetVar="wizardwv">
+                        <p:tab id="datosgenerales">
+                            <ui:include src="./datosgenerales.xhtml"  />
+                            <div class="row">
+                                <div class="col">  <p:messages/>
+                                </div>
+                            </div>
+                        </p:tab>
+                        <p:tab id="funcionarios">
+                            <ui:include src="./funcionarios.xhtml"  />                            
+                        </p:tab>
+                        <p:tab id="pago">
+                            <div class="row mt-3">
+                                <div class="offset-2 col-8">
+                                    <div class="card border-success shadow-sm bg-success-light">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col text-center"> 
+                                                    <h4 class="text-success mb-2">
+                                                        <i class="fas fa-check-circle fa-2x mb-3"></i><br/>
+                                                        El registro de la camara de comercio se ha realizado de manera exitosa.
+                                                    </h4>                                                    
+                                                    <div class="text-center mt-3">                                                        
+
+
+
+                                                        <p:commandLink ajax="true"
+                                                                       styleClass="btn btn-primary"
+                                                                       title="Volver"
+                                                                       process="@this"
+                                                                       actionListener="#{cCParametrosBean.realoadListaCamaras}"
+                                                                       action="/view/admin/ccparametros.xhtml?faces-redirect=true">
+                                                           <f:ajax render=":frmCCParametros:tblCamaras" />
+                                                           Volver al listado de camaras<i class="fas fa-long-arrow-alt-right ml-2"></i>
+                                                        </p:commandLink>
+                                                    </div>
+                                                </div>                                           
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">  <p:messages/>
+                                </div>
+                            </div>
+                        </p:tab>
+
+
+                    </p:wizard>
+                    <ui:include src="./../../WEB-INF/webparts/botonesWizardCamara.xhtml">
+                        <ui:param name="currentBean" value="#{cCParametrosBean}" />
+                    </ui:include>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

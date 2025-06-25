@@ -1,0 +1,228 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="https://jakarta.ee/jsf/facelets"
+                xmlns:h="https://jakarta.ee/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="https://jakarta.ee/jsf/core"> 
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-warning">
+                <ui:include src="./../../WEB-INF/webparts/avisoCamposRequeridos.xhtml"  />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">                                
+        <div class="col-xl-2 col-sm-3 form-group">
+            <label class="control-label">Tipo de documento</label>
+            <div class="input-group">
+                <div class="input-group-prepend required">
+                    <span class="input-group-text"><i class="far fa-copy fa-fw"></i></span>
+                </div>
+                <p:inputText id="txtTipoDoc" 
+                             class="form-control" 
+                             maxlength="150" 
+                             disabled="false"
+                             readonly="true"
+                             value="#{cCParametrosBean.camaraTipoDoc}">
+                </p:inputText>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-4 form-group">
+            <label class="control-label">Numero de documento</label>
+            <div class="input-group">
+                <div class="input-group-prepend required">
+                    <span class="input-group-text"><i class="fas fa-cash-register"></i></span>
+                </div>
+                <p:inputNumber id="txtNumDocumento" class="form-control" maxlength="15" disabled="false"
+                               value="#{cCParametrosBean.camaraNumDocumento}" decimalPlaces="0">
+                    <p:ajax event="blur" listener="#{cCParametrosBean.onChangeNumDocumentoCamara}" 
+                            update="frmWizardCamaras"    
+                            process="@form" />
+                </p:inputNumber>
+            </div>
+        </div>
+        <div class="col-xl-1 col-sm-2 form-group">
+            <label class="control-label">DV</label>
+            <div class="input-group">
+                <div class="input-group-prepend required">
+                    <span class="input-group-text"><i class="fas fa-sort-numeric-up"></i></span>
+                </div>
+                <p:inputNumber id="txtDV" class="form-control" maxlength="1" disabled="false" decimalPlaces="0"
+                               value="#{cCParametrosBean.camaraDigitoVerificacion}" minValue="0" maxValue="9">
+
+                </p:inputNumber>
+            </div>
+        </div>
+        <div class="col-xl-6 col-sm-5 form-group">
+            <label class="control-label">Nombre cámara</label>
+            <div class="input-group">
+                <div class="input-group-prepend required">
+                    <span class="input-group-text"><i class="fas fa-file-signature"></i></span>
+                </div>
+                <p:inputText id="txtNombreCamara" 
+                             class="form-control" 
+                             maxlength="150" 
+                             disabled="false"
+                             value="#{cCParametrosBean.camaraFullName}">
+                </p:inputText>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-2 col-sm-3 form-group">
+            <label class="control-label">Tipo de persona</label>
+            <div class="input-group">
+                <div class="input-group-prepend required">
+                    <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                </div>
+                <p:inputText id="txtTipoPersona" 
+                             class="form-control" 
+                             maxlength="150" 
+                             disabled="false"
+                             readonly="true"
+                             value="#{cCParametrosBean.camaraTipoPersona}">
+                </p:inputText>
+            </div>
+        </div>
+        <div class="col-xl-4 col-sm-5 form-group">
+            <label class="control-label">Dirección</label>
+            <div class="input-group">
+                <div class="input-group-prepend required">
+                    <span class="input-group-text"><i class="fas fa-map-marked-alt"></i></span>
+                </div>
+                <p:inputText id="txtDireccion" class="form-control" maxlength="150" disabled="false"
+                             value="#{cCParametrosBean.camaraDireccion}">
+                </p:inputText>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-sm-5 form-group">
+            <label class="control-label">Departamento</label>
+            <div class="input-group">
+                <div class="input-group-prepend required">
+                    <span class="input-group-text"><i class="fas fa-city"></i></span>
+                </div>
+                <p:selectOneMenu id="txtDepartamento" 
+                                 class="form-control" 
+                                 required="#{request.getParameter('validate')}" 
+                                 filter="true"
+                                 filterMatchMode="contains"
+                                 autoWidth="false"
+                                 disabled="false"
+                                 requiredMessage="El departamento es requerido." value="#{cCParametrosBean.camaraCodigoRegion}">
+                    <p:ajax listener="#{cCParametrosBean.onChangeDepartamento}" update="wizardCamaras" process="@form" />
+                    <f:selectItem itemLabel="-- Seleccione opción --"></f:selectItem>
+                    <f:selectItems value="#{cCParametrosBean.listaDepartamentos}" var="entry"
+                                   itemValue="#{entry.codi_regi}" itemLabel="#{entry.nomb_regi}"></f:selectItems>
+                </p:selectOneMenu>
+            </div>
+        </div>                                
+        <div class="col-xl-2 col-sm-5 form-group">
+            <label class="control-label">Ciudad</label>
+            <div class="input-group">
+                <div class="input-group-prepend required">
+                    <span class="input-group-text"><i class="fas fa-city"></i></span>
+                </div>
+                <p:selectOneMenu id="txtCiudad" 
+                                 class="form-control" 
+                                 required="#{request.getParameter('validate')}" 
+                                 filter="true"
+                                 filterMatchMode="contains"
+                                 autoWidth="false"
+                                 disabled="false"
+                                 requiredMessage="Tipo de documento es requerido." value="#{cCParametrosBean.camaraCodigoCiudad}"  >
+                    <p:ajax listener="#{cCParametrosBean.onChangeCiudadCamara}" update="wizardCamaras" process="@form" />
+                    <f:selectItem itemLabel="-- Seleccione opción --"></f:selectItem>
+                    <f:selectItems value="#{cCParametrosBean.listaCiudades}" var="entry"
+                                   itemValue="#{entry.codi_ciud}" itemLabel="#{entry.nomb_ciud}"></f:selectItems>
+                </p:selectOneMenu>
+            </div>
+        </div>
+
+    </div>
+    
+ 
+    <div class="row">
+        <div class="col-xl-2 col-sm-3 form-group">
+            <label class="control-label">Teléfono</label>
+            <div class="input-group">
+                <div class="input-group-prepend required">
+                    <span class="input-group-text"><i class="fas fa-blender-phone"></i></span>
+                </div>
+                <p:inputText id="txtTelefono" class="form-control" maxlength="15" disabled="false"
+                             value="#{cCParametrosBean.camaraTelefono}">
+                            <p:keyFilter regEx="/[0-9]/i"/> 
+                </p:inputText>                
+                
+            </div>
+        </div>
+
+
+        <div class="col-xl-4 col-sm-5 form-group">
+            <label class="control-label">Email</label>
+            <div class="input-group">
+                <div class="input-group-prepend required">
+                    <span class="input-group-text"><i class="fas fa-envelope-open-text"></i></span>
+                </div>
+                <p:inputText id="txtEmail" class="form-control" maxlength="150" disabled="false"
+                             value="#{cCParametrosBean.camaraEmail}">                                            
+                </p:inputText>
+            </div>
+        </div>
+        <div class="col-sm-2 form-group">
+            <label class="control-label">Fecha de Acto</label>
+            <div class="input-group">
+                <div class="input-group-prepend required">
+                    <span class="input-group-text"><i class="far fa-calendar-alt fa-fw"></i></span>
+                </div>
+                <p:calendar id="tbFechaActoCamara" showOtherMonths="true" autocomplete="off"
+                            pattern="dd/MM/yyyy" placeholder="dd/mm/aaaa"
+                            locale="es" class="form-control"
+                            required="#{request.getParameter('validate')}"
+                            requiredMessage="La fecha del acto es requerida."
+                            value="#{cCParametrosBean.camaraFechaActo}" >
+
+                </p:calendar>
+                <h:outputScript>$( function() {
+                    $("input[name$='tbFechaActoCamara_input']").datepicker("option", "maxDate", +0);
+                    });  </h:outputScript>
+            </div>
+        </div>
+        <div class="col-sm-2 form-group">
+            <label class="control-label"># Acto</label>
+            <div class="input-group">
+                <div class="input-group-prepend required">
+                    <span class="input-group-text"><i class="fas fa-hashtag fa-fw"></i></span>
+                </div>
+                <p:inputText id="txtNumActoCamara" class="form-control" disabled="false"
+                             required="#{request.getParameter('validate')}"
+                             requiredMessage="El numero de acto es requerido."
+                             value="#{cCParametrosBean.camaraNumActo}">
+                              <p:keyFilter regEx="/[0-9]/i"/> 
+                </p:inputText>
+            </div>
+        </div>
+        <div class="col-md-2 form-group">
+
+                    <table>
+                        <tbody>
+                            <tr style="height: 38px;">
+                                <td ></td>                                
+                            </tr>
+                            <tr >
+                                <td>
+                                    <div class="input-group">                        
+                                        <p:selectBooleanCheckbox value="#{cCParametrosBean.camaraEstado}"/>
+                                        <label>Estado de la cámara</label>                    
+                                    </div>
+
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+    </div>
+</ui:composition>

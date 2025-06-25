@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+<body>
+	<ui:composition
+		template="./../../WEB-INF/webparts/solicitudesmain.xhtml">
+		<ui:param name="title" value="Detalle solicitud" />
+		<ui:define name="mainContent">
+			<h:form id="frmLoadFiles">
+				<fieldset>
+					<h:panelGroup layout="block" styleClass="col" id="pnlTabla">
+						<legend> Transferencia entidad competente
+							#{transfentidadBean.tramite.ano_radi}-#{transfentidadBean.tramite.nume_radi}
+						</legend>
+						<div class="row">
+							<div class="col">
+								<div class="alert alert-warning">
+									<i class="fas fa-info-circle fa-fw fa-lg mr-2"></i><strong>
+										En esta opción el funcionario puede cargar la información del
+										traslado a entidad competente. </strong>
+								</div>
+							</div>
+						</div>
+					</h:panelGroup>
+
+					<h:panelGroup layout="block" styleClass="col" id="pnlObservaciones">
+						<div class="row">
+							<div class="col form-group">
+								<label class="control-label">Observaciones</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"> <i
+											class="fab fa-stack-exchange fa-fw"></i>
+										</span>
+									</div>
+									<p:inputTextarea rows="5" id="tbObservaciones"
+										class="form-control" maxlength="2000" autoResize="false"
+										value="#{transfentidadBean.observaciones}">
+									</p:inputTextarea>
+								</div>
+							</div>
+						</div>
+					</h:panelGroup>
+
+					<h:panelGroup layout="block" styleClass="col" id="pnlEntidades">
+
+						<div class="row">
+							<fieldset>
+								<legend> Entidades </legend>
+
+								<div class="row">
+									<div class="col">
+										<p:messages id="msgEntidades" />
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col form-group">
+										<label class="control-label">Entidad *:</label>
+										<div class="input-group">
+											<div class="input-group-prepend required">
+												<span class="input-group-text"> <i
+													class="fab fa-stack-exchange fa-fw"></i>
+												</span>
+											</div>
+											<p:inputText value="#{transfentidadBean.entidad}"
+												style="width: 97%;"></p:inputText>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col form-group" align="right">
+										<p:commandLink styleClass="btn btn-primary " disabled="false"
+											update="pnlEntidades" process="@this,pnlEntidades"
+											action="#{transfentidadBean.buscarEntidad}">
+											<i class="fas fa-list"></i> Consultar Entidades
+									</p:commandLink>
+									</div>
+								</div>
+
+								<p:dataTable resizableColumns="false" id="tblPersonaEmail"
+									emptyMessage="No se existen entidades" var="personaEmail"
+									rowKey="#{personaEmail.id}"
+									value="#{transfentidadBean.listPersonaEmail}"
+									selection="#{transfentidadBean.personaEmailSelected}"
+									paginator="true" rows="5"
+									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+									rowsPerPageTemplate="5,10,15">
+
+									<p:column selectionMode="single"
+										style="width:30px;text-align:center" />
+
+									<p:column headerText="Nombres" class="text-center" width="35%">
+										<h:outputText value="#{personaEmail.nombrePersona}" />
+									</p:column>
+									<p:column headerText="Tipo de Documento" class="text-center"
+										width="10%">
+										<h:outputText value="#{personaEmail.tipoDocumento}" />
+									</p:column>
+
+									<p:column headerText="Número de Documento" class="text-center"
+										width="20%">
+										<h:outputText value="#{personaEmail.numeroDocumento}" />
+									</p:column>
+
+									<p:column headerText="Correo Electrónico" class="text-center"
+										width="35%">
+										<h:outputText value="#{personaEmail.direEmai}" />
+									</p:column>
+
+								</p:dataTable>
+								
+								<br/>
+								
+								<p:ajaxStatus>
+									<f:facet name="default">
+										<div class="row">
+											<div class="col form-group" align="right">
+												<p:commandLink styleClass="btn btn-primary "
+													disabled="false" update="frmLoadFiles"
+													validateClient="true" oncomplete="removeUIClasess();"
+													actionListener="#{transfentidadBean.enviarRespuestaFinalizarSolicitud}">
+													<f:param name="validate" value="true" />
+
+													<i class="fas fa-list"></i> Enviar respuesta y finalizar solicitud.
+                                                </p:commandLink>
+											</div>
+											<div class="col form-group" align="left">
+												<p:commandLink ajax="true" styleClass="btn btn-primary"
+													title="Volver" process="@this"
+													action="/view/requests/detalletramite.xhtml?faces-redirect=true"
+													actionListener="#{transfentidadBean.limpiarForm}">
+													<f:ajax render=":frmMyRequests:myRequestTable" />
+													<i class="fa fa-backward"></i> Volver al detalle de la solicitud
+                                                </p:commandLink>
+											</div>
+										</div>
+									</f:facet>
+									<f:facet name="start">
+										<div class='alert alert-warning' align="center">
+											<div class="spinner-border" role="status">
+												<span class="sr-only">Procesando...</span>
+											</div>
+											Procesando...
+										</div>
+									</f:facet>
+									<f:facet name="complete">
+										<div class="row">
+											<div class="col form-group" align="right">
+												<p:commandLink styleClass="btn btn-primary "
+													disabled="false" update="frmLoadFiles"
+													validateClient="true" oncomplete="removeUIClasess();"
+													actionListener="#{transfentidadBean.enviarRespuestaFinalizarSolicitud}">
+													<f:param name="validate" value="true" />
+
+													<i class="fas fa-list"></i> Enviar respuesta y finalizar solicitud.
+                                                </p:commandLink>
+											</div>
+											<div class="col form-group" align="left">
+												<p:commandLink ajax="true" styleClass="btn btn-primary"
+													title="Volver" process="@this"
+													action="/view/requests/detalletramite.xhtml?faces-redirect=true"
+													actionListener="#{transfentidadBean.limpiarForm}">
+													<f:ajax render=":frmMyRequests:myRequestTable" />
+													<i class="fa fa-backward"></i> Volver al detalle de la solicitud
+                                                </p:commandLink>
+											</div>
+										</div>
+									</f:facet>
+								</p:ajaxStatus>
+							</fieldset>
+						</div>
+					</h:panelGroup>
+
+
+
+				</fieldset>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="https://jakarta.ee/jsf/facelets"
+	xmlns:h="https://jakarta.ee/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="https://jakarta.ee/jsf/core">
+	<div class="alert alert-warning p-0">
+		<table>
+			<tbody>
+				<tr>
+					<td class="td-info" rowspan="2"><i
+						class="fas fa-info-circle fa-3x"></i></td>
+					<td class="p-3 td-info2">
+						<h5 class="mb-3">Términos y Condiciones</h5>
+						<p class="mb-3">La SUPERINTENDENCIA DE INDUSTRIA Y COMERCIO,
+							es responsable del tratamiento de los datos personales obtenidos
+							a través de este sistema de copias y certificaciones. Los datos
+							aquí gestionados se utilizan para la finalidades etablecidas y en
+							últimas para las finalidades dispuestas en la Política de
+							Tratamiento de Datos personales, literal 8.1. página 11.</p>
+						<p>
+							Como titular de los datos personales, podré ejercer mis derechos
+							a conocer, actualizar, rectificar y suprimir mi información
+							personal cuando ello fuera posible, así como el derecho a revocar
+							el consentimiento otorgado para el tratamiento de sus datos
+							personales. El canal dispuesto por la SUPERINTENDENCIA DE
+							INDUSTRIA Y COMERCIO para la atención de sus solicitudes las
+							puede llevar a cabo a través de este <a
+								href="https://servicioslinea.sic.gov.co/servilinea/PQRSF"
+								target="_blank">enlace.</a>
+						</p>
+						<p>
+							La Política de Tratamiento de Datos Personales, se encuentra
+							publicada en este <a
+								href="https://sedeelectronica.sic.gov.co/sites/default/files/normativa/CS005-POL01_copia_no_controlada_0.pdf"
+								target="_blank">enlace.</a>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td class="pt-0 text-center td-info2">
+						<div class="custom-control custom-checkbox mb-3">
+							<h:selectBooleanCheckbox id="aceptoTerminos"
+								class="custom-control-input">
+							</h:selectBooleanCheckbox>
+							<label class="custom-control-label font-weight-bolder"
+								for="frmWizard:aceptoTerminos">He leído y acepto los
+								términos y condiciones</label>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</ui:composition>

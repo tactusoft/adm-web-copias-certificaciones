@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <body>
+        <ui:composition template="./../../WEB-INF/webparts/principal.xhtml">
+            <ui:param name="title" value="Trámites Disponibles" />
+            <ui:param name="login" value="inner_medium_login" />
+            <ui:param name="renderMenuItemLista" value="d-none" />
+            <ui:define name="mainContent">
+                <div style="margin-bottom: -50px;margin-top: 40px">
+                    <h:form id="MenuTramites">
+                        <p:importEnum type="co.gov.sic.copiasycertificaciones.enums.TipoTramite" var="TipoTramite" allSuffix="ALL_ENUM_VALUES" />
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-6 col-md-12">
+                                <div class="px-5">
+                                    <div class="my-4 card card-black shadow-sm-strong d-inline-block">
+                                        <div class="card-icon-icon">
+                                            <span class="fa-stack fa-stack-custom">
+                                                <i class="far fa-file fa-stack-2x"></i>
+                                                <i class="fas fa-gavel fa-stack-1x"></i>
+                                            </span>
+                                        </div>
+                                        <div class="card-icon-title"><h5>#{TipoTramite.CERTIFICADO_SANCIONES.descripcion}</h5>
+                                        </div>
+                                        <div class="card-icon-body">
+                                            <p class="card-text">Para la expedición de certificados de demandas, investigaciones o sanciones ante la Superintendencia de Industria y Comercio, el usuario debe especificar el número de identificación de la persona jurídica o natural y el rango de fechas a consultar.</p>
+                                        </div>
+                                        <div class="card-footer text-center">
+                                            <p:link outcome="/view/tramites/CertificadoDIS" class="btn btn-sm btn-primary">
+                                                Iniciar Nuevo Trámite <i class="fas fa-long-arrow-alt-right ml-2"></i>
+                                            </p:link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            
+                            <div class="col-xl-4 col-lg-6 col-md-12">
+                                <div class="px-3">
+                                    <div class="my-4 card card-yellow shadow-sm-strong d-inline-block">
+                                        <div class="card-icon-icon">
+                                            <i class="far fa-copy"></i>
+                                        </div>
+                                        <div class="card-icon-title"><h5>#{TipoTramite.COPIAS_SIMPLES.descripcion}</h5></div>
+                                        <div class="card-icon-body">
+                                            <p class="card-text">Para la expedición de copias simples y autenticas, se debe indicar claramente la información requerida. Si los documentos invocan la reserva y el interesado insite en la petición, corresponderá al Tribunal Administrativo con jurisdicción, decidir en única instancia si se niega o se acepta total o parcialmente la petición.</p>
+                                        </div>
+                                        <div class="card-footer text-center">
+                                            <p:link outcome="/view/tramites/SolicitudCopias" class="btn btn-sm btn-primary">
+                                                Iniciar Nuevo Trámite <i class="fas fa-long-arrow-alt-right ml-2"></i>
+                                            </p:link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-xl-4 col-lg-6 col-md-12">
+                                <div class="px-3">
+                                    <div class="my-4 card card-green shadow-sm-strong d-inline-block">
+                                        <div class="card-icon-icon">
+                                                <span class="fa-stack fa-stack-custom">
+                                                    <i class="far fa-file fa-stack-2x"></i>
+                                                    <i class="fas fa-info fa-stack-1x"></i>
+                                                </span>
+                                        </div>
+                                        <div class="card-icon-title"><h5>#{TipoTramite.LISTADOS_INFORMACION.descripcion}<br/></h5></div>
+                                        <div class="card-icon-body">
+                                            <p class="card-text">La solicitud de listados corresponde al derecho que tiene toda persona (natural o jurídica), a obtener información que repose en las bases de datos de la Superintendencia de Industria y Comercio, siempre y cuando no tenga relación con temas de datos personales.</p>
+                                        </div>
+                                        <div class="card-footer text-center">
+                                            <p:link outcome="/view/tramites/ListadosInf" class="btn btn-sm btn-primary">
+                                                Iniciar Nuevo Trámite <i class="fas fa-long-arrow-alt-right ml-2"></i>
+                                            </p:link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </h:form> 
+                </div>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

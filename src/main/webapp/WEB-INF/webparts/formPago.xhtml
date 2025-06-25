@@ -1,0 +1,29 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                 xmlns:h="http://xmlns.jcp.org/jsf/html"
+                 xmlns:p="http://primefaces.org/ui" id="divPay" class="sr-only" rendered="#{currentBean.idCurrentInvoice != null}">
+    <div id="frmPay" data-url="#{currentBean.URL_SONDA}">
+        <input id="ServiceCode" name="ServiceCode" type="hidden"
+               value="#{currentBean.CODIGO_PSE}"/>
+        <input id="Invoice" name="Invoice"
+               type="hidden" value="#{currentBean.idCurrentInvoice}"/>
+        <input id="TransValue"
+               name="TransValue" type="hidden" value="#{currentBean.tramiteSeleccionado.valor_total}"/>
+        <input
+            id="TransVatValue" name="TransVatValue" type="hidden"
+            value="0"/> 
+        <input id="RefCustomerIdType"
+               name="RefCustomerIdType" type="hidden" value="#{loginBean.getDatosSesion().persona.tipoDocumento}"/>
+        <input
+            id="RefCustomerCodeNumber" name="RefCustomerCodeNumber"
+            type="hidden" value="#{loginBean.getDatosSesion().persona.numeroDocumento}"/> 
+        <input id="RefCustomerName"
+               name="RefCustomerName" type="hidden" value="#{loginBean.getDatosSesion().persona.fullName}"/>
+        <input id="RefCustomerEmail"
+               name="RefCustomerEmail" type="hidden" value=""/>
+        <input id="RefCustomerAddress"
+               name="RefCustomerAddress" type="hidden" value="#{loginBean.userDireccion}"/>
+        <input id="RefCustomerTelephone"
+               name="RefCustomerTelephone" type="hidden" value="#{loginBean.userTelefono}"/>
+    </div>
+</ui:composition>

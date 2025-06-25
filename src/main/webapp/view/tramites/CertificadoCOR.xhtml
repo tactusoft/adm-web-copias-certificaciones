@@ -1,0 +1,372 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<body>
+	<ui:composition
+		template="./../../WEB-INF/webparts/notificationmain.xhtml">
+		<ui:param name="title" value="Solicitud Certificación" />
+		<ui:define name="mainContent">
+
+			<table class="tableTitle"
+				style="margin-bottom: -50px; margin-top: 40px">
+				<tbody>
+					<tr>
+						<td class="tableTitle-icon">
+							<div class="card-small card-black d-inline-block">
+								<div class="card-icon-icon">
+									<span class="fa-stack fa-stack-custom"> <i
+										class="far fa-file fa-stack-2x"></i> <i
+										class="fas fa-gavel fa-stack-1x"></i>
+									</span>
+								</div>
+							</div>
+						</td>
+						<td class="tableTitle-text">
+							<h3>
+								<h:outputText
+									value="Solicitud de #{certificadoCORBean.tipoTramite.descripcion}" />
+							</h3>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<h:form id="frmWizard">
+				<div class="four-steps current-step step-1" id="divStepMenu">
+					<p:steps activeIndex="0" id="stepsMenu">
+						<p:menuitem value="Aviso Legal" id="stepsMenuItem1" />
+						<p:menuitem value="Datos Solicitud" id="stepsMenuItem2" />
+						<p:menuitem value="Confirmación" id="stepsMenuItem3" />
+						<p:menuitem value="Descarga" id="stepsMenuItem4" />
+					</p:steps>
+				</div>
+				<p:wizard id="wizardDemanda" onback="onback()"
+					flowListener="#{certificadoCORBean.procesoFlujoCertificadosSinPago}"
+					showNavBar="false" showStepStatus="false" backLabel="Anterior"
+					nextLabel="Siguiente" widgetVar="wizardwv">
+					<p:tab id="legal">
+						<ui:include
+							src="./../../WEB-INF/webparts/avisoLegalDatosPersonales.xhtml" />
+						<div class="row">
+							<div class="col">
+								<p:messages />
+							</div>
+						</div>
+					</p:tab>
+					<p:tab id="solicitudes">
+						<div class="row">
+							<div class="col">
+								<div class="alert alert-warning">
+									<i class="fas fa-info-circle fa-fw fa-lg mr-2"></i>Puede
+									solicitar hasta un <strong>máximo de
+										#{certificadoCORBean.numMaxSolicitudes} certificaciones</strong> entre
+									todas las identificaciones agregadas. Si requiere
+									certificaciones adicionales debe realizar una nueva solicitud.<br />
+									<ui:include
+										src="./../../WEB-INF/webparts/avisoCamposRequeridos.xhtml" />
+								</div>
+							</div>
+						</div>
+						<div class="py-3 px-1">
+							<h:panelGroup layout="block" styleClass="row">
+								<div class="col form-group">
+									<label class="control-label">Tipo de Identificación</label>
+									<div class="input-group">
+										<div class="input-group-prepend required">
+											<span class="input-group-text"><i
+												class="far fa-address-card fa-fw"></i></span>
+										</div>
+										<p:selectOneMenu id="tipo_docu" class="form-control"
+											disabled="#{not certificadoCORBean.showPanelAgregar}"
+											required="#{request.getParameter('validate')}"
+											autoWidth="false"
+											requiredMessage="El tipo de identificación es requerido."
+											value="#{certificadoCORBean.tipo_docu}">
+											<f:selectItem itemLabel="-- Seleccione opción --"></f:selectItem>
+											<f:selectItems
+												value="#{certificadoCORBean.traerTipoDocumento}" var="entry"
+												itemValue="#{entry.codigo}" itemLabel="#{entry.valor}"></f:selectItems>
+										</p:selectOneMenu>
+									</div>
+								</div>
+								<div class="col form-group">
+									<label class="control-label">Número de Identificación</label>
+									<div class="input-group">
+										<div class="input-group-prepend required">
+											<span class="input-group-text"><i
+												class="far fa-address-card fa-fw"></i></span>
+										</div>
+										<p:inputText id="tbNumDoc" class="form-control" maxlength="20"
+											disabled="#{not certificadoCORBean.showPanelAgregar}"
+											required="#{request.getParameter('validate')}"
+											requiredMessage="El número de identificación es requerido."
+											value="#{certificadoCORBean.nume_docu}">
+										</p:inputText>
+									</div>
+								</div>
+								<div class="col form-group">
+									<label class="control-label">Tipo de Certificación:</label>
+									<div class="input-group">
+										<div class="input-group-prepend required">
+											<span class="input-group-text"><i
+												class="fas fa-certificate fa-fw"></i></span>
+										</div>
+										<p:selectOneMenu id="tipo_certi" class="form-control"
+											required="#{request.getParameter('validate')}"
+											autoWidth="false"
+											disabled="#{not certificadoCORBean.showPanelAgregar}"
+											requiredMessage="El tipo de certificación es requerido."
+											value="#{certificadoCORBean.tipo_certi}">
+											<f:selectItem itemLabel="-- Seleccione opción --"></f:selectItem>
+											<f:selectItems
+												value="#{certificadoCORBean.listaTiposCertificado}"
+												var="entry" itemValue="#{entry.codigo}"
+												itemLabel="#{entry.valor}"></f:selectItems>
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="row">
+								<div class="col form-group">
+									<label class="control-label">Rango de Consulta</label>
+									<div class="input-group">
+										<div class="input-group-prepend required">
+											<span class="input-group-text"><i
+												class="far fa-calendar-alt fa-fw"></i></span>
+										</div>
+										<p:selectOneMenu id="rango" class="form-control"
+											required="#{request.getParameter('validate')}"
+											autoWidth="false"
+											disabled="#{not certificadoCORBean.showPanelAgregar}"
+											requiredMessage="El rango de consulta es requerido."
+											value="#{certificadoCORBean.rango}">
+											<f:selectItem itemLabel="-- Seleccione opción --" />
+											<f:selectItem itemLabel="Último año" itemValue="1" />
+											<f:selectItem itemLabel="Últimos 2 años" itemValue="2" />
+											<f:selectItem itemLabel="Últimos 3 años" itemValue="3" />
+											<f:selectItem itemLabel="Últimos 4 años" itemValue="4" />
+											<f:selectItem itemLabel="Últimos 5 años" itemValue="5" />
+											<f:selectItem itemLabel="Últimos 6 años" itemValue="6" />
+											<f:selectItem itemLabel="Últimos 7 años" itemValue="7" />
+											<f:selectItem itemLabel="Últimos 8 años" itemValue="8" />
+											<f:selectItem itemLabel="Últimos 9 años" itemValue="9" />
+											<f:selectItem itemLabel="Últimos 10 años" itemValue="10" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+								<div class="col form-group">
+									<label class="control-label">Cantidad</label>
+									<div class="input-group">
+										<div class="input-group-prepend required">
+											<span class="input-group-text"><i
+												class="fas fa-hashtag fa-fw"></i></span>
+										</div>
+										<p:selectOneMenu id="ddlCantidad" class="form-control"
+											required="#{request.getParameter('validate')}"
+											autoWidth="false"
+											disabled="#{not certificadoCORBean.showPanelAgregar}"
+											requiredMessage="La cantidad es requerida."
+											value="#{certificadoCORBean.cantidad}">
+											<f:selectItem itemLabel="-- Seleccione opción --" />
+											<f:selectItem itemLabel="1" itemValue="1" />
+											<f:selectItem itemLabel="2" itemValue="2" />
+											<f:selectItem itemLabel="3" itemValue="3" />
+											<f:selectItem itemLabel="4" itemValue="4" />
+											<f:selectItem itemLabel="5" itemValue="5" />
+											<f:selectItem itemLabel="6" itemValue="6" />
+											<f:selectItem itemLabel="7" itemValue="7" />
+											<f:selectItem itemLabel="8" itemValue="8" />
+											<f:selectItem itemLabel="9" itemValue="9" />
+											<f:selectItem itemLabel="10" itemValue="10" />
+											<f:selectItem itemLabel="11" itemValue="11" />
+											<f:selectItem itemLabel="12" itemValue="12" />
+											<f:selectItem itemLabel="13" itemValue="13" />
+											<f:selectItem itemLabel="14" itemValue="14" />
+											<f:selectItem itemLabel="15" itemValue="15" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</h:panelGroup>
+							<div class="row">
+								<div class="col">
+									<p:messages />
+								</div>
+							</div>
+							<h:panelGroup layout="block" styleClass="row mb-3">
+								<div class="col"></div>
+								<div class="col form-group">
+									<p:commandLink styleClass="btn btn-warning btn-block mt-3"
+										disabled="#{not certificadoCORBean.showPanelAgregar}"
+										validateClient="true" oncomplete="removeUIClasess();"
+										update="wizardDemanda"
+										actionListener="#{certificadoCORBean.addRowTable}">
+										<f:param name="validate" value="true" />
+                                            Agregar Identificación <i
+											class="fas fa-level-down-alt ml-3"></i>
+									</p:commandLink>
+								</div>
+								<div class="col"></div>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="row mb-3">
+								<div class="col form-group">
+									<label class="control-label">Justificación</label>
+									<div class="input-group">
+										<div class="input-group-prepend required">
+											<span class="input-group-text"><i
+												class="far fa-address-card fa-fw"></i></span>
+										</div>
+										<p:inputTextarea rows="3" id="tbJustificaciones"
+											class="form-control" maxlength="500" autoResize="false"
+											value="#{certificadoCORBean.justificacion}">
+										</p:inputTextarea>
+									</div>
+								</div>
+							</h:panelGroup>
+							<div class="row">
+								<h:panelGroup layout="block" styleClass="col" id="pnlTabla">
+									<fieldset>
+										<legend> Identificaciones Agregadas
+											(#{certificadoCORBean.listaDetalles.size()}) </legend>
+										<p:dataTable resizableColumns="false"
+											emptyMessage="No se han agregado solicitudes."
+											rowIndexVar="_row" id="datosListFormularioCertificaciones"
+											var="listaCertifica"
+											value="#{certificadoCORBean.listaDetalles}">
+											<p:column headerText="#" width="3%" class="row-index"
+												exportable="false">
+												<h:outputText value="#{_row + 1}" />
+											</p:column>
+											<p:column headerText="Identificación" class="text-center"
+												width="20%">
+												<h:outputText value="#{listaCertifica.tipo_docu}" />
+												<span data-type='valor'>#{listaCertifica.nume_docu}</span>
+											</p:column>
+											<p:column headerText="Tipo de Certificación"
+												class="text-center">
+												<h:outputText
+													value="#{listaCertifica.tipo_certifica_descripcion}" />
+											</p:column>
+											<p:column headerText="Rango de Consulta" class="text-center"
+												width="20%">
+												<h:outputText value="Último año"
+													rendered="#{listaCertifica.anos == 1}" />
+												<h:outputText value="Últimos #{listaCertifica.anos} años"
+													rendered="#{listaCertifica.anos gt 1}" />
+											</p:column>
+											<p:column headerText="Cantidad" class="text-center"
+												width="15%">
+												<h:outputText value="#{listaCertifica.cantidad}" />
+											</p:column>
+											<p:column headerText="Acciones" width="10%"
+												class="text-center align-middle">
+												<p:commandLink
+													styleClass="btn btn-outline-danger btn-sm btn-block border-0 no-shadow"
+													title="Eliminar esta identificación" process="@this"
+													action="#{certificadoCORBean.eliminarDetalle(listaCertifica)}"
+													update=":frmWizard:wizardDemanda">
+													<i class="fas fa-times"></i>
+												</p:commandLink>
+											</p:column>
+										</p:dataTable>
+									</fieldset>
+								</h:panelGroup>
+							</div>
+						</div>
+					</p:tab>
+
+					<p:tab id="confirmacion">
+						<div class="row">
+							<div class="col">
+								<p:messages />
+							</div>
+						</div>
+						<div class="py-0 px-1">
+							<div class="row">
+								<div class="col">
+									<fieldset>
+										<legend> Identificaciones Agregadas
+											(#{certificadoCORBean.listaDetalles.size()}) </legend>
+										<p:dataTable resizableColumns="false"
+											emptyMessage="No se han agregado solicitudes."
+											rowIndexVar="_row" id="confirmListFormularioCertificaciones"
+											var="listaCertifica"
+											value="#{certificadoCORBean.listaDetalles}">
+											<p:column headerText="#" width="3%" class="row-index"
+												exportable="false">
+												<h:outputText value="#{_row + 1}" />
+											</p:column>
+											<p:column headerText="Identificación" class="text-center">
+												<h:outputText value="#{listaCertifica.tipo_docu}" />
+												<span data-type='valor'>#{listaCertifica.nume_docu}</span>
+											</p:column>
+											<p:column headerText="Tipo de Certificación"
+												class="text-center">
+												<h:outputText
+													value="#{listaCertifica.tipo_certifica_descripcion}" />
+											</p:column>
+											<p:column headerText="Rango de Consulta" class="text-center"
+												width="20%">
+												<h:outputText value="Último año"
+													rendered="#{listaCertifica.anos == 1}" />
+												<h:outputText value="Últimos #{listaCertifica.anos} años"
+													rendered="#{listaCertifica.anos gt 1}" />
+											</p:column>
+											<p:column headerText="Cantidad" class="text-center"
+												width="15%">
+												<h:outputText value="#{listaCertifica.cantidad}" />
+											</p:column>
+										</p:dataTable>
+									</fieldset>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center mt-4">
+									<div class="alert alert-warning">
+										<div class="custom-control custom-checkbox">
+											<h:selectBooleanCheckbox id="aceptoSolicitud"
+												class="custom-control-input"
+												value="#{certificadoCORBean.aceptoSolicitud}">
+											</h:selectBooleanCheckbox>
+											<label class="custom-control-label font-weight-bolder"
+												for="frmWizard:aceptoSolicitud">Confirmo que los
+												datos solicitados son correctos</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</p:tab>
+					<p:tab id="pago">
+						<div class="col">
+							<div class="alert alert-warning">
+								<i class="fas fa-info-circle fa-fw fa-lg mr-2"></i>Puede
+								descargar el certificado a continuación.<br />
+							</div>
+
+							<h:panelGroup layout="block" styleClass="row mb-3">
+								<div class="col"></div>
+								<div class="col form-group">
+									<p:commandLink styleClass="btn btn-primary btn-block mt-3"
+										ajax="false" action="#{certificadoCORBean.downloadFile}">
+                                            Descargar <i
+											class="fas fa-level-down-alt ml-3"></i>
+									</p:commandLink>
+								</div>
+								<div class="col"></div>
+							</h:panelGroup>
+						</div>
+					</p:tab>
+				</p:wizard>
+				<ui:include src="./../../WEB-INF/webparts/botonesWizard.xhtml">
+					<ui:param name="currentBean" value="#{certificadoCORBean}" />
+				</ui:include>
+			</h:form>
+		</ui:define>
+
+	</ui:composition>
+
+</body>
+</html>

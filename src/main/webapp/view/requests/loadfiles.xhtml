@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+<body>
+	<ui:composition
+		template="./../../WEB-INF/webparts/solicitudesmain.xhtml">
+		<ui:param name="title" value="Detalle solicitud" />
+		<ui:define name="mainContent">
+			<h:form id="frmLoadFiles">
+				<fieldset>
+					<h:panelGroup layout="block" styleClass="col" id="pnlTabla">
+
+						<legend> Cargar información solicitada por el usuario al
+							Drive
+							#{loadFilesBean.tramite.ano_radi}-#{loadFilesBean.tramite.nume_radi}
+						</legend>
+						<div class="row">
+							<div class="col">
+								<div class="alert alert-warning">
+									<i class="fas fa-info-circle fa-fw fa-lg mr-2"></i><strong>
+										En esta opción el funcionario puede cargar la información
+										solicitada por el usuario al Drive para que el usuario la
+										descargue </strong>
+								</div>
+							</div>
+						</div>
+					</h:panelGroup>
+
+					<h:panelGroup layout="block" styleClass="col" id="pnlObservaciones">
+						<div class="row">
+							<div class="col form-group">
+								<label class="control-label">Observaciones</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"> <i
+											class="fab fa-stack-exchange fa-fw"></i>
+										</span>
+									</div>
+									<p:inputTextarea rows="5" id="tbObservaciones"
+										class="form-control" maxlength="2000" autoResize="false"
+										disabled="#{loadFilesBean.observacionesObligatorias}"
+										value="#{loadFilesBean.observaciones}">
+									</p:inputTextarea>
+								</div>
+							</div>
+						</div>
+					</h:panelGroup>
+
+					<h:panelGroup layout="block" styleClass="col" id="pnlTipoCopias">
+						<div class="row">
+							<div class="col form-group">
+								<label class="control-label">Tipo de copia:</label>
+								<div class="input-group">
+									<p:selectOneMenu id="tipoCopias" class="form-control"
+										autoWidth="false"
+										requiredMessage="El Tipo de copias es obligatorio."
+										value="#{loadFilesBean.tipoCopias}">
+										<f:selectItem itemLabel="-- Seleccione opción --" />
+										<f:selectItem itemLabel="Simple" itemValue="S" />
+										<f:selectItem itemLabel="Autenticación Digital" itemValue="A" />
+									</p:selectOneMenu>
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col form-group">
+								<label class="control-label">Tipo de medio:</label>
+								<div class="input-group">
+									<h:inputText escape="false" readonly="true"
+										class="form-control"
+										value="#{loadFilesBean.tramiteDetalle.opcionesEntrega eq 1 ? 'Física' : (loadFilesBean.tramiteDetalle.opcionesEntrega eq 2 ? 'Magnético' : (loadFilesBean.tramiteDetalle.opcionesEntrega eq 3 ? 'Digital' : 'Digital'))}" />
+								</div>
+							</div>
+						</div>
+					</h:panelGroup>
+
+
+					<h:panelGroup layout="block" styleClass="col" id="pnlCheck">
+						<div class="custom-control custom-checkbox mt-3">
+							<h:selectBooleanCheckbox id="obsCompletas"
+								class="custom-control-input"
+								value="#{loadFilesBean.observacionesObligatorias}">
+								<p:ajax event="change" update="pnlObservaciones" />
+							</h:selectBooleanCheckbox>
+							<label class="custom-control-label"
+								for="frmLoadFiles:obsCompletas">Comunicado de respuesta
+								por defecto</label>
+						</div>
+
+					</h:panelGroup>
+
+
+					<h:panelGroup layout="block" styleClass="col" id="attachmentsTable">
+						<div>
+							<h:panelGroup layout="block" styleClass="row"
+								rendered="#{loadFilesBean.tramiteDetalle.opcionesEntrega ne 1}">
+								<p:fileUpload listener="#{loadFilesBean.handleFileUpload}"
+									mode="advanced" dragDropSupport="false" multiple="true"
+									rendered="true" sizeLimit="1000000000000"
+									update="attachmentsTable" fileLimit="10" auto="true"
+									value="Anexar" label="Anexar" skinSimple="true"
+									allowTypes="/(\.|\/)(zip|pdf)$/" />
+							</h:panelGroup>
+
+							<div class="row">
+								<div class="col">
+									<p:messages id="msgLoadFiles" />
+								</div>
+							</div>
+
+							<fieldset>
+								<h:panelGroup
+									rendered="#{loadFilesBean.tramiteDetalle.opcionesEntrega ne 1}">
+									<legend> Archivos cargados </legend>
+								</h:panelGroup>
+
+								<p:dataTable resizableColumns="false"
+									emptyMessage="No se han adjuntado archivo." rowIndexVar="_row"
+									id="tblAttachments" var="listaAttachments"
+									value="#{loadFilesBean.listaAdjunto}"
+									rendered="#{loadFilesBean.tramiteDetalle.opcionesEntrega ne 1}">
+									<p:column headerText="#" width="3%" class="row-index"
+										exportable="false">
+										<h:outputText value="#{_row + 1}" />
+									</p:column>
+
+									<p:column headerText="Archivo" class="text-center" width="35%">
+										<h:outputText value="#{listaAttachments.fileName}" />
+									</p:column>
+									<p:column headerText="Tipo" class="text-center" width="35%">
+										<h:outputText value="#{listaAttachments.fileExtension}" />
+									</p:column>
+
+									<p:column headerText="Tamaño" class="text-center" width="25%">
+										<h:outputText value="#{listaAttachments.fileSize} MB" />
+									</p:column>
+
+
+									<p:column headerText="Acciones" width="7%"
+										class="text-center align-middle">
+										<p:commandLink
+											styleClass="btn btn-outline-danger btn-sm btn-block border-0 no-shadow"
+											title="Eliminar adjunto" process="@this"
+											action="#{loadFilesBean.EliminarAdjunto(listaAttachments)}"
+											update=":frmLoadFiles:attachmentsTable">
+											<i class="fas fa-times"></i>
+										</p:commandLink>
+									</p:column>
+
+								</p:dataTable>
+
+								<br />
+
+								<p:ajaxStatus>
+									<f:facet name="default">
+										<div class="row" style="text-align: center">
+											<div class="col form-group">
+												<p:commandLink styleClass="btn btn-primary "
+													disabled="false" update="frmLoadFiles"
+													validateClient="true" oncomplete="removeUIClasess();"
+													actionListener="#{loadFilesBean.enviarRespuestaFinalizarSolicitud}">
+													<f:param name="validate" value="true" />
+
+													<i class="fas fa-list"></i> Enviar respuesta y finalizar solicitud.
+                                                </p:commandLink>
+											</div>
+											<div class="col form-group">
+												<p:commandLink ajax="true" styleClass="btn btn-primary"
+													title="Volver" process="@this"
+													action="/view/requests/detalletramite.xhtml?faces-redirect=true"
+													actionListener="#{loadFilesBean.limpiarForm}">
+													<f:ajax render=":frmMyRequests:myRequestTable" />
+													<i class="fa fa-backward"></i> Volver al detalle de la solicitud
+                                                </p:commandLink>
+											</div>
+										</div>
+									</f:facet>
+									<f:facet name="start">
+										<div class='alert alert-warning' align="center">
+											<div class="spinner-border" role="status">
+												<span class="sr-only">Procesando...</span>
+											</div>
+											Procesando...
+										</div>
+									</f:facet>
+									<f:facet name="complete">
+										<div class="row" style="text-align: center">
+											<div class="col form-group">
+												<p:commandLink styleClass="btn btn-primary "
+													disabled="false" update="frmLoadFiles"
+													validateClient="true" oncomplete="removeUIClasess();"
+													actionListener="#{loadFilesBean.enviarRespuestaFinalizarSolicitud}">
+													<f:param name="validate" value="true" />
+
+													<i class="fas fa-list"></i> Enviar respuesta y finalizar solicitud.
+                                                </p:commandLink>
+											</div>
+											<div class="col form-group">
+												<p:commandLink ajax="true" styleClass="btn btn-primary"
+													title="Volver" process="@this"
+													action="/view/requests/detalletramite.xhtml?faces-redirect=true"
+													actionListener="#{loadFilesBean.limpiarForm}">
+													<f:ajax render=":frmMyRequests:myRequestTable" />
+													<i class="fa fa-backward"></i> Volver al detalle de la solicitud
+                                                </p:commandLink>
+											</div>
+											<h:panelGroup styleClass="col form-group"
+												rendered="#{loadFilesBean.fileContentSinFirma ne null}">
+												<p:commandLink value="Descargar archivo para firma física"
+													ajax="false" styleClass="btn btn-primary"
+													actionListener="#{loadFilesBean.descargarRespuesta}"
+													rendered="#{loadFilesBean.tramiteDetalle.opcionesEntrega eq 1}">
+													<p:fileDownload value="#{downloadFilesBean.download}" />
+												</p:commandLink>
+											</h:panelGroup>
+										</div>
+									</f:facet>
+								</p:ajaxStatus>
+
+							</fieldset>
+						</div>
+					</h:panelGroup>
+
+
+				</fieldset>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>
