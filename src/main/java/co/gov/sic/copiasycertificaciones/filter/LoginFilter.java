@@ -41,6 +41,7 @@ public class LoginFilter implements Filter {
 		boolean validatePath = !path.contains("/jakarta.faces.resource/") && !path.contains("/css/")
 				&& !path.contains("/img/") && !path.contains("/js/") && !path.contains("/fonts/")
 				&& !path.endsWith(".pdf") && !path.contains("/login.xhtml") && !path.contains("/procesarPago.xhtml")
+				&& !path.contains("/confirmarPago.xhtml")
 				&& !path.contains("/admin/pendientes.xhtml");
 
 		boolean validAdminPath = path.contains("/notification/validaciontramite.xhtml")
@@ -61,12 +62,11 @@ public class LoginFilter implements Filter {
 
 		boolean validUserPath = path.contains("/tramites/CertificadoDIS.xhtml")
 				|| path.contains("/tramites/ListadosInf.xhtml") || path.contains("/tramites/SolicitudCopias.xhtml")
-				|| path.contains("/tramites/confirmarPago.xhtml") || path.contains("/tramites/listado.xhtml")
+				|| path.contains("/tramites/listado.xhtml")
 				|| path.contains("/tramites/menu.xhtml") || path.contains("/errors/csrf.xhtml")
 				|| path.contains("/tramites/detalleadjuntosSolicitante.xhtml")
 				|| path.contains("/tramites/downloadfiles.xhtml") || path.contains("/tramites/payment.xhtml")
 				|| path.contains("/errors/rtacomplemento.xhtml") || path.contains("/errors/pagenotfound.xhtml")
-				|| path.contains("/tramites/procesarPago.xhtml")
 				|| path.contains("/requester/detalleadjuntosSolicitante.xhtml")
 				|| path.contains("/requester/downloadfiles.xhtml") || path.contains("/requester/payment.xhtml")
 				|| path.contains("/requester/rtacomplemento.xhtml");
