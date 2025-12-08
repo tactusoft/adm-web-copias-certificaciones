@@ -37,20 +37,43 @@
 
 	<context-param>
 		<param-name>CopiasyCertificaciones.FechaActualizacion</param-name>
-		<param-value>04-06-2025</param-value>
+		<param-value>12-12-2025</param-value>
 	</context-param>
-	
+
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
-	
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+		<cookie-config>
+			<http-only>true</http-only>
+		</cookie-config>
+		<tracking-mode>COOKIE</tracking-mode>
+	</session-config>
+
+	<error-page>
+		<error-code>404</error-code>
+		<location>/view/errors/pagenotfound.xhtml</location>
+	</error-page>
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/view/errors/pagenotfound.xhtml</location>
+	</error-page>
+
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/view/errors/pagenotfound.xhtml</location>
+	</error-page>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Area del coordinador</web-resource-name>
@@ -62,7 +85,7 @@
 			<role-name>COORDINADOR_SCC</role-name>
 		</auth-constraint>
 	</security-constraint>
-	
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Area del funcionario</web-resource-name>
@@ -74,7 +97,7 @@
 			<role-name>RESPONSABLE_SCC</role-name>
 		</auth-constraint>
 	</security-constraint>
-	
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Area del funcionario</web-resource-name>

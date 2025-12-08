@@ -1,79 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:c="jakarta.tags.core"
+	xmlns:p="http://primefaces.org/ui">
+<body>
+	<ui:composition template="./../../WEB-INF/webparts/principal.xhtml">
+		<ui:param name="title" value="Detalle solicitud" />
+		<ui:define name="mainContent">
+			<h:form id="frmRtaComple">
+				<h:panelGroup layout="block" styleClass="col" id="pnlTabla">
+					<fieldset>
+						<legend> Detalles del pago solicitud -
+							#{tramite.ano_radi}-#{tramite.nume_radi} </legend>
+					</fieldset>
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-    <body>
-        <ui:composition template="./../../WEB-INF/webparts/principal.xhtml">
-            <ui:param name="title" value="Detalle solicitud" />
-            <ui:define name="mainContent">
-                <h:form id="frmRtaComple">       
-                    <h:panelGroup layout="block"
-                                  styleClass="col" id="pnlTabla">
-                        <fieldset>
-                            <legend>
-                                Detalles del pago solicitud - #{tramite.ano_radi}-#{tramite.nume_radi}
-                            </legend>
-                        </fieldset>
-                        
-                        <p:dataTable resizableColumns="false"
-                                         emptyMessage="No hay solicitudes pendientes."
-                                         rowIndexVar="_row"
-                                         paginator="true"
-                                         rows="5"
-                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                         currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
-                                         rowsPerPageTemplate="5,10,15"
-                                         id="tblDetalleSolicitudes"
-                                         var="detallesSolicitud"
-                                         value="#{paymentBean.tramite.detalles}">
+					<p:dataTable resizableColumns="false"
+						emptyMessage="No hay solicitudes pendientes." rowIndexVar="_row"
+						paginator="true" rows="5"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+						rowsPerPageTemplate="5,10,15" id="tblDetalleSolicitudes"
+						var="detallesSolicitud" value="#{paymentBean.tramite.detalles}">
 
-                                <p:column headerText="#" width="5%"
-                                          class="row-index" exportable="false">
-                                    <h:outputText value="#{_row + 1}" />
-                                </p:column>
+						<p:column headerText="#" width="5%" class="row-index"
+							exportable="false">
+							<h:outputText value="#{_row + 1}" />
+						</p:column>
 
-                                <p:column headerText="Tipo de Copia" class="text-center" width="25%">
-                                    <h:outputText value="#{detallesSolicitud.tipo_certifica_descripcion}" />
-                                </p:column>
-                                <p:column headerText="Descripción" class="text-center">
-                                    <h:outputText escape="false" value="#{utility.replaceNewLines(detallesSolicitud.observaciones)}" />
-                                </p:column>
-                                <p:column headerText="Acto" class="text-center" width="15%">
-                                    <h:outputText value="#{detallesSolicitud.variableAdicional1} " /> 
-                                    <h:outputText value="#{detallesSolicitud.variableAdicional2} " />
-                                    <h:outputText value="#{detallesSolicitud.fechaAdicional1}" />
-                                </p:column>
+						<p:column headerText="Tipo de Copia" class="text-center"
+							width="25%">
+							<h:outputText
+								value="#{detallesSolicitud.tipo_certifica_descripcion}" />
+						</p:column>
+						<p:column headerText="Descripción" class="text-center">
+							<h:outputText escape="false"
+								value="#{utility.replaceNewLines(detallesSolicitud.observaciones)}" />
+						</p:column>
+						<p:column headerText="Acto" class="text-center" width="15%">
+							<h:outputText value="#{detallesSolicitud.variableAdicional1} " />
+							<h:outputText value="#{detallesSolicitud.variableAdicional2} " />
+							<h:outputText value="#{detallesSolicitud.fechaAdicional1}" />
+						</p:column>
 
-                                <p:column headerText="Valor"  class="text-center align-middle" width="5%">
-                                    <h:outputText value="#{detallesSolicitud.valor} " />
-                                </p:column>
-                            </p:dataTable>
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        <p:commandLink styleClass="btn btn-success btn-block btn-lg mt-4" process="@this" oncomplete="goToPSE();" onclick="PF('dlgProcessing').show();"
-                                       update="@form" actionListener="#{currentBean.nextInvoiceId(tramite)}">
-                            <i class="fas fa-credit-card fa-lg fa-fw mr-2" aria-hidden="true"></i>
+						<p:column headerText="Valor" class="text-center align-middle"
+							width="5%">
+							<h:outputText value="#{detallesSolicitud.valor} " />
+						</p:column>
+					</p:dataTable>
+					<p:commandLink styleClass="btn btn-success btn-block btn-lg mt-4"
+						process="@this" oncomplete="goToPSE();"
+						onclick="PF('dlgProcessing').show();" update="@form"
+						actionListener="#{currentBean.nextInvoiceId(tramite)}">
+						<i class="fas fa-credit-card fa-lg fa-fw mr-2" aria-hidden="true"></i>
                             Pagar en línea
                         </p:commandLink>
-                        <ui:include src="formPago.xhtml" rendered="#{currentBean.idCurrentInvoice != null}">
-                            <ui:param name="currentBean" value="#{currentBean}" />
-                        </ui:include>
+					<ui:include src="formPago.xhtml"
+						rendered="#{currentBean.idCurrentInvoice != null}">
+						<ui:param name="currentBean" value="#{currentBean}" />
+					</ui:include>
 
-                    </h:panelGroup>
-                </h:form>
-            </ui:define>
-        </ui:composition>
-    </body>
+				</h:panelGroup>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
 </html>

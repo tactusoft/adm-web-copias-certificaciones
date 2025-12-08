@@ -1,4 +1,4 @@
-package co.gov.sic.copiasycertificaciones.ws.client.soap;
+package co.gov.sic.copiasycertificaciones.rest;
 
 import java.time.LocalDate;
 

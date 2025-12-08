@@ -95,19 +95,19 @@ public class DownloadFilesBean implements Serializable {
 	}
 
 	private ByteArrayOutputStream getFileContent(String fullFileName) throws FileNotFoundException, IOException {
-
-		byte[] buffer = new byte[4096];
-		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(fullFileName));
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-		int bytes = 0;
-		while ((bytes = bis.read(buffer, 0, buffer.length)) > 0) {
-			baos.write(buffer, 0, bytes);
-		}
-		baos.close();
-		bis.close();
-
-		return baos;
+	    byte[] buffer = new byte[4096];
+	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	    
+	    try (FileInputStream fis = new FileInputStream(fullFileName);
+	         BufferedInputStream bis = new BufferedInputStream(fis)) {
+	        
+	        int bytes;
+	        while ((bytes = bis.read(buffer, 0, buffer.length)) > 0) {
+	            baos.write(buffer, 0, bytes);
+	        }
+	    }
+	    
+	    return baos;
 	}
 
 	public void descargarAdjunto(String pathToFind, String fileName) {

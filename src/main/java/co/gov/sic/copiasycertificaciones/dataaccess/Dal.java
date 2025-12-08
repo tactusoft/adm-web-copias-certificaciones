@@ -757,7 +757,7 @@ public class Dal implements AutoCloseable {
 			}
 
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			logger.error(e.getMessage());
 		}
 		return response;
 
@@ -1023,7 +1023,7 @@ public class Dal implements AutoCloseable {
 			stmt.executeUpdate();
 			return true;
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			logger.error(e.getMessage());
 			return false;
 		}
 	}
@@ -1039,7 +1039,7 @@ public class Dal implements AutoCloseable {
 			return true;
 
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			logger.error(e.getMessage());
 			return false;
 		}
 	}
@@ -1466,7 +1466,7 @@ public class Dal implements AutoCloseable {
 		tram.setCons_radi(rs.getInt("cons_radi"));
 		tram.setEstado(rs.getInt("estado"));
 		if (tram.getEstado().equals(EstadoTramite.COMPLEMENTAR)) {
-			System.out.println(tram.getIdtramite());
+			logger.info(tram.getIdtramite().toString());
 			tram.setDetalles(getDetallesTramite(rs.getInt("idtramite")));
 		}
 		tram.setFunc_asignado(rs.getLong("func_asignado"));

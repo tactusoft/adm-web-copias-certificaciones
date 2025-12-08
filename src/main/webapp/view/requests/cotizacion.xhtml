@@ -1,330 +1,333 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:c="jakarta.tags.core"
+	xmlns:p="http://primefaces.org/ui">
+<body>
+	<ui:composition
+		template="./../../WEB-INF/webparts/solicitudesmain.xhtml">
+		<ui:param name="title" value="Cotización" />
+		<ui:define name="mainContent">
+			<h:form id="frmCCotizacion">
+				<h:panelGroup layout="block" styleClass="col" id="pnlCotizacion">
+					<fieldset>
+						<legend> Detalles de la solicitud -
+							#{requestManagementBean.tramiteSolicitud.ano_radi}-#{requestManagementBean.tramiteSolicitud.nume_radi}
+						</legend>
+						<div class="row">
+							<div class="col-sm-6 form-group">
+								<label class="control-label">Concepto</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-chevron-right fa-fw"></i></span>
+									</div>
+									<p:selectOneMenu id="idFuncionario" class="form-control"
+										filter="true" filterMatchMode="contains" autoWidth="false"
+										disabled="false" value="#{cotizacionBean.fcncpto}">
+										<p:ajax listener="#{cotizacionBean.onChangeConcepto}"
+											update=":frmCCotizacion:pnlCotizacion" process="@form" />
+										<f:selectItem itemLabel="-- Seleccione opción --">
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-    <body>
-        <ui:composition template="./../../WEB-INF/webparts/solicitudesmain.xhtml">
-            <ui:param name="title" value="Cotización" />
-            <ui:define name="mainContent">
-                <h:form id="frmCCotizacion">
-                    <h:panelGroup layout="block" styleClass="col" id="pnlCotizacion">
-                        <fieldset>
-                            <legend>
-                                Detalles de la solicitud - #{requestManagementBean.tramiteSolicitud.ano_radi}-#{requestManagementBean.tramiteSolicitud.nume_radi}
-                            </legend>
-                            <div class="row">
-                                <div class="col-sm-6 form-group">
-                                    <label class="control-label">Concepto</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-chevron-right fa-fw"></i></span>
-                                        </div>
-                                        <p:selectOneMenu  id="idFuncionario" class="form-control" filter="true" filterMatchMode="contains" autoWidth="false" disabled="false"
-                                                          value="#{cotizacionBean.fcncpto}">
-                                            <p:ajax listener="#{cotizacionBean.onChangeConcepto}" 
-                                                    update=":frmCCotizacion:pnlCotizacion"    
-                                                    process="@form" />
-                                            <f:selectItem itemLabel="-- Seleccione opción --">
+										</f:selectItem>
+										<f:selectItems value="#{cotizacionBean.listaRentistico}"
+											var="entry" itemValue="#{entry.fcncpto}"
+											itemLabel="#{entry.nomb_conc}">
+										</f:selectItems>
+									</p:selectOneMenu>
+								</div>
+							</div>
+							<div class="col-sm-2 form-group">
+								<label class="control-label">Valor unitario</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="fas fa-tags"></i></span>
+									</div>
+									<p:inputText class="form-control" readonly="true"
+										value="#{utility.tryFormatCurrencyNumber(cotizacionBean.fvalor, true, true)}"></p:inputText>
+								</div>
+							</div>
+							<div class="col-sm-2 form-group">
+								<label class="control-label">Cantidad</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-align-justify"></i></span>
+									</div>
+									<p:inputNumber class="form-control" minValue="0"
+										readonly="false" value="#{cotizacionBean.cantidad}">
+										<p:ajax event="blur"
+											listener="#{cotizacionBean.onChangeCantidad}" update="total"
+											process="@form" />
+									</p:inputNumber>
+								</div>
+							</div>
+							<div class="col-sm-2 form-group">
+								<label class="control-label">Total por concepto</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-file-invoice-dollar"></i></span>
+									</div>
+									<p:inputText id="total" class="form-control" readonly="true"
+										value="#{utility.tryFormatCurrencyNumber(cotizacionBean.totalConcepto, true, true)}">
+									</p:inputText>
+								</div>
+							</div>
 
-                                            </f:selectItem>
-                                            <f:selectItems value="#{cotizacionBean.listaRentistico}" var="entry"
-                                                           itemValue="#{entry.fcncpto}" itemLabel="#{entry.nomb_conc}">
-                                            </f:selectItems>
-                                        </p:selectOneMenu>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 form-group">
-                                    <label class="control-label">Valor unitario</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-tags"></i></span>
-                                        </div>
-                                        <p:inputText class="form-control" readonly="true" value="#{utility.tryFormatCurrencyNumber(cotizacionBean.fvalor, true, true)}"></p:inputText>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 form-group">
-                                    <label class="control-label">Cantidad</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-align-justify"></i></span>
-                                        </div>
-                                        <p:inputNumber class="form-control" minValue="0" readonly="false" value="#{cotizacionBean.cantidad}">
-                                            <p:ajax event="blur" listener="#{cotizacionBean.onChangeCantidad}" 
-                                                    update="total"    
-                                                    process="@form" />
-                                        </p:inputNumber>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 form-group">
-                                    <label class="control-label">Total por concepto</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-file-invoice-dollar"></i></span>
-                                        </div>
-                                        <p:inputText  id="total" class="form-control" readonly="true" value="#{utility.tryFormatCurrencyNumber(cotizacionBean.totalConcepto, true, true)}">                                            
-                                        </p:inputText>
-                                    </div>
-                                </div>
+						</div>
 
-                            </div>
-
-                            <p:ajaxStatus>
-                                    <f:facet name="default">
-                            <div class="row">
-                                <div class="col form-group text-center">
-                                    <p:commandLink styleClass="btn btn-warning" 
-                                                   validateClient="true" oncomplete="removeUIClasess();"
-                                                   update="frmCCotizacion"
-                                                   actionListener="#{cotizacionBean.agregarACotizacion}">
+						<p:ajaxStatus>
+							<f:facet name="default">
+								<div class="row">
+									<div class="col form-group text-center">
+										<p:commandLink styleClass="btn btn-warning"
+											validateClient="true" oncomplete="removeUIClasess();"
+											update="frmCCotizacion"
+											actionListener="#{cotizacionBean.agregarACotizacion}">
                                         Agregar a cotización
                                     </p:commandLink>
-                                </div>
-                            </div>
-                                    </f:facet>
-                                <f:facet name="start">
-                                        <div class='alert alert-warning' align="center">
-                                            <div class="spinner-border" role="status">
-                                                <span class="sr-only">Procesando...</span>
-                                            </div> Procesando...
-                                        </div>
-                                    </f:facet>
-                                    <f:facet name="complete">
-                                        <div class="row">
-                                <div class="col form-group text-center">
-                                    <p:commandLink styleClass="btn btn-warning" 
-                                                   validateClient="true" oncomplete="removeUIClasess();"
-                                                   update="frmCCotizacion"
-                                                   actionListener="#{cotizacionBean.agregarACotizacion}">
+									</div>
+								</div>
+							</f:facet>
+							<f:facet name="start">
+								<div class='alert alert-warning' align="center">
+									<div class="spinner-border" role="status">
+										<span class="sr-only">Procesando...</span>
+									</div>
+									Procesando...
+								</div>
+							</f:facet>
+							<f:facet name="complete">
+								<div class="row">
+									<div class="col form-group text-center">
+										<p:commandLink styleClass="btn btn-warning"
+											validateClient="true" oncomplete="removeUIClasess();"
+											update="frmCCotizacion"
+											actionListener="#{cotizacionBean.agregarACotizacion}">
                                         Agregar a cotización
                                     </p:commandLink>
-                                </div>
-                            </div>
-                                    </f:facet>
-                            </p:ajaxStatus>
-                            
-                            <div class="row">   
-                                <div class="col">  <p:messages id="msgCotizacion"/>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </h:panelGroup>
-                    <div class="row">
-                        <h:panelGroup layout="block"
-                                      styleClass="col" id="pnlCotizaciones">
-                            <fieldset>
-                                <legend>
-                                    Cotizaciones agregadas (#{cotizacionBean.listaCotizacion.size()})
-                                </legend>
+									</div>
+								</div>
+							</f:facet>
+						</p:ajaxStatus>
+
+						<div class="row">
+							<div class="col">
+								<p:messages id="msgCotizacion" />
+							</div>
+						</div>
+					</fieldset>
+				</h:panelGroup>
+				<div class="row">
+					<h:panelGroup layout="block" styleClass="col" id="pnlCotizaciones">
+						<fieldset>
+							<legend> Cotizaciones agregadas
+								(#{cotizacionBean.listaCotizacion.size()}) </legend>
 
 
-                                <p:dataTable resizableColumns="false"
-                                             emptyMessage="No se han agregado una cotización." rowIndexVar="_row"
-                                             id="datosListFormularioCertificaciones"
-                                             var="cotizacion"
-                                             value="#{cotizacionBean.listaCotizacion}">
-                                    <p:column headerText="#" width="3%"
-                                              class="row-index" exportable="false">
-                                        <h:outputText value="#{_row + 1}" />
-                                    </p:column>
-                                    <p:column headerText="Codigo" class="text-center" width="5%">
-                                        <h:outputText value="#{cotizacion.frntstco.fcncpto}" />
-                                    </p:column>
-                                    <p:column headerText="Descripción" class="text-left" width="35%">
-                                        <h:outputText value="#{cotizacion.frntstco.nomb_conc}" />
-                                    </p:column>
-                                    <p:column headerText="Valor unitario" class="text-right" width="10%">
-                                        <h:outputText value="#{utility.tryFormatCurrencyNumber(cotizacion.fvalor, true, true)}" />
-                                    </p:column>
-                                    <p:column headerText="cantidad" class="text-center" width="10%">
-                                        <h:outputText value="#{utility.tryFormatCurrencyNumber(cotizacion.cantidad, false, true)}" />
-                                    </p:column>
-                                    <p:column headerText="cantidad" class="text-right" width="10%">
-                                        <h:outputText value="#{utility.tryFormatCurrencyNumber(cotizacion.totalConcepto, true, true)}" />
-                                    </p:column>
-                                    <p:column headerText="Acciones" width="7%"
-                                              class="text-center align-middle">
-                                        <p:commandLink
-                                            styleClass="btn btn-outline-danger btn-sm btn-block border-0 no-shadow"
-                                            title="Eliminar esta cotizacion" process="@this"
-                                            action="#{cotizacionBean.eliminarDetalleCotizacion(cotizacion)}"
-                                            update="frmCCotizacion">
-                                            <i class="fas fa-times"></i>
-                                        </p:commandLink>
-                                    </p:column>
+							<p:dataTable resizableColumns="false"
+								emptyMessage="No se han agregado una cotización."
+								rowIndexVar="_row" id="datosListFormularioCertificaciones"
+								var="cotizacion" value="#{cotizacionBean.listaCotizacion}">
+								<p:column headerText="#" width="3%" class="row-index"
+									exportable="false">
+									<h:outputText value="#{_row + 1}" />
+								</p:column>
+								<p:column headerText="Codigo" class="text-center" width="5%">
+									<h:outputText value="#{cotizacion.frntstco.fcncpto}" />
+								</p:column>
+								<p:column headerText="Descripción" class="text-left" width="35%">
+									<h:outputText value="#{cotizacion.frntstco.nomb_conc}" />
+								</p:column>
+								<p:column headerText="Valor unitario" class="text-right"
+									width="10%">
+									<h:outputText
+										value="#{utility.tryFormatCurrencyNumber(cotizacion.fvalor, true, true)}" />
+								</p:column>
+								<p:column headerText="cantidad" class="text-center" width="10%">
+									<h:outputText
+										value="#{utility.tryFormatCurrencyNumber(cotizacion.cantidad, false, true)}" />
+								</p:column>
+								<p:column headerText="cantidad" class="text-right" width="10%">
+									<h:outputText
+										value="#{utility.tryFormatCurrencyNumber(cotizacion.totalConcepto, true, true)}" />
+								</p:column>
+								<p:column headerText="Acciones" width="7%"
+									class="text-center align-middle">
+									<p:commandLink
+										styleClass="btn btn-outline-danger btn-sm btn-block border-0 no-shadow"
+										title="Eliminar esta cotizacion" process="@this"
+										action="#{cotizacionBean.eliminarDetalleCotizacion(cotizacion)}"
+										update="frmCCotizacion">
+										<i class="fas fa-times"></i>
+									</p:commandLink>
+								</p:column>
 
 
-                                    <p:columnGroup type="footer">
-                                        <p:row>
-                                            <p:column colspan="5"  class="text-right" footerText="Total a Pagar" />
-                                            <p:column class="font-weight-bolder color-money text-right" 
-                                                      footerText="#{utility.tryFormatCurrencyNumber(cotizacionBean.totalCotizacion, true)}" />
-                                            <p:column  />
-                                        </p:row>
-                                    </p:columnGroup>
+								<p:columnGroup type="footer">
+									<p:row>
+										<p:column colspan="5" class="text-right"
+											footerText="Total a Pagar" />
+										<p:column class="font-weight-bolder color-money text-right"
+											footerText="#{utility.tryFormatCurrencyNumber(cotizacionBean.totalCotizacion, true)}" />
+										<p:column />
+									</p:row>
+								</p:columnGroup>
 
-                                </p:dataTable>
-                                <br/>
-                                <div class="row">
+							</p:dataTable>
+							<br />
+							<div class="row">
 
-                                    <div class="col form-group">
-                                        <label class="control-label">Observaciones</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fab fa-stack-exchange fa-fw"></i>
-                                                </span>
-                                            </div>
-                                            <p:inputTextarea rows="3" id="tbObservaciones" class="form-control" maxlength="600" autoResize="false" disabled="false"
-                                                             value="#{cotizacionBean.observaciones}">
-                                            </p:inputTextarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <br/>
-                                <div class="row">
-                                    <h:panelGroup layout="block"
-                                                  styleClass="col" id="attachmentsTable"
-                                                  >
-                                        <p:fileUpload listener="#{cotizacionBean.handleFileUpload}" 
-                                                      mode="advanced"                                                              
-                                                      dragDropSupport="false"
-                                                      multiple="true"
-                                                      rendered="true"
-                                                      sizeLimit="10485760"
-                                                      update="attachmentsTable"
-                                                      fileLimit="10"
-                                                      value="Anexar"
-                                                      label="Anexar"
-                                                      auto="true"
-                                                      skinSimple="true"
-                                                      allowTypes="/(\.|\/)(pdf)$/" />
+								<div class="col form-group">
+									<label class="control-label">Observaciones</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"> <i
+												class="fab fa-stack-exchange fa-fw"></i>
+											</span>
+										</div>
+										<p:inputTextarea rows="3" id="tbObservaciones"
+											class="form-control" maxlength="600" autoResize="false"
+											disabled="false" value="#{cotizacionBean.observaciones}">
+										</p:inputTextarea>
+									</div>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<h:panelGroup layout="block" styleClass="col"
+									id="attachmentsTable">
+									<p:fileUpload listener="#{cotizacionBean.handleFileUpload}"
+										mode="advanced" dragDropSupport="false" multiple="true"
+										rendered="true" sizeLimit="10485760" update="attachmentsTable"
+										fileLimit="10" value="Anexar" label="Anexar" auto="true"
+										skinSimple="true" allowTypes="/(\.|\/)(pdf)$/" />
 
-                                        <fieldset>
-                                            <legend>
-                                                Total adjuntos (#{cotizacionBean.listaAdjuntos.size()}) - Tamaño total  (#{cotizacionBean.totalAttachmentSize} MB)
-                                            </legend>
+									<fieldset>
+										<legend> Total adjuntos
+											(#{cotizacionBean.listaAdjuntos.size()}) - Tamaño total
+											(#{cotizacionBean.totalAttachmentSize} MB) </legend>
 
 
-                                            <p:dataTable resizableColumns="false"
-                                                         emptyMessage="No se han adjuntado archivo."
-                                                         rowIndexVar="_row"
-                                                         id="tblAttachments"
-                                                         var="listaAttachments"
-                                                         value="#{cotizacionBean.listaAdjuntos}">
-                                                <p:column headerText="#" width="3%"
-                                                          class="row-index" exportable="false">
-                                                    <h:outputText value="#{_row + 1}" />
-                                                </p:column>
+										<p:dataTable resizableColumns="false"
+											emptyMessage="No se han adjuntado archivo."
+											rowIndexVar="_row" id="tblAttachments" var="listaAttachments"
+											value="#{cotizacionBean.listaAdjuntos}">
+											<p:column headerText="#" width="3%" class="row-index"
+												exportable="false">
+												<h:outputText value="#{_row + 1}" />
+											</p:column>
 
-                                                <p:column headerText="Archivo" class="text-center" width="35%">
-                                                    <h:outputText value="#{listaAttachments.fileName}" />
-                                                </p:column>
-                                                <p:column headerText="Tipo" class="text-center" width="35%">
-                                                    <h:outputText value="#{listaAttachments.fileExtension}" />
-                                                </p:column>
+											<p:column headerText="Archivo" class="text-center"
+												width="35%">
+												<h:outputText value="#{listaAttachments.fileName}" />
+											</p:column>
+											<p:column headerText="Tipo" class="text-center" width="35%">
+												<h:outputText value="#{listaAttachments.fileExtension}" />
+											</p:column>
 
-                                                <p:column headerText="Tamaño" class="text-center" width="25%">
-                                                    <h:outputText value="#{listaAttachments.fileSize} MB" />
-                                                </p:column>
+											<p:column headerText="Tamaño" class="text-center" width="25%">
+												<h:outputText value="#{listaAttachments.fileSize} MB" />
+											</p:column>
 
 
-                                                <p:column headerText="Acciones" width="7%"
-                                                          class="text-center align-middle">
-                                                    <p:commandLink
-                                                        styleClass="btn btn-outline-danger btn-sm btn-block border-0 no-shadow"
-                                                        title="Eliminar adjunto" process="@this"
-                                                        action="#{cotizacionBean.EliminarAdjunto(listaAttachments)}"
-                                                        update=":frmCCotizacion:attachmentsTable">
-                                                        <i class="fas fa-times"></i>
-                                                    </p:commandLink>
-                                                </p:column>
+											<p:column headerText="Acciones" width="7%"
+												class="text-center align-middle">
+												<p:commandLink
+													styleClass="btn btn-outline-danger btn-sm btn-block border-0 no-shadow"
+													title="Eliminar adjunto" process="@this"
+													action="#{cotizacionBean.EliminarAdjunto(listaAttachments)}"
+													update=":frmCCotizacion:attachmentsTable">
+													<i class="fas fa-times"></i>
+												</p:commandLink>
+											</p:column>
 
-                                            </p:dataTable>
-                                        </fieldset>
-                                    </h:panelGroup>
-                                </div>
+										</p:dataTable>
+									</fieldset>
+								</h:panelGroup>
+							</div>
 
-                                <br/>
-                                <div class="row">   
-                                    <div class="col">  <p:messages id="msgCotizacion1"/>
-                                    </div>
-                                </div>
-                                <p:ajaxStatus>
-                                    <f:facet name="default">                                
-                                        <div class="row">
-                                            <div class="col form-group" align="right">
-                                                <p:commandLink styleClass="btn btn-primary" 
-                                                               validateClient="true" oncomplete="removeUIClasess();"                                                           
-                                                               update="frmCCotizacion"
-                                                               actionListener="#{cotizacionBean.hacerCotizacion}">
-                                                    <f:param name="validate" value="true"/>
+							<br />
+							<div class="row">
+								<div class="col">
+									<p:messages id="msgCotizacion1" />
+								</div>
+							</div>
+							<p:ajaxStatus>
+								<f:facet name="default">
+									<div class="row">
+										<div class="col form-group" align="right">
+											<p:commandLink styleClass="btn btn-primary"
+												validateClient="true" oncomplete="removeUIClasess();"
+												update="frmCCotizacion"
+												actionListener="#{cotizacionBean.hacerCotizacion}">
+												<f:param name="validate" value="true" />
 
-                                                    <i class="fas fa-sign-language"></i> Enviar cotización
+												<i class="fas fa-sign-language"></i> Enviar cotización
                                                 </p:commandLink>
-                                            </div>
-                                            <div class="col form-group" align="left">
-                                                <p:commandLink ajax="true"
-                                                               styleClass="btn btn-primary"
-                                                               title="Volver"
-                                                               process="@this" 
-                                                               actionListener="#{cotizacionBean.volver}"
-                                                               action="/view/requests/detalletramite.xhtml?faces-redirect=true">                                                    
-                                                    <i class="fa fa-backward"></i> Volver al detalle
-                                                    <f:actionListener binding="#{requestManagementBean.limpiarForm()}" />
-                                                    <f:ajax render=":frmDetalleValidationSolicitud:tblDetalleExpediente" />
+										</div>
+										<div class="col form-group" align="left">
+											<p:commandLink ajax="true" styleClass="btn btn-primary"
+												title="Volver" process="@this"
+												actionListener="#{cotizacionBean.volver}"
+												action="/view/requests/detalletramite.xhtml?faces-redirect=true">
+												<i class="fa fa-backward"></i> Volver al detalle
+                                                    <f:actionListener
+													binding="#{requestManagementBean.limpiarForm()}" />
+												<f:ajax
+													render=":frmDetalleValidationSolicitud:tblDetalleExpediente" />
+											</p:commandLink>
+										</div>
+
+									</div>
+								</f:facet>
+								<f:facet name="start">
+									<div class='alert alert-warning' align="center">
+										<div class="spinner-border" role="status">
+											<span class="sr-only">Procesando...</span>
+										</div>
+										Procesando...
+									</div>
+								</f:facet>
+								<f:facet name="complete">
+									<div class="row">
+										<div class="col form-group" align="right">
+											<p:commandLink styleClass="btn btn-primary"
+												validateClient="true" oncomplete="removeUIClasess();"
+												update="frmCCotizacion"
+												actionListener="#{cotizacionBean.hacerCotizacion}">
+												<f:param name="validate" value="true" />
+
+												<i class="fas fa-sign-language"></i> Agregar cotización
                                                 </p:commandLink>
-                                            </div>
+										</div>
+										<div class="col form-group" align="left">
+											<p:commandLink ajax="true" styleClass="btn btn-primary"
+												title="Volver" process="@this"
+												actionListener="#{cotizacionBean.volver}"
+												action="/view/requests/detalletramite.xhtml?faces-redirect=true">
+												<i class="fa fa-backward"></i> Volver al detalle
+                                                    <f:actionListener
+													binding="#{requestManagementBean.limpiarForm()}" />
+												<f:ajax
+													render=":frmDetalleValidationSolicitud:tblDetalleExpediente" />
+											</p:commandLink>
+										</div>
 
-                                        </div>
-                                    </f:facet>
-                                    <f:facet name="start">
-                                        <div class='alert alert-warning' align="center">
-                                            <div class="spinner-border" role="status">
-                                                <span class="sr-only">Procesando...</span>
-                                            </div> Procesando...
-                                        </div>
-                                    </f:facet>
-                                    <f:facet name="complete">
-                                        <div class="row">
-                                            <div class="col form-group" align="right">
-                                                <p:commandLink styleClass="btn btn-primary" 
-                                                               validateClient="true" oncomplete="removeUIClasess();"                                                           
-                                                               update="frmCCotizacion"
-                                                               actionListener="#{cotizacionBean.hacerCotizacion}">
-                                                    <f:param name="validate" value="true"/>
-
-                                                    <i class="fas fa-sign-language"></i> Agregar cotización
-                                                </p:commandLink>
-                                            </div>
-                                            <div class="col form-group" align="left">
-                                                <p:commandLink ajax="true"
-                                                               styleClass="btn btn-primary"
-                                                               title="Volver"
-                                                               process="@this" 
-                                                               actionListener="#{cotizacionBean.volver}"
-                                                               action="/view/requests/detalletramite.xhtml?faces-redirect=true">                                                    
-                                                    <i class="fa fa-backward"></i> Volver al detalle
-                                                    <f:actionListener binding="#{requestManagementBean.limpiarForm()}" />
-                                                    <f:ajax render=":frmDetalleValidationSolicitud:tblDetalleExpediente" />
-                                                </p:commandLink>
-                                            </div>
-
-                                        </div>
-                                    </f:facet>
-                                </p:ajaxStatus>
-                            </fieldset>
+									</div>
+								</f:facet>
+							</p:ajaxStatus>
+						</fieldset>
 
 
 
 
-                        </h:panelGroup>
-                    </div>
-                </h:form>
-            </ui:define>
-        </ui:composition>
-    </body>
+					</h:panelGroup>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
 </html>

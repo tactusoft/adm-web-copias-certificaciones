@@ -1,107 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:c="jakarta.tags.core"
+	xmlns:p="http://primefaces.org/ui">
+<body>
+	<ui:composition
+		template="./../../WEB-INF/webparts/notificationmain.xhtml">
+		<ui:param name="title" value="Administración de parámetros" />
+		<ui:define name="mainContent">
+			<h:form id="frmCCParametros">
 
-<html lang="es" xmlns="https://www.w3.org/1999/xhtml"
-      xmlns:h="https://jakarta.ee/jsf/html"
-      xmlns:f="https://jakarta.ee/jsf/core"
-      xmlns:ui="https://jakarta.ee/jsf/facelets"
-      xmlns:c="https://jakarta.ee/jsp/jstl/core"
-      xmlns:p="http://primefaces.org/ui">
-    <body>
-        <ui:composition template="./../../WEB-INF/webparts/notificationmain.xhtml">
-            <ui:param name="title" value="Administración de parámetros" />
-            <ui:define name="mainContent">
-                <h:form id="frmCCParametros">
+				<p:growl id="growl" showDetail="true" />
+				<p:growl id="growl-sticky" for="sticky-key" showDetail="true"
+					sticky="true" />
 
-                    <p:growl id="growl" showDetail="true" />
-                    <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
-
-                    <h:panelGroup layout="block"
-                                  styleClass="col" id="pnlCamaras">
-                        <div class="row">
-                            <fieldset>
-                                <legend>
-                                    Parámetro cámara de comercio
-                                </legend>
-                                <div class="row">
-                                    <div class="col form-group" align="right">
-                                        <p:commandLink
-                                            ajax="true"
-                                            styleClass="btn btn-primary"
-                                            action="/view/admin/regrcamarawzd.xhtml?faces-redirect=true"                                            
-                                            title="Registrar Cámara"
-                                            actionListener="#{cCParametrosBean.clearAll}"
-                                            update="tblCamaras">
-                                            <f:param name="validate" value="true"/>
-                                            <i class="far fa-address-card"></i>
+				<h:panelGroup layout="block" styleClass="col" id="pnlCamaras">
+					<div class="row">
+						<fieldset>
+							<legend> Parámetro cámara de comercio </legend>
+							<div class="row">
+								<div class="col form-group" align="right">
+									<p:commandLink ajax="true" styleClass="btn btn-primary"
+										action="/view/admin/regrcamarawzd.xhtml?faces-redirect=true"
+										title="Registrar Cámara"
+										actionListener="#{cCParametrosBean.clearAll}"
+										update="tblCamaras">
+										<f:param name="validate" value="true" />
+										<i class="far fa-address-card"></i>
                                             Registrar Cámara
                                         </p:commandLink>
-                                    </div>                                        
-                                </div> 
+								</div>
+							</div>
 
-                                <p:dataTable resizableColumns="false"
+							<p:dataTable resizableColumns="false"
+								emptyMessage="No hay camaras configuradas." rowIndexVar="_row"
+								paginator="true" rows="10"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+								rowsPerPageTemplate="5,10,15" id="tblCamaras" var="camaras"
+								value="#{cCParametrosBean.camaras}">
+								<p:column headerText="#" width="3%" class="row-index"
+									exportable="false">
+									<h:outputText value="#{_row + 1}" />
+								</p:column>
+								<p:column headerText="Tipo" filterBy="#{camaras.tipoDocumento}"
+									filterMatchMode="contains" class="text-center" width="5%">
+									<h:outputText value="#{camaras.tipoDocumento}" />
+								</p:column>
+								<p:column headerText="Nombre cámara"
+									filterBy="#{camaras.nombre}" filterMatchMode="contains"
+									class="text-left" width="25%">
+									<h:outputText value="#{camaras.nombre}" />
+								</p:column>
+								<p:column headerText="Número documento"
+									filterBy="#{camaras.numeroDocumento}"
+									filterMatchMode="contains" class="text-center" width="10%">
+									<h:outputText value="#{camaras.numeroDocumento}" />
+								</p:column>
+								<p:column headerText="Decreto"
+									filterBy="#{camaras.numeroDecreto}" filterMatchMode="contains"
+									class="text-center" width="5%">
+									<h:outputText value="#{camaras.numeroDecreto}" />
+								</p:column>
+								<p:column headerText="Fecha" filterBy="#{camaras.fechaDecreto}"
+									filterMatchMode="contains" class="text-center" width="10%">
+									<h:outputText value="#{camaras.fechaDecreto}" />
+								</p:column>
 
-                                             emptyMessage="No hay camaras configuradas."
-                                             rowIndexVar="_row"
-                                             paginator="true"
-                                             rows="10"
-                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
-                                             rowsPerPageTemplate="5,10,15"
-                                             id="tblCamaras"
-                                             var="camaras"                                            
-                                             value="#{cCParametrosBean.camaras}">
-                                    <p:column headerText="#" width="3%"
-                                              class="row-index" exportable="false">
-                                        <h:outputText value="#{_row + 1}" />
-                                    </p:column>
-                                    <p:column headerText="Tipo" 
-                                              filterBy="#{camaras.tipoDocumento}" 
-                                              filterMatchMode="contains" class="text-center" width="5%">
-                                        <h:outputText value="#{camaras.tipoDocumento}" />
-                                    </p:column>
-                                    <p:column headerText="Nombre cámara" filterBy="#{camaras.nombre}" filterMatchMode="contains" class="text-left" width="25%">
-                                        <h:outputText value="#{camaras.nombre}" />
-                                    </p:column>
-                                    <p:column headerText="Número documento" filterBy="#{camaras.numeroDocumento}" filterMatchMode="contains" class="text-center" width="10%">
-                                        <h:outputText value="#{camaras.numeroDocumento}" />
-                                    </p:column>
-                                    <p:column headerText="Decreto" filterBy="#{camaras.numeroDecreto}" filterMatchMode="contains" class="text-center" width="5%">
-                                        <h:outputText value="#{camaras.numeroDecreto}" />
-                                    </p:column>
-                                    <p:column headerText="Fecha" filterBy="#{camaras.fechaDecreto}" filterMatchMode="contains" class="text-center" width="10%">
-                                        <h:outputText value="#{camaras.fechaDecreto}" />
-                                    </p:column>
+								<p:column headerText="Representante"
+									filterBy="#{camaras.representante.nombre}"
+									filterMatchMode="contains" class="text-left" width="15%">
+									<h:outputText value="#{camaras.representante.nombre}" />
+								</p:column>
 
-                                    <p:column headerText="Representante" filterBy="#{camaras.representante.nombre}" filterMatchMode="contains" class="text-left" width="15%">
-                                        <h:outputText value="#{camaras.representante.nombre}" />
-                                    </p:column>
+								<p:column headerText="Acciones" width="8%"
+									class="text-center align-middle">
 
-                                    <p:column headerText="Acciones" width="8%"
-                                              class="text-center align-middle">
-
-                                        <p:commandLink ajax="false"
-                                                       styleClass="btn btn-outline-primary btn-sm btn-block border-0 no-shadow"
-                                                       title="Ver detalle"
-                                                       process="@this"
-                                                       action="/view/admin/regrcamarawzd.xhtml?faces-redirect=true"
-                                                       actionListener="#{cCParametrosBean.setCurrentCamara(camaras)}">
+									<p:commandLink ajax="false"
+										styleClass="btn btn-outline-primary btn-sm btn-block border-0 no-shadow"
+										title="Ver detalle" process="@this"
+										action="/view/admin/regrcamarawzd.xhtml?faces-redirect=true"
+										actionListener="#{cCParametrosBean.setCurrentCamara(camaras)}">
                                             Editar
                                             <i class="fa fa-bars"></i>
-                                        </p:commandLink>
+									</p:commandLink>
 
-                                    </p:column>
+								</p:column>
 
-                                </p:dataTable>
-                            </fieldset>
-                        </div>
-                    </h:panelGroup>
-                    <div class="row">   
-                        <div class="col">  <p:messages id="msgDatosGenerales"/>
-                        </div>
-                    </div>
-                </h:form>
-            </ui:define>
-        </ui:composition>
-    </body>
+							</p:dataTable>
+						</fieldset>
+					</div>
+				</h:panelGroup>
+				<div class="row">
+					<div class="col">
+						<p:messages id="msgDatosGenerales" />
+					</div>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
 </html>

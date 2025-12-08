@@ -1,44 +1,39 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html  xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-    
-    
-    <h:head>
-        <title>Sistema de copias y certificaciones - [ Error]</title>
-    </h:head>
-    <h:body>
-        <ui:composition template="./../../WEB-INF/webparts/notificationmain.xhtml">
-            <ui:param name="title" value="Administración de parámetros" />
-            <ui:define name="mainContent">
-                <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="error-template">
-                        <h1>
-                            Oops!</h1>
-                        <input type="submit" class="btn btn-primary" value="s" />
-                        <h2>
-                            Transaccion bloqueda [CSRF] </h2>
-                        <div class="error-details">
-                            Lo sentimos, su trasaccion no puede ser finalizada debido a un incidente de seguridad
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-            
-            
-            </ui:define>
-        
-        
-        
-        </ui:composition>
-        
-        
-    </h:body>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:c="jakarta.tags.core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Sistema de copias y certificaciones - [ Error]</title>
+</h:head>
+<h:body>
+	<ui:composition
+		template="./../../WEB-INF/webparts/notificationmain.xhtml">
+		<ui:param name="title" value="Administración de parámetros" />
+		<ui:define name="mainContent">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="error-template">
+							<h1>Oops!</h1>
+							<input type="submit" class="btn btn-primary" value="s" />
+							<h2>Transaccion bloqueda [CSRF]</h2>
+							<div class="error-details">Lo sentimos, su trasaccion no
+								puede ser finalizada debido a un incidente de seguridad</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</ui:define>
+
+
+
+	</ui:composition>
+
+
+</h:body>
 </html>

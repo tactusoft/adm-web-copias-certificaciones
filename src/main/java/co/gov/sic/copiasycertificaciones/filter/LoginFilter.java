@@ -36,8 +36,6 @@ public class LoginFilter implements Filter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-		logger.info("Valor de loginBean: " + (loginBean != null ? "Existe" : "NULL"));
-		logger.info("Sesión ID: " + httpRequest.getSession().getId());
 		String path = httpRequest.getRequestURI();
 
 		boolean validatePath = !path.contains("/jakarta.faces.resource/") && !path.contains("/css/")

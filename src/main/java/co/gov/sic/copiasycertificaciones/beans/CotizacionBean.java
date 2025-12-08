@@ -9,7 +9,6 @@ import static co.gov.sic.copiasycertificaciones.beans.BeanBase.getSession;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,14 +18,14 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.file.UploadedFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import co.gov.sic.copiasycertificaciones.dataaccess.Dal;
 import co.gov.sic.copiasycertificaciones.entities.Attachment;
@@ -84,7 +83,6 @@ public class CotizacionBean implements Serializable {
 	private String observaciones;
 
 	public CotizacionBean() {
-
 		Dal dal = new Dal();
 		frntstco = dal.getDayConfigParameters("frntstco");
 		listaRentistico = dal.getCodigosRentisticos(frntstco.getValorString());
@@ -226,18 +224,17 @@ public class CotizacionBean implements Serializable {
 	}
 
 	private ByteArrayOutputStream getFileContent(String fullFileName) throws FileNotFoundException, IOException {
-
 		byte[] buffer = new byte[4096];
-		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(fullFileName));
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-		int bytes = 0;
-		while ((bytes = bis.read(buffer, 0, buffer.length)) > 0) {
-			baos.write(buffer, 0, bytes);
-		}
-		baos.close();
-		bis.close();
+		try (FileInputStream fis = new FileInputStream(fullFileName);
+				BufferedInputStream bis = new BufferedInputStream(fis)) {
 
+			int bytes;
+			while ((bytes = bis.read(buffer, 0, buffer.length)) > 0) {
+				baos.write(buffer, 0, bytes);
+			}
+		}
 		return baos;
 	}
 
@@ -255,9 +252,6 @@ public class CotizacionBean implements Serializable {
 
 		Cesl_cotizacion c = new Cesl_cotizacion();
 		for (Frntstco f : listaRentistico) {
-			// System.out.println(" first : " + f.getFcncpto() + " - second : " + fcncpto +
-			// " - resolt : " + Short.compare(f.getFcncpto(),fcncpto));
-
 			if (Short.compare(f.getFcncpto(), fcncpto) == 0) {
 				c.setFrntstco(f);
 			}
@@ -493,11 +487,34 @@ public class CotizacionBean implements Serializable {
 
 		if (getTotalAttachmentSize() > Constantes.MAX_SIZE_ATTACHMENTS) {
 			this.AddErrorMessage("Error: " + event.getFile().getFileName()
-					+ " no se peude adjuntar, se ha sueperado el tamaño maximo", "msgCotizacion");
+					+ " no se puede adjuntar, se ha superado el tamaño máximo", "msgCotizacion");
 			return;
 		}
 
 		UploadedFile file = event.getFile();
+		String originalFileName = file.getFileName();
+
+		// Validar nombre de archivo
+		if (originalFileName == null || originalFileName.trim().isEmpty()) {
+			this.AddErrorMessage("Error: Nombre de archivo inválido", "msgCotizacion");
+			return;
+		}
+
+		// Prevenir path traversal
+		String sanitizedFileName = originalFileName.trim();
+		if (sanitizedFileName.contains("..") || sanitizedFileName.contains("/") || sanitizedFileName.contains("\\")
+				|| sanitizedFileName.contains("~")) {
+			this.AddErrorMessage("Error: Nombre de archivo contiene caracteres no permitidos", "msgCotizacion");
+			logger.warn("Intento de path traversal detectado: " + originalFileName);
+			return;
+		}
+
+		// Solo permitir caracteres seguros en el nombre
+		if (!sanitizedFileName.matches("^[a-zA-Z0-9._-]+$")) {
+			this.AddErrorMessage("Error: Nombre de archivo contiene caracteres inválidos", "msgCotizacion");
+			return;
+		}
+
 		Path targetLocation = Paths.get(directory);
 
 		try {
@@ -505,17 +522,31 @@ public class CotizacionBean implements Serializable {
 				Files.createDirectories(targetLocation);
 			}
 
-			InputStream input = file.getInputStream();
-			Files.copy(input, new File(directory, file.getFileName()).toPath());
-			Attachment att = new Attachment(file.getFileName(), file.getContentType(), file.getSize(),
-					directory + file.getFileName());
+			// Normalizar y validar path final
+			Path targetFile = targetLocation.resolve(sanitizedFileName).normalize();
+
+			// Verificar que no salga del directorio permitido
+			if (!targetFile.startsWith(targetLocation.normalize())) {
+				this.AddErrorMessage("Error: Operación de archivo no permitida", "msgCotizacion");
+				logger.error("Path traversal detectado después de normalización: " + originalFileName);
+				return;
+			}
+
+			// Copiar archivo con try-with-resources para cerrar el stream
+			try (InputStream input = file.getInputStream()) {
+				Files.copy(input, targetFile, StandardCopyOption.REPLACE_EXISTING);
+			}
+
+			Attachment att = new Attachment(sanitizedFileName, file.getContentType(), file.getSize(),
+					targetFile.toString());
 
 			setTotalAttachmentSize(getTotalAttachmentSize() + att.getFileSize());
 			setTotalAttachmentSize(att.roundFileSize(getTotalAttachmentSize(), 3));
 			getListaAdjuntos().add(att);
 
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			logger.error("handleFileUpload", e);
+			this.AddErrorMessage("Error al guardar el archivo", "msgCotizacion");
 		}
 	}
 

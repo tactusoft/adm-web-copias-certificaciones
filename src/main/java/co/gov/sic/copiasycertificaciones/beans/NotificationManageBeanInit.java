@@ -156,10 +156,10 @@ public abstract class NotificationManageBeanInit {
 	}
 
 	public void descargarMemo(Cesl_tramite tramite) {
-		Dal Dal = new Dal();
+		Dal dal = new Dal();
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		try {
-			Cesl_detalleSolicitud tramiteDetalle = Dal.getDetallesTramite(tramite.getIdtramite()).get(0);
+			Cesl_detalleSolicitud tramiteDetalle = dal.getDetallesTramite(tramite.getIdtramite()).get(0);
 			String rutaMemo = tramiteDetalle.getRutaMemo();
 			if (rutaMemo != null && !rutaMemo.isEmpty()) {
 				rutaMemo = rutaMemo.trim();
@@ -183,7 +183,7 @@ public abstract class NotificationManageBeanInit {
 				facesContext.responseComplete();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("descargarMemo", e);
 			AddErrorMessage("Error al descargar el archivo: " + e.getMessage());
 		}
 	}

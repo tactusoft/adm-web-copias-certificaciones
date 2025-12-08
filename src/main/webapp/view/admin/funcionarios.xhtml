@@ -1,313 +1,294 @@
-<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
-                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                 xmlns:p="http://primefaces.org/ui"
-                 xmlns:f="http://xmlns.jcp.org/jsf/core">      
-    <h:form>
-        <h:panelGroup layout="block"
-                      styleClass="col" id="pnlDetalle">
-            <fieldset>
-                <legend>
-                    Funcionarios asignados.
-                </legend>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets"
+	xmlns:c="jakarta.tags.core" xmlns:p="http://primefaces.org/ui">
+	<h:form>
+		<h:panelGroup layout="block" styleClass="col" id="pnlDetalle">
+			<fieldset>
+				<legend> Funcionarios asignados. </legend>
 
-                <div class="row">
-                    <div class="col">
-                        <div class="alert alert-warning">
-                            <ui:include src="./../../WEB-INF/webparts/avisoCamposRequeridos.xhtml"  />
-                        </div>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col">
-                        <label class="control-label">Tipo de documento</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend required">
-                                <span class="input-group-text"><i class="far fa-copy fa-fw"></i></span>
-                            </div>
-                            <p:selectOneMenu id="txtTipoDocumentoFuncionario" 
-                                             class="form-control" 
-                                             required="#{request.getParameter('validate')}" 
-                                             autoWidth="false"
-                                             disabled="false"
-                                             requiredMessage="Tipo de documento es requerido." value="#{cCParametrosBean.currentPersonaCamara.tipo_docu}"  >
-                                <f:selectItem itemLabel="-- Seleccione opción --"></f:selectItem>
-                                <f:selectItems value="#{cCParametrosBean.listaTiposDocumento}" var="entry"
-                                               itemValue="#{entry.codigo}" itemLabel="#{entry.valor}"></f:selectItems>
-                            </p:selectOneMenu>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label class="control-label">Número de documento</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend required">
-                                <span class="input-group-text"><i class="fas fa-cash-register"></i></span>
-                            </div>
-                            <p:inputNumber id="txtNumDocumentoFuncionario" class="form-control" maxlength="15" disabled="false"
-                                           required="#{request.getParameter('validate')}" 
-                                           requiredMessage="El numero de documento es requerido."
-                                           value="#{cCParametrosBean.currentPersonaCamara.nume_docu}" decimalPlaces="0">
-                                <p:ajax listener="#{cCParametrosBean.onChangeNumDocumento}" 
-                                        update="frmWizardCamaras"    
-                                        process="@form" />
-                            </p:inputNumber>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label class="control-label">Nombres Completos</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend required">
-                                <span class="input-group-text"><i class="fas fa-file-signature"></i></span>
-                            </div>
-                            <p:inputText id="txtNombreFuncionario" 
-                                         class="form-control" 
-                                         maxlength="150" 
-                                         disabled="false"
-                                         requiredMessage="El nombre del funcionario es requerido" 
-                                         required="#{request.getParameter('validate')}"
-                                         value="#{cCParametrosBean.currentPersonaCamara.nomb_perso}">
-                            </p:inputText>
-                        </div>
-                    </div>
-                </div>
+				<div class="row">
+					<div class="col">
+						<div class="alert alert-warning">
+							<ui:include
+								src="./../../WEB-INF/webparts/avisoCamposRequeridos.xhtml" />
+						</div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col">
+						<label class="control-label">Tipo de documento</label>
+						<div class="input-group">
+							<div class="input-group-prepend required">
+								<span class="input-group-text"><i
+									class="far fa-copy fa-fw"></i></span>
+							</div>
+							<p:selectOneMenu id="txtTipoDocumentoFuncionario"
+								class="form-control"
+								required="#{request.getParameter('validate')}" autoWidth="false"
+								disabled="false"
+								requiredMessage="Tipo de documento es requerido."
+								value="#{cCParametrosBean.currentPersonaCamara.tipo_docu}">
+								<f:selectItem itemLabel="-- Seleccione opción --"></f:selectItem>
+								<f:selectItems value="#{cCParametrosBean.listaTiposDocumento}"
+									var="entry" itemValue="#{entry.codigo}"
+									itemLabel="#{entry.valor}"></f:selectItems>
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="col">
+						<label class="control-label">Número de documento</label>
+						<div class="input-group">
+							<div class="input-group-prepend required">
+								<span class="input-group-text"><i
+									class="fas fa-cash-register"></i></span>
+							</div>
+							<p:inputNumber id="txtNumDocumentoFuncionario"
+								class="form-control" maxlength="15" disabled="false"
+								required="#{request.getParameter('validate')}"
+								requiredMessage="El numero de documento es requerido."
+								value="#{cCParametrosBean.currentPersonaCamara.nume_docu}"
+								decimalPlaces="0">
+								<p:ajax listener="#{cCParametrosBean.onChangeNumDocumento}"
+									update="frmWizardCamaras" process="@form" />
+							</p:inputNumber>
+						</div>
+					</div>
+					<div class="col">
+						<label class="control-label">Nombres Completos</label>
+						<div class="input-group">
+							<div class="input-group-prepend required">
+								<span class="input-group-text"><i
+									class="fas fa-file-signature"></i></span>
+							</div>
+							<p:inputText id="txtNombreFuncionario" class="form-control"
+								maxlength="150" disabled="false"
+								requiredMessage="El nombre del funcionario es requerido"
+								required="#{request.getParameter('validate')}"
+								value="#{cCParametrosBean.currentPersonaCamara.nomb_perso}">
+							</p:inputText>
+						</div>
+					</div>
+				</div>
 
-                <div class="form-row">
-                    <div class="col">
-                        <label class="control-label">Fecha de Acto</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend required">
-                                <span class="input-group-text"><i class="far fa-calendar-alt fa-fw"></i></span>
-                            </div>
-                            <p:calendar id="tbFechaActo" showOtherMonths="true" autocomplete="off"
-                                        pattern="dd/MM/yyyy" placeholder="dd/mm/aaaa"
-                                        locale="es" class="form-control"
-                                        required="#{request.getParameter('validate')}"
-                                        requiredMessage="La fecha del acto es requerida."
-                                        value="#{cCParametrosBean.currentPersonaCamara.fecha_acto}" >
+				<div class="form-row">
+					<div class="col">
+						<label class="control-label">Fecha de Acto</label>
+						<div class="input-group">
+							<div class="input-group-prepend required">
+								<span class="input-group-text"><i
+									class="far fa-calendar-alt fa-fw"></i></span>
+							</div>
+							<p:calendar id="tbFechaActo" showOtherMonths="true"
+								autocomplete="off" pattern="dd/MM/yyyy" placeholder="dd/mm/aaaa"
+								locale="es" class="form-control"
+								required="#{request.getParameter('validate')}"
+								requiredMessage="La fecha del acto es requerida."
+								value="#{cCParametrosBean.currentPersonaCamara.fecha_acto}">
 
-                            </p:calendar>
-                            <h:outputScript>$( function() {
+							</p:calendar>
+							<h:outputScript>$( function() {
                                 $("input[name$='tbFechaActo_input']").datepicker("option", "maxDate", +0);
                                 });  </h:outputScript>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label class="control-label">Número de Acto</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend required">
-                                <span class="input-group-text"><i class="fas fa-hashtag fa-fw"></i></span>
-                            </div>
-                            <p:inputText id="txtNumActo" class="form-control" disabled="false"
-                                         required="#{request.getParameter('validate')}"
-                                         requiredMessage="El numero de acto es requerido."
-                                         value="#{cCParametrosBean.currentPersonaCamara.nume_acto}">
-                                <p:keyFilter regEx="/[0-9]/i"/> 
-                            </p:inputText>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label class="control-label">Documento Nombramiento</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend required">
-                                <span class="input-group-text"><i class="fas fa-file-signature"></i></span>
-                            </div>
-                            <p:inputText id="txtDocumentoNombra" 
-                                         class="form-control" 
-                                         maxlength="150" 
-                                         disabled="false"
-                                         requiredMessage="El tipo de documento de nombramiento es requerido." 
-                                         required="#{request.getParameter('validate')}"
-                                         value="#{cCParametrosBean.currentPersonaCamara.docu_nombra}">
-                            </p:inputText>
-                        </div>
-                    </div>
-                </div>
+						</div>
+					</div>
+					<div class="col">
+						<label class="control-label">Número de Acto</label>
+						<div class="input-group">
+							<div class="input-group-prepend required">
+								<span class="input-group-text"><i
+									class="fas fa-hashtag fa-fw"></i></span>
+							</div>
+							<p:inputText id="txtNumActo" class="form-control"
+								disabled="false" required="#{request.getParameter('validate')}"
+								requiredMessage="El numero de acto es requerido."
+								value="#{cCParametrosBean.currentPersonaCamara.nume_acto}">
+								<p:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="col">
+						<label class="control-label">Documento Nombramiento</label>
+						<div class="input-group">
+							<div class="input-group-prepend required">
+								<span class="input-group-text"><i
+									class="fas fa-file-signature"></i></span>
+							</div>
+							<p:inputText id="txtDocumentoNombra" class="form-control"
+								maxlength="150" disabled="false"
+								requiredMessage="El tipo de documento de nombramiento es requerido."
+								required="#{request.getParameter('validate')}"
+								value="#{cCParametrosBean.currentPersonaCamara.docu_nombra}">
+							</p:inputText>
+						</div>
+					</div>
+				</div>
 
-                <div class="form-row">
-                    <div class="col">
-                        <label class="control-label">Cargo</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend required">
-                                <span class="input-group-text"><i class="fas fa-file-signature"></i></span>
-                            </div>
-                            <p:inputText id="txtCargoFuncionario" 
-                                         class="form-control" 
-                                         maxlength="150" 
-                                         disabled="false"
-                                         requiredMessage="El cargo es requerido." 
-                                         required="#{request.getParameter('validate')}"
-                                         value="#{cCParametrosBean.currentPersonaCamara.cargo}">
-                            </p:inputText>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label class="control-label">Rol</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend required">
-                                <span class="input-group-text"><i class="far fa-copy fa-fw"></i></span>
-                            </div>
-                            <p:selectOneMenu id="txtTipoRolFuncionario" 
-                                             class="form-control" 
-                                             required="#{request.getParameter('validate')}" 
-                                             autoWidth="false"
-                                             disabled="false"
-                                             requiredMessage="El rol es requerido." value="#{cCParametrosBean.currentPersonaCamara.rol}"  >
+				<div class="form-row">
+					<div class="col">
+						<label class="control-label">Cargo</label>
+						<div class="input-group">
+							<div class="input-group-prepend required">
+								<span class="input-group-text"><i
+									class="fas fa-file-signature"></i></span>
+							</div>
+							<p:inputText id="txtCargoFuncionario" class="form-control"
+								maxlength="150" disabled="false"
+								requiredMessage="El cargo es requerido."
+								required="#{request.getParameter('validate')}"
+								value="#{cCParametrosBean.currentPersonaCamara.cargo}">
+							</p:inputText>
+						</div>
+					</div>
+					<div class="col">
+						<label class="control-label">Rol</label>
+						<div class="input-group">
+							<div class="input-group-prepend required">
+								<span class="input-group-text"><i
+									class="far fa-copy fa-fw"></i></span>
+							</div>
+							<p:selectOneMenu id="txtTipoRolFuncionario" class="form-control"
+								required="#{request.getParameter('validate')}" autoWidth="false"
+								disabled="false" requiredMessage="El rol es requerido."
+								value="#{cCParametrosBean.currentPersonaCamara.rol}">
 
-                                <f:selectItem itemLabel="-- Seleccione opción --"/>
-                                <f:selectItem itemLabel="Representante Legal" itemValue="RL" />
-                                <f:selectItem itemLabel="Secretario" itemValue="SC" />
-                                <f:selectItem itemLabel="Representante Para asuntos Judiciales" itemValue="RJ" />
-                                <f:selectItem itemLabel="Suplente" itemValue="SL" />
+								<f:selectItem itemLabel="-- Seleccione opción --" />
+								<f:selectItem itemLabel="Representante Legal" itemValue="RL" />
+								<f:selectItem itemLabel="Secretario" itemValue="SC" />
+								<f:selectItem itemLabel="Representante Para asuntos Judiciales"
+									itemValue="RJ" />
+								<f:selectItem itemLabel="Suplente" itemValue="SL" />
 
-                            </p:selectOneMenu>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <table>
-                            <tbody>
-                                <tr style="height: 38px;">
-                                    <td ></td>                                
-                                </tr>
-                                <tr >
-                                    <td>
-                                        <div class="input-group">                        
-                                            <p:selectBooleanCheckbox value="#{cCParametrosBean.currentPersonaCamara.isEnabled}"/>
-                                            <label>Funcionario Activo</label>                    
-                                        </div>
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="col">
+						<table>
+							<tbody>
+								<tr style="height: 38px;">
+									<td></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="input-group">
+											<p:selectBooleanCheckbox
+												value="#{cCParametrosBean.currentPersonaCamara.isEnabled}" />
+											<label>Funcionario Activo</label>
+										</div>
 
-                                    </td>
-                                </tr>
-                            </tbody>
+									</td>
+								</tr>
+							</tbody>
 
-                        </table>
-                    </div>
-                </div>
+						</table>
+					</div>
+				</div>
 
-                <div class="row">
-                    <div class="col">  <p:messages/>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col"></div>
-                    <div class="col form-group">
-                        <p:commandLink styleClass="btn btn-warning btn-block mt-3" disabled="false"
-                                       validateClient="true" oncomplete="removeUIClasess();"
-                                       update=":frmWizardCamaras"
-                                       actionListener="#{cCParametrosBean.agregarFuncionario}">
-                            <f:param name="validate" value="true"/>
+				<div class="row">
+					<div class="col">
+						<p:messages />
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col"></div>
+					<div class="col form-group">
+						<p:commandLink styleClass="btn btn-warning btn-block mt-3"
+							disabled="false" validateClient="true"
+							oncomplete="removeUIClasess();" update=":frmWizardCamaras"
+							actionListener="#{cCParametrosBean.agregarFuncionario}">
+							<f:param name="validate" value="true" />
                             Guardar<i class="fas fa-level-down-alt ml-3"></i>
-                        </p:commandLink>
-                    </div>
-                    <div class="col"></div>
-                </div>
-            </fieldset>       
-        </h:panelGroup>
+						</p:commandLink>
+					</div>
+					<div class="col"></div>
+				</div>
+			</fieldset>
+		</h:panelGroup>
 
 
 
 
-        <br/>
+		<br />
 
-        <div class="row">
-            <h:panelGroup layout="block"
-                          styleClass="col" id="pnlFuncionarios">
-                <fieldset>
-                    <legend>
-                        Funcionarios agregados (#{cCParametrosBean.listaFuncionarios.size()})
-                    </legend>
-                    <p:dataTable resizableColumns="false"                                             
-                                 emptyMessage="No se han agregado secretarios"
-                                 rowIndexVar="_row"
-                                 paginator="true"
-                                 rows="5"
-                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
-                                 rowsPerPageTemplate="5,10,15"
-                                 id="tblSecreatarios"
-                                 var="funcionario"
-                                 widgetVar="tblFuncionarios"
-                                 value="#{cCParametrosBean.listaFuncionarios}">
+		<div class="row">
+			<h:panelGroup layout="block" styleClass="col" id="pnlFuncionarios">
+				<fieldset>
+					<legend> Funcionarios agregados
+						(#{cCParametrosBean.listaFuncionarios.size()}) </legend>
+					<p:dataTable resizableColumns="false"
+						emptyMessage="No se han agregado secretarios" rowIndexVar="_row"
+						paginator="true" rows="5"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+						rowsPerPageTemplate="5,10,15" id="tblSecreatarios"
+						var="funcionario" widgetVar="tblFuncionarios"
+						value="#{cCParametrosBean.listaFuncionarios}">
 
 
-                        <p:column headerText="#" width="3%"
-                                  class="row-index" exportable="false">
-                            <h:outputText value="#{_row + 1}" />
-                        </p:column>
+						<p:column headerText="#" width="3%" class="row-index"
+							exportable="false">
+							<h:outputText value="#{_row + 1}" />
+						</p:column>
 
 
-                        <p:column headerText="#Numero" 
-                                  filterBy="#{funcionario.nume_docu}" 
-                                  filterMatchMode="contains" 
-                                  class="text-center" 
-                                  width="15%">
-                            <h:outputText value="#{funcionario.nume_docu}" />
-                        </p:column>
-                        <p:column headerText="Nombre completo" 
-                                  filterBy="#{funcionario.nomb_perso}" 
-                                  filterMatchMode="contains" 
-                                  class="text-center" 
-                                  width="32%">
-                            <h:outputText value="#{funcionario.nomb_perso}" />
-                        </p:column>
+						<p:column headerText="#Numero" filterBy="#{funcionario.nume_docu}"
+							filterMatchMode="contains" class="text-center" width="15%">
+							<h:outputText value="#{funcionario.nume_docu}" />
+						</p:column>
+						<p:column headerText="Nombre completo"
+							filterBy="#{funcionario.nomb_perso}" filterMatchMode="contains"
+							class="text-center" width="32%">
+							<h:outputText value="#{funcionario.nomb_perso}" />
+						</p:column>
 
-                        <p:column headerText="Cargo" 
-                                  filterBy="#{funcionario.cargo}" 
-                                  filterMatchMode="contains" 
-                                  class="text-center" 
-                                  width="20%">
-                            <h:outputText value="#{funcionario.cargo}" />
-                        </p:column>
-                        <p:column headerText="# Acto" 
-                                  filterBy="#{funcionario.nume_acto}" 
-                                  filterMatchMode="contains" 
-                                  class="text-center" 
-                                  width="5%">
-                            <h:outputText value="#{funcionario.nume_acto}" />
-                        </p:column>
-                        <p:column headerText="Estado" 
-                                  filterBy="#{funcionario.estado}" 
-                                  filterMatchMode="exact"                              
-                                  class="text-center" 
-                                  width="10%">
+						<p:column headerText="Cargo" filterBy="#{funcionario.cargo}"
+							filterMatchMode="contains" class="text-center" width="20%">
+							<h:outputText value="#{funcionario.cargo}" />
+						</p:column>
+						<p:column headerText="# Acto" filterBy="#{funcionario.nume_acto}"
+							filterMatchMode="contains" class="text-center" width="5%">
+							<h:outputText value="#{funcionario.nume_acto}" />
+						</p:column>
+						<p:column headerText="Estado" filterBy="#{funcionario.estado}"
+							filterMatchMode="exact" class="text-center" width="10%">
 
 
-                            <f:facet name="filter">
-                                <p:selectOneMenu onchange="PF('tblFuncionarios').filter()" >
-                                    <f:selectItem itemLabel="Seleccione el estado" itemValue="#{null}" noSelectionOption="true" />
-                                    <f:selectItems value="#{cCParametrosBean.filtroEstado}" />
-                                </p:selectOneMenu>
-                            </f:facet>
+							<f:facet name="filter">
+								<p:selectOneMenu onchange="PF('tblFuncionarios').filter()">
+									<f:selectItem itemLabel="Seleccione el estado"
+										itemValue="#{null}" noSelectionOption="true" />
+									<f:selectItems value="#{cCParametrosBean.filtroEstado}" />
+								</p:selectOneMenu>
+							</f:facet>
 
-                            <h:outputText value="#{funcionario.estado}" />
+							<h:outputText value="#{funcionario.estado}" />
 
-                        </p:column>
-                        <p:column headerText="Rol" 
-                                  filterBy="#{funcionario.rol}" 
-                                  filterMatchMode="contains" 
-                                  class="text-center" 
-                                  width="5%">
-                            <h:outputText value="#{funcionario.rol}" />
-                        </p:column>
-                        <p:column headerText="Acciones" width="7%"
-                                  class="text-center align-middle">
-                            <p:commandLink
-                                styleClass="btn btn-outline-primary btn-sm btn-block border-0 no-shadow"
-                                title="Editar funcionario" process="@this"
-                                disabled=" #{not funcionario.isEnabled}"
-                                action="#{cCParametrosBean.setCurrentPersonaCamara(funcionario)}"
-                                update=":frmWizardCamaras:pnlDetalle">
-                                <i class="far fa-edit"></i>
-                            </p:commandLink>
+						</p:column>
+						<p:column headerText="Rol" filterBy="#{funcionario.rol}"
+							filterMatchMode="contains" class="text-center" width="5%">
+							<h:outputText value="#{funcionario.rol}" />
+						</p:column>
+						<p:column headerText="Acciones" width="7%"
+							class="text-center align-middle">
+							<p:commandLink
+								styleClass="btn btn-outline-primary btn-sm btn-block border-0 no-shadow"
+								title="Editar funcionario" process="@this"
+								disabled=" #{not funcionario.isEnabled}"
+								action="#{cCParametrosBean.setCurrentPersonaCamara(funcionario)}"
+								update=":frmWizardCamaras:pnlDetalle">
+								<i class="far fa-edit"></i>
+							</p:commandLink>
 
-                        </p:column>
+						</p:column>
 
-                    </p:dataTable>
+					</p:dataTable>
 
-                </fieldset>
-                
-            </h:panelGroup>
-            </h:form>
-        </div>
+				</fieldset>
+
+			</h:panelGroup>
+	</h:form>
+	</div>
 
 
 </ui:composition>

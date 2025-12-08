@@ -5,14 +5,19 @@
  */
 package co.gov.sic.copiasycertificaciones.beans;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *
  * @author emosquera
  */
 public abstract class ConfigurationBeanInit {
+	
+	protected final Logger logger = LoggerFactory.getLogger(LoadFilesBean.class);
     
     public ConfigurationBeanInit() {
-        System.out.println("Inicio del bean de configuracion");
+    	logger.info("Inicio del bean de configuracion");
     }
     
 }

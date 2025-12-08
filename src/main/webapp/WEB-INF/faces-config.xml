@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="4.0"
+	xmlns="https://jakarta.ee/xml/ns/jakartaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                        https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_4_0.xsd">
+
+	<application>
+		<locale-config>
+			<default-locale>es_CO</default-locale>
+		</locale-config>
+	</application>
+
+	<protected-views>
+		<url-pattern>/view/login.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/notification/inboxnotify.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/notification/memorandos.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/requests/missolicitudes.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/otc/overthecounter.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/tramites/menu.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/tramites/listado.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/tramites/CertificadoDIS.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/tramites/CertificadoCOR.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/tramites/SolicitudCopias.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/tramites/ListadosInf.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/tramites/listado.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/notification/validaciontramite.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/requests/detalletramite.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/requests/complementar.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/requests/traslado.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/requests/infoareaex.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/requests/digitalizacion.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/requests/prorroga.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/requests/cotizacion.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/requests/loadfiles.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/requests/transfentidad.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/requests/detalleadjuntos.xhtml?faces-redirect=true</url-pattern>
+		<url-pattern>/view/requester/rtacomplemento.xhtml?faces-redirect=true</url-pattern>
+	</protected-views>
+</faces-config>

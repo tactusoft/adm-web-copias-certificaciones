@@ -78,7 +78,7 @@ import sic.ws.interop.entities.response.radicacion.ResponseRadicacion;
 @Named("notificationProcessBean")
 @SessionScoped
 public class NotificationProcessBean extends NotificationManageBeanInit implements Serializable {
-	
+
 	private static final long serialVersionUID = 6033233867984866149L;
 	private boolean solicitudAsignada = false;
 	private String mensaje;
@@ -99,7 +99,7 @@ public class NotificationProcessBean extends NotificationManageBeanInit implemen
 			setListaSolicitudes(Dal.getPendingRequestCoordinador());
 		}
 	}
-	
+
 	public void actualizarReasignarTable() throws Exception {
 		try (Dal Dal = new Dal()) {
 			setListaSolicitudesActivas(Dal.getActiveCoordinador());
@@ -119,7 +119,7 @@ public class NotificationProcessBean extends NotificationManageBeanInit implemen
 			}
 		}
 	}
-	
+
 	public void setTramiteActivo(int id) throws Exception {
 		for (Cesl_tramite tramite : getListaSolicitudesActivas()) {
 			if (tramite.getIdtramite() == id) {
@@ -135,15 +135,14 @@ public class NotificationProcessBean extends NotificationManageBeanInit implemen
 	public void asignarFuncionario() throws IOException, Exception {
 		this.asignarFuncionarioGeneral(EstadoTramite.ASIGNADA.getValue());
 	}
-	
+
 	public void reAsignarFuncionario() throws IOException, Exception {
 		this.asignarFuncionarioGeneral(getTramiteSolicitud().getEstado().getValue());
 		try (Dal Dal = new Dal()) {
-			Dal.setCeslTramiteEstadoReasignar(getTramiteSolicitud().getIdtramite(),
-					this.observaciones);
+			Dal.setCeslTramiteEstadoReasignar(getTramiteSolicitud().getIdtramite(), this.observaciones);
 		}
 	}
-	
+
 	public void asignarFuncionarioGeneral(int estado) throws IOException, Exception {
 		InteropWSClient wsInteropClient = new InteropWSClient(Constantes.WS_INTEROP_USER, Constantes.WS_INTEROP_PASS,
 				Constantes.URL_WS_INTEROP, 500, true);
@@ -169,8 +168,7 @@ public class NotificationProcessBean extends NotificationManageBeanInit implemen
 		setMensaje(response.getMensaje());
 
 		try (Dal Dal = new Dal()) {
-			Dal.setFuncionarioAsignado(getIdFuncionario(), getTramiteSolicitud().getIdtramite(),
-					estado);
+			Dal.setFuncionarioAsignado(getIdFuncionario(), getTramiteSolicitud().getIdtramite(), estado);
 		}
 
 		this.AddStatusMessage(response.getMensaje(), "msgAsignacion");
@@ -215,7 +213,7 @@ public class NotificationProcessBean extends NotificationManageBeanInit implemen
 		setSolicitudAsignada(false);
 		setSolicitudNoAsignada(true);
 	}
-	
+
 	public void removerSolicitudReasignada() throws Exception {
 		actualizarReasignarTable();
 		setCodigoDependencia(-1);
@@ -268,6 +266,11 @@ public class NotificationProcessBean extends NotificationManageBeanInit implemen
 
 	private String addPDFWatermark(String archivoPDFOriginal) throws Exception {
 		String archivoPDFMarcaDeAgua = null;
+		PdfReader reader = null;
+		PdfStamper stamper = null;
+		FileOutputStream fos = null;
+		Dal Dal = null;
+
 		try {
 			archivoPDFMarcaDeAgua = this.getRuta() + "c0p14_" + archivoPDFOriginal;
 
@@ -276,11 +279,12 @@ public class NotificationProcessBean extends NotificationManageBeanInit implemen
 				archivoSalida.delete();
 			}
 
-			PdfReader reader = new PdfReader(this.getRuta() + archivoPDFOriginal);
+			reader = new PdfReader(this.getRuta() + archivoPDFOriginal);
 			int numberOfPages = reader.getNumberOfPages();
 			Document document = new Document(reader.getPageSizeWithRotation(1));
 
-			PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(archivoPDFMarcaDeAgua));
+			fos = new FileOutputStream(archivoPDFMarcaDeAgua);
+			stamper = new PdfStamper(reader, fos);
 			BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
 			PdfContentByte content;
 			float fontSize = 6;
@@ -292,12 +296,10 @@ public class NotificationProcessBean extends NotificationManageBeanInit implemen
 				content.setFontAndSize(bf, fontSize);
 				content.setColorFill(BaseColor.GRAY);
 
-				float x = 5; // Posición X en la esquina inferior izquierda
-				float y = 50; // Posición Y en la esquina inferior izquierda
+				float x = 5;
+				float y = 50;
 
 				content.setTextMatrix(0, 1, -1, 0, x, y);
-
-				// Texto
 				content.showText(
 						"EL SUSCRITO SECRETARIO GENERAL HACE CONSTAR QUE LA PRESENTE COPIA COINCIDE CON EL DOCUMENTO ORIGINAL QUE REPOSA EN LOS ARCHIVOS DE LA SUPERINTENDENCIA DE INDUSTRIA Y COMERCIO.");
 
@@ -357,19 +359,49 @@ public class NotificationProcessBean extends NotificationManageBeanInit implemen
 							+ "</x:xmpmeta>";
 					byte[] xmpBytes = xmpMetadata.getBytes("UTF-8");
 					stamper.getWriter().setXmpMetadata(xmpBytes);
-					Dal Dal = new Dal();
+
+					Dal = new Dal();
 					Dal.setCeslTramiteHashPDF(getTramiteSolicitud().getIdtramite(), hash);
 				}
 			}
 
 			document.close();
-			stamper.close();
-			reader.close();
-		} catch (IOException | DocumentException e) {
-			e.printStackTrace();
-		}
+			return archivoPDFMarcaDeAgua;
 
-		return archivoPDFMarcaDeAgua;
+		} catch (IOException | DocumentException e) {
+			logger.error("addPDFWatermark", e);
+			throw e;
+		} finally {
+			// ✅ Cerrar recursos en orden inverso
+			if (stamper != null) {
+				try {
+					stamper.close();
+				} catch (Exception e) {
+					logger.error("Error cerrando PdfStamper", e);
+				}
+			}
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (Exception e) {
+					logger.error("Error cerrando PdfReader", e);
+				}
+			}
+			if (fos != null) {
+				try {
+					fos.close();
+				} catch (IOException e) {
+					logger.error("Error cerrando FileOutputStream", e);
+				}
+			}
+			if (Dal != null) {
+				try {
+					Dal.close();
+				} catch (Exception e) {
+					logger.error("Error cerrando Dal", e);
+				}
+			}
+		}
 	}
 
 	public Image getResourceImage(String imageName) throws Exception {
@@ -387,7 +419,7 @@ public class NotificationProcessBean extends NotificationManageBeanInit implemen
 			byte[] hashBytes = digest.digest(contenido.getBytes());
 			return new String(Hex.encode(hashBytes));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("calcularHash", e);
 			return null;
 		}
 	}
@@ -567,18 +599,21 @@ public class NotificationProcessBean extends NotificationManageBeanInit implemen
 	}
 
 	private ByteArrayOutputStream getFileContent(String fullFileName) throws FileNotFoundException, IOException {
-		byte[] buffer = new byte[4096];
-		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(fullFileName));
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-		int bytes = 0;
-		while ((bytes = bis.read(buffer, 0, buffer.length)) > 0) {
-			baos.write(buffer, 0, bytes);
-		}
-		baos.close();
-		bis.close();
-
-		return baos;
+	    byte[] buffer = new byte[4096];
+	    
+	    // ✅ try-with-resources cierra automáticamente bis y baos
+	    try (FileInputStream fis = new FileInputStream(fullFileName);
+	         BufferedInputStream bis = new BufferedInputStream(fis);
+	         ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+	        
+	        int bytes;
+	        while ((bytes = bis.read(buffer, 0, buffer.length)) > 0) {
+	            baos.write(buffer, 0, bytes);
+	        }
+	        
+	        // Retornar el contenido antes de que se cierre baos
+	        return baos;
+	    }
 	}
 
 	/**

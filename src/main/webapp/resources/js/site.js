@@ -151,15 +151,13 @@ jQuery.fn.extend({
     }
 });
 function MaskedVal(val) {
-    var result = null;
-    if (divMaskTemp === null) {
-        divMaskTemp = $("<div>" + val + "</div>");
-        divMaskTemp.mask(SPMaskBehavior, spOptions);
-        result = divMaskTemp.html();
-    } else
-        result = divMaskTemp.masked(val);
+    var tempDiv = $("<div>" + val + "</div>");
+    tempDiv.mask(SPMaskBehavior, spOptions);
+    var result = tempDiv.html();
+    tempDiv.remove();
     return result;
 }
+
 function MaskedVal2(val) {
     val = val.toString().replace(/\./g, ',');
     var index = val.indexOf(",");
@@ -168,16 +166,13 @@ function MaskedVal2(val) {
         decimalPart = val.substring(index);
         val = val.substring(0, index);
     }
-    var result = null;
-    if (divMaskTemp === null || divMaskTemp.data('mask') === null) {
-        divMaskTemp = $("<div>" + val + "</div>");
-        divMaskTemp.mask(SPMaskBehavior, spOptions);
-        result = divMaskTemp.html();
-    } else
-        result = divMaskTemp.masked(val);
+    
+    var tempDiv = $("<div>" + val + "</div>");
+    tempDiv.mask(SPMaskBehavior, spOptions);
+    var result = tempDiv.html();
+    tempDiv.remove();
     result += decimalPart;
     return result;
-
 }
 var divStepMenu = null;
 var currentWizardStepIndex = 1;

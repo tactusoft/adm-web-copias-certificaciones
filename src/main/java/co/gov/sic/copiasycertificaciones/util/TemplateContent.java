@@ -15,7 +15,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.thymeleaf.templateresolver.FileTemplateResolver;
 
 import co.gov.sic.copiasycertificaciones.entities.CamaraComercio;
 import co.gov.sic.copiasycertificaciones.entities.Cesl_config;
@@ -28,6 +28,7 @@ import co.gov.sic.copiasycertificaciones.enums.TipoSancion;
 import co.gov.sic.copiasycertificaciones.enums.TipoTramite;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import sic.ws.interop.entities.Direccion;
 import sic.ws.interop.entities.Email;
@@ -45,24 +46,24 @@ public class TemplateContent {
 	protected final Logger logger = LoggerFactory.getLogger(TemplateContent.class);
 
 	public TemplateContent() throws MalformedURLException {
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-
-        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
-
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		ServletContext servletContext = (ServletContext) externalContext.getContext();
+		
+		HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
         currentURLDomain = new URL(request.getScheme(), request.getServerName(), request.getServerPort(),
                 request.getContextPath()).toString();
 
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateResolver.setPrefix("/WEB-INF/templates/");
-        templateResolver.setSuffix(".html");
-        templateResolver.setCacheTTLMs(3600000L); // 1 hora
-        templateResolver.setCacheable(true);
-        templateResolver.setCharacterEncoding("UTF-8");
+		FileTemplateResolver templateResolver = new FileTemplateResolver();
+		templateResolver.setPrefix(servletContext.getRealPath("/WEB-INF/templates/") + "/");
+		templateResolver.setSuffix(".html");
+		templateResolver.setTemplateMode(TemplateMode.HTML);
+		templateResolver.setCacheable(true);
+		templateResolver.setCharacterEncoding("UTF-8");
 
-        this.templateEngine = new TemplateEngine();
-        this.templateEngine.addDialect(new Java8TimeDialect());
-        this.templateEngine.setTemplateResolver(templateResolver);
+		this.templateEngine = new TemplateEngine();
+		this.templateEngine.addDialect(new Java8TimeDialect());
+		this.templateEngine.setTemplateResolver(templateResolver);
+
     }
 
 	public String buildEmailTemplatePdfProrroga(Radicacion radi, ResponsableDepe responsableDepe, Persona funcionario)

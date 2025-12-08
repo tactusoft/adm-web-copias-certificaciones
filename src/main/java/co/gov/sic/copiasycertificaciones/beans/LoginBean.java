@@ -26,6 +26,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import co.gov.sic.copiasycertificaciones.dataaccess.Dal;
 import co.gov.sic.copiasycertificaciones.entities.Cesl_tramite;
 import co.gov.sic.copiasycertificaciones.util.Constantes;
+import co.gov.sic.copiasycertificaciones.util.EncriptacionUtil;
 import co.gov.sic.copiasycertificaciones.util.NavegaUsuarioMB;
 import co.gov.sic.copiasycertificaciones.util.Utility;
 import jakarta.enterprise.context.SessionScoped;
@@ -40,7 +41,7 @@ import sic.ws.interop.entities.response.ResponseAutenticar;
 @Named("loginBean")
 @SessionScoped
 public class LoginBean extends BeanBase implements Serializable {
-	
+
 	@Inject
 	private NavegaUsuarioMB navegaUsuarioMB;
 
@@ -64,7 +65,7 @@ public class LoginBean extends BeanBase implements Serializable {
 	private String userRegion;
 	private String captchaSiteKey;
 	private String captchaSecret;
-	
+
 	public LoginBean() throws Exception {
 		super();
 		try (Dal DAL = new Dal()) {
@@ -210,29 +211,29 @@ public class LoginBean extends BeanBase implements Serializable {
 	}
 
 	public void handleFileUpload(FileUploadEvent event) {
-	    UploadedFile uploadedFile = event.getFile();
-	    try {
-	        byte[] fileContent = uploadedFile.getContent();
-	        String calculatedHash = calculateHash(fileContent);
-	        if (calculatedHash != null) {
-	            try (Dal DAL = new Dal()) {
-	                String[] partes = calculatedHash.replaceAll("\\n", "").split("\\|");
-	                int idSolicitud = Integer.parseInt(partes[0]);
-	                String hash = partes[1];
-	                boolean validateHash = DAL.obtenerHash(idSolicitud, hash);
-	                if (validateHash) {
-	                    this.AddInfoMessage("¡El archivo es una copia auténtica!", "msgCodigo");
-	                } else {
-	                    this.AddErrorMessage("El archivo no es una copia auténtica.", "msgCodigo");
-	                }
-	            }
-	        } else {
-	            this.AddErrorMessage("El archivo no es una copia auténtica.", "msgCodigo");
-	        }
-	    } catch (Exception e) {
-	        logger.error("Error al manejar la carga del archivo", e);
-	        this.AddErrorMessage("Ocurrió un error al procesar el archivo.", "msgCodigo");
-	    }
+		UploadedFile uploadedFile = event.getFile();
+		try {
+			byte[] fileContent = uploadedFile.getContent();
+			String calculatedHash = calculateHash(fileContent);
+			if (calculatedHash != null) {
+				try (Dal DAL = new Dal()) {
+					String[] partes = calculatedHash.replaceAll("\\n", "").split("\\|");
+					int idSolicitud = Integer.parseInt(partes[0]);
+					String hash = partes[1];
+					boolean validateHash = DAL.obtenerHash(idSolicitud, hash);
+					if (validateHash) {
+						this.AddInfoMessage("¡El archivo es una copia auténtica!", "msgCodigo");
+					} else {
+						this.AddErrorMessage("El archivo no es una copia auténtica.", "msgCodigo");
+					}
+				}
+			} else {
+				this.AddErrorMessage("El archivo no es una copia auténtica.", "msgCodigo");
+			}
+		} catch (Exception e) {
+			logger.error("Error al manejar la carga del archivo", e);
+			this.AddErrorMessage("Ocurrió un error al procesar el archivo.", "msgCodigo");
+		}
 	}
 
 	private String calculateHash(byte[] data) throws NoSuchAlgorithmException {
@@ -242,37 +243,37 @@ public class LoginBean extends BeanBase implements Serializable {
 			String xmpString = new String(xmpData, StandardCharsets.UTF_8);
 			return obtenerHashDesdeXMP(xmpString);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("calculateHash", e);
 		}
 		return null;
 	}
 
 	public String obtenerHashDesdeXMP(String xmpString) {
-	    try {
-	        // Configuración segura del DocumentBuilderFactory
-	        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-	        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-	        factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
-	        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-	        factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+		try {
+			// Configuración segura del DocumentBuilderFactory
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+			factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+			factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+			factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+			factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 
-	        DocumentBuilder builder = factory.newDocumentBuilder();
+			DocumentBuilder builder = factory.newDocumentBuilder();
 
-	        // Parsear el XML de forma segura
-	        Document document = builder.parse(new ByteArrayInputStream(xmpString.getBytes(StandardCharsets.UTF_8)));
+			// Parsear el XML de forma segura
+			Document document = builder.parse(new ByteArrayInputStream(xmpString.getBytes(StandardCharsets.UTF_8)));
 
-	        // Procesar el contenido del XML para obtener el hash
-	        NodeList dcDescriptions = document.getElementsByTagName("dc:description");
-	        if (dcDescriptions.getLength() > 0) {
-	            Node dcDescription = dcDescriptions.item(0);
-	            String hash = dcDescription.getTextContent();
-	            return hash;
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    return null;
+			// Procesar el contenido del XML para obtener el hash
+			NodeList dcDescriptions = document.getElementsByTagName("dc:description");
+			if (dcDescriptions.getLength() > 0) {
+				Node dcDescription = dcDescriptions.item(0);
+				String hash = dcDescription.getTextContent();
+				return hash;
+			}
+		} catch (Exception e) {
+			logger.error("obtenerHashDesdeXMP", e);
+		}
+		return null;
 	}
 
 	public void onChangeDireccion() {
@@ -326,7 +327,7 @@ public class LoginBean extends BeanBase implements Serializable {
 		session.invalidate();
 		setDatosSesion(null, null, null);
 		this.setLoggenIn(false);
-		
+
 		return "/view/login.xhtml?faces-redirect=true";
 	}
 
@@ -368,6 +369,17 @@ public class LoginBean extends BeanBase implements Serializable {
 		} else {
 			return null;
 		}
+	}
+
+	public String getRefPasarelaEncriptado() {
+		String valor = "";
+		try {
+			valor = EncriptacionUtil.encriptarRefPasarela();
+			logger.info("RefPasarela: " + valor);
+		} catch (Exception e) {
+			logger.error("Error generando RefPasarela", e);
+		}
+		return valor;
 	}
 
 	/**

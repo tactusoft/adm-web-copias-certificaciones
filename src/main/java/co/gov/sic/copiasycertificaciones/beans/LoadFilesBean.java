@@ -20,11 +20,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.file.UploadedFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import co.gov.sic.copiasycertificaciones.dataaccess.Dal;
 import co.gov.sic.copiasycertificaciones.entities.Attachment;
@@ -96,7 +95,7 @@ public class LoadFilesBean implements Serializable {
 			getListaAdjunto().add(att);
 
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			logger.error("handleFileUpload", e);
 		}
 	}
 
@@ -313,15 +312,16 @@ public class LoadFilesBean implements Serializable {
 
 	private ByteArrayOutputStream getFileContent(String fullFileName) throws FileNotFoundException, IOException {
 		byte[] buffer = new byte[4096];
-		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(fullFileName));
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-		int bytes = 0;
-		while ((bytes = bis.read(buffer, 0, buffer.length)) > 0) {
-			baos.write(buffer, 0, bytes);
+		try (FileInputStream fis = new FileInputStream(fullFileName);
+				BufferedInputStream bis = new BufferedInputStream(fis)) {
+
+			int bytes;
+			while ((bytes = bis.read(buffer, 0, buffer.length)) > 0) {
+				baos.write(buffer, 0, bytes);
+			}
 		}
-		baos.close();
-		bis.close();
 
 		return baos;
 	}
@@ -417,7 +417,7 @@ public class LoadFilesBean implements Serializable {
 				this.observacionesObligatorias = false;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("setTramite", e);
 		}
 	}
 

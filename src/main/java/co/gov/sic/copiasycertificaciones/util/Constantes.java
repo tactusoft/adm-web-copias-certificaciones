@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Properties;
@@ -42,6 +42,9 @@ public class Constantes {
 	public static String WS_SIGN_PASS;
 	public static String URL_WS_INTEROP;
 	public static String URL_RECAUDOS_BASE;
+	public static String URL_SSO_TOKEN;
+	public static String RECAUDOS_USERNAME;
+	public static String RECAUDOS_PASSWORD;
 	public static String URL_WEB_SERVICIOS_EN_LINEA;
 	public static String URL_WEB_SERVICIOS_EN_LINEA_CREAR_USUARIO;
 	public static String URL_WEB_SERVICIOS_EN_LINEA_RECORDAR_USUARIO;
@@ -177,9 +180,6 @@ public class Constantes {
 	public static String KEYWORDS_PDF_DEMANDAS;
 	public static String KEYWORDS_PDF_CAMARAS;
 	public static String KEYWORDS_PDF_FIRMA_SECRETARIO;
-	public static String URL_WS_RECAUDOS;
-
-	public static String URL_DOWNLOAD_RECIBO_RECAUDOS;
 
 	public static String[] UNIDADES = { "", "Un ", "Dos ", "Tres ", "Cuatro ", "Cinco ", "Seis ", "Siete ", "Ocho ",
 			"Nueve ", "Diez ", "Once ", "Doce ", "Trece ", "Catorce ", "Quince ", "Dieciséis", "Diecisiete",
@@ -210,22 +210,48 @@ public class Constantes {
 	public static String PDF_APOSTILLE_SUFIX;
 
 	public static String URL_VISOR;
-	
+
+	public static String ORIGINAL_TEXT;
+	public static String ENCRYPTION_KEY;
+
 	public Constantes() {
-		
+
 	}
 
 	@PostConstruct
-    public void init() {
-		FileInputStream fis = null;
+	public void init() {
 		try {
+			String configDir = System.getProperty("jboss.server.config.dir");
 
-			fis = new FileInputStream(new File(
-					System.getProperty("jboss.server.config.dir") + "/copiascertificaciones/Constans.properties"));
-			// fis = new FileInputStream(new File("C:\\Works\\SIC\\COPIAS
-			// PRODUCCION\\adm-web-copias-certificaciones\\Constans.DEV.properties"));
+			if (configDir == null || configDir.trim().isEmpty()) {
+				throw new IllegalStateException("Propiedad jboss.server.config.dir no está configurada");
+			}
+
+			if (configDir.contains("..") || configDir.contains("~")) {
+				throw new SecurityException("Directorio de configuración contiene caracteres no permitidos");
+			}
+
+			File configDirFile = new File(configDir).getCanonicalFile();
+			File propertiesFile = new File(configDirFile, "copiascertificaciones/Constans.properties")
+					.getCanonicalFile();
+
+			if (!propertiesFile.getPath().startsWith(configDirFile.getPath())) {
+				throw new SecurityException("Intento de acceso fuera del directorio de configuración");
+			}
+
+			if (!propertiesFile.exists() || !propertiesFile.isFile()) {
+				throw new FileNotFoundException("Archivo de propiedades no encontrado: " + propertiesFile.getPath());
+			}
+
 			Properties props = new Properties();
-			props.load(new InputStreamReader(fis, Charset.forName("UTF-8")));
+
+			try (FileInputStream fis = new FileInputStream(propertiesFile);
+					InputStreamReader reader = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
+
+				props.load(reader);
+
+			}
+
 			AMBIENTE = props.getProperty("AMBIENTE_ACTIVO");
 
 			if ("DE".equals(AMBIENTE)) {
@@ -246,6 +272,9 @@ public class Constantes {
 			WS_SIGN_PASS = props.getProperty("WS_SIGN_PASS");
 			URL_WS_INTEROP = props.getProperty("URL_WS_INTEROP");
 			URL_RECAUDOS_BASE = props.getProperty("URL_RECAUDOS_BASE");
+			URL_SSO_TOKEN = props.getProperty("URL_SSO_TOKEN");
+			RECAUDOS_USERNAME = props.getProperty("RECAUDOS_USERNAME");
+			RECAUDOS_PASSWORD = props.getProperty("RECAUDOS_PASSWORD");
 			URL_WEB_SERVICIOS_EN_LINEA = props.getProperty("URL_WEB_SERVICIOS_EN_LINEA");
 			URL_WEB_SERVICIOS_EN_LINEA_CREAR_USUARIO = props.getProperty("URL_WEB_SERVICIOS_EN_LINEA_CREAR_USUARIO");
 			URL_WEB_SERVICIOS_EN_LINEA_RECORDAR_USUARIO = props
@@ -387,10 +416,6 @@ public class Constantes {
 			KEYWORDS_PDF_DEMANDAS = props.getProperty("KEYWORDS_PDF_DEMANDAS");
 			KEYWORDS_PDF_CAMARAS = props.getProperty("KEYWORDS_PDF_CAMARAS");
 			KEYWORDS_PDF_FIRMA_SECRETARIO = props.getProperty("KEYWORDS_PDF_FIRMA_SECRETARIO");
-			URL_WS_RECAUDOS = URL_RECAUDOS_BASE + props.getProperty("URL_WS_RECAUDOS");
-
-			URL_DOWNLOAD_RECIBO_RECAUDOS = URL_RECAUDOS_BASE + props.getProperty("URL_DOWNLOAD_RECIBO_RECAUDOS_1")
-					+ WS_RECAUDOS_USER + props.getProperty("URL_DOWNLOAD_RECIBO_RECAUDOS_2") + WS_RECAUDOS_PASS;
 
 			URL_PROTOCOL_HTTPS = props.getProperty("URL_PROTOCOL_HTTPS");
 			URL_SIC = URL_PROTOCOL_HTTPS + props.getProperty("URL_SIC");
@@ -415,6 +440,8 @@ public class Constantes {
 			URL_VISOR = Objects.isNull(props.getProperty("URL_VISOR"))
 					? "http://visordocs.sic.gov.co:8080/consultaDocs/visor.jsf?ano_radi=%s&nume_radi=%s&cont_radi=%s&cons_radi=%s"
 					: props.getProperty("URL_VISOR");
+			ORIGINAL_TEXT = props.getProperty("ORIGINAL_TEXT");
+			ENCRYPTION_KEY = props.getProperty("ENCRYPTION_KEY");
 
 			logger.info(AMBIENTE);
 			logger.info(String.valueOf(WS_RADICACION_FUNCIONARIO_RADICADOR_ID));
@@ -538,9 +565,11 @@ public class Constantes {
 			logger.info(KEYWORDS_PDF_DEMANDAS);
 			logger.info(KEYWORDS_PDF_CAMARAS);
 			logger.info(KEYWORDS_PDF_FIRMA_SECRETARIO);
-			logger.info(URL_WS_RECAUDOS);
-			logger.info(URL_DOWNLOAD_RECIBO_RECAUDOS);
-			logger.info(URL_PROTOCOL_HTTPS);
+			logger.info(URL_RECAUDOS_BASE);
+			logger.info(URL_SSO_TOKEN);
+			logger.info(URL_RECAUDOS_BASE);
+			logger.info(RECAUDOS_USERNAME);
+			logger.info(RECAUDOS_PASSWORD);
 			logger.info(URL_SIC);
 			logger.info(URL_DATOS_PERSONALES);
 			logger.info(URL_ENCUESTA);
@@ -557,20 +586,15 @@ public class Constantes {
 			logger.info(String.valueOf(PDF_FOOTER_FONT_SIZE));
 			logger.info(PDF_APOSTILLE_SUFIX);
 			logger.info(URL_VISOR);
+			logger.info(ORIGINAL_TEXT);
+			logger.info(ENCRYPTION_KEY);
 
 		} catch (FileNotFoundException ex) {
 			logger.error("Archivo no encontrado: {}", ex.getMessage(), ex);
 			logger.error(ex.getLocalizedMessage());
 		} catch (IOException ex) {
 			logger.error("Error de I/O: {}", ex.getMessage(), ex);
-		} finally {
-			try {
-				fis.close();
-			} catch (IOException ex) {
-				logger.error("Error al cerrar el FileInputStream: {}", ex.getMessage(), ex);
-			}
 		}
-
 	}
 
 }

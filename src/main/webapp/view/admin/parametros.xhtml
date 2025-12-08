@@ -1,370 +1,387 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:c="jakarta.tags.core"
+	xmlns:p="http://primefaces.org/ui">
+<body>
+	<ui:composition
+		template="./../../WEB-INF/webparts/notificationmain.xhtml">
+		<ui:param name="title" value="Administración de parámetros" />
+		<ui:define name="mainContent">
+			<h:panelGroup>
+				<p:growl id="msgs" showDetail="true"
+					skipDetailIfEqualsSummary="true" />
+				<h3 style="margin-top: 0">Configuración de parámetros</h3>
+				<p:tabView effect="fold">
+					<p:tab title="#{configurationBean.title}">
+						<h:form id="dayConfigurationForm">
+							<div class="card shadow-sm-strong">
+								<div class="card-body">
+									<h:panelGroup>
+										<fieldset>
+											<div class="form-row align-items-center">
+												<div class="col-sm-3 my-1">
+													<label for="inlineFormInputGroupUsername">Días al
+														vencimiento</label>
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<div class="input-group-text">Días</div>
+														</div>
+														<p:inputNumber value="#{configurationBean.maturityDays}"
+															decimalPlaces="0" maxValue="100" class="form-control"
+															id="diasAlVencimiento">
+														</p:inputNumber>
+													</div>
+													<span class="input-group-text"> <p:selectBooleanCheckbox
+															value="#{configurationBean.maturityBusinessDay}" /> <p:outputLabel>Hábiles / Calendario</p:outputLabel>
+													</span>
+												</div>
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-    <body>
-        <ui:composition template="./../../WEB-INF/webparts/notificationmain.xhtml">
-            <ui:param name="title" value="Administración de parámetros" />
-            <ui:define name="mainContent">
-                <h:panelGroup>
-                    <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
-                    <h3 style="margin-top:0">Configuración de parámetros</h3>
-                    <p:tabView effect="fold">
-                        <p:tab title="#{configurationBean.title}" >
-                            <h:form id="dayConfigurationForm">
-                                <div class="card shadow-sm-strong">
-                                    <div class="card-body">
-                                        <h:panelGroup>
-                                            <fieldset>
-                                                <div class="form-row align-items-center">
-                                                    <div class="col-sm-3 my-1">
-                                                        <label for="inlineFormInputGroupUsername">Días al vencimiento</label>
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <div class="input-group-text">Días</div>
-                                                            </div>
-                                                            <p:inputNumber
-                                                                value="#{configurationBean.maturityDays}"
-                                                                decimalPlaces="0"
-                                                                maxValue="100"
-                                                                class="form-control" 
-                                                                id="diasAlVencimiento">                                                                                                                          
-                                                            </p:inputNumber>
-                                                        </div>
-                                                        <span class="input-group-text">
-                                                            <p:selectBooleanCheckbox value="#{configurationBean.maturityBusinessDay}"/>
-                                                            <p:outputLabel>Hábiles / Calendario</p:outputLabel>
-                                                        </span> 
-                                                    </div>
+												<div class="col-sm-3 my-1">
+													<label for="inlineFormInputGroupUsername">Complemento
+														de información</label>
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<div class="input-group-text">Días</div>
+														</div>
+														<p:inputNumber value="#{configurationBean.complementDays}"
+															decimalPlaces="0" maxValue="100" class="form-control"
+															id="complementoInformacion" />
+													</div>
+													<span class="input-group-text"> <p:selectBooleanCheckbox
+															value="#{configurationBean.complementBusinessDay}" /> <p:outputLabel>Hábiles / Calendario</p:outputLabel>
+													</span>
+												</div>
 
-                                                    <div class="col-sm-3 my-1">
-                                                        <label for="inlineFormInputGroupUsername">Complemento de información</label>
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <div class="input-group-text">Días</div>
-                                                            </div>
-                                                            <p:inputNumber
-                                                                value="#{configurationBean.complementDays}"
-                                                                decimalPlaces="0" 
-                                                                maxValue="100" 
-                                                                class="form-control" 
-                                                                id="complementoInformacion"/>                                                        
-                                                        </div>
-                                                        <span class="input-group-text">
-                                                            <p:selectBooleanCheckbox value="#{configurationBean.complementBusinessDay}"/>
-                                                            <p:outputLabel>Hábiles / Calendario</p:outputLabel>
-                                                        </span> 
-                                                    </div>
+												<div class="col-sm-3 my-1">
+													<label for="inlineFormInputGroupUsername">Respuesta
+														requerimiento interno</label>
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<div class="input-group-text">Días</div>
+														</div>
+														<p:inputNumber value="#{configurationBean.internalDays}"
+															decimalPlaces="0" maxValue="100" class="form-control"
+															id="reqInterno" />
+													</div>
+													<span class="input-group-text"> <p:selectBooleanCheckbox
+															value="#{configurationBean.internalBusinessDay}" /> <p:outputLabel>Hábiles / Calendario</p:outputLabel>
+													</span>
+												</div>
+												<p:ajaxStatus>
+													<f:facet name="default">
+														<div class="col-lg my-2">
+															<p:commandLink styleClass="btn btn-primary btn-lg"
+																disabled="false" validateClient="true"
+																oncomplete="removeUIClasess();"
+																update="dayConfigurationForm"
+																actionListener="#{configurationBean.saveConfiguration()}">
+																<f:param name="validate" value="true" />
 
-                                                    <div class="col-sm-3 my-1">
-                                                        <label for="inlineFormInputGroupUsername">Respuesta requerimiento interno</label>
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <div class="input-group-text">Días</div>
-                                                            </div>
-                                                            <p:inputNumber 
-                                                                value="#{configurationBean.internalDays}"
-                                                                decimalPlaces="0" 
-                                                                maxValue="100" 
-                                                                class="form-control" id="reqInterno"/>                                                        
-                                                        </div>
-                                                        <span class="input-group-text">
-                                                            <p:selectBooleanCheckbox value="#{configurationBean.internalBusinessDay}"/>
-                                                            <p:outputLabel>Hábiles / Calendario</p:outputLabel>
-                                                        </span> 
-                                                    </div>
-                                                    <p:ajaxStatus>
-                                                        <f:facet name="default">
-                                                            <div class="col-lg my-2">
-                                                                <p:commandLink styleClass="btn btn-primary btn-lg" disabled="false"
-                                                                               validateClient="true" oncomplete="removeUIClasess();"
-                                                                               update="dayConfigurationForm"                                                                                                                      
-                                                                               actionListener="#{configurationBean.saveConfiguration()}">
-                                                                    <f:param name="validate" value="true"/>
-
-                                                                    <i class="fas fa-user-cog"></i> Guardar parámetros
+																<i class="fas fa-user-cog"></i> Guardar parámetros
                                                                 </p:commandLink>
-                                                            </div>
-                                                        </f:facet>
-                                                        <f:facet name="start">
-                                                            <div class='alert alert-warning' align="center">
-                                                                <div class="spinner-border" role="status">
-                                                                    <span class="sr-only">Procesando...</span>
-                                                                </div> Procesando...
-                                                            </div>
-                                                        </f:facet>
-                                                        <f:facet name="complete">
-                                                            <div class="col-lg my-2">
-                                                                <p:commandLink styleClass="btn btn-primary btn-lg" disabled="false"
-                                                                               validateClient="true" oncomplete="removeUIClasess();"
-                                                                               update="dayConfigurationForm"                                                                                                                      
-                                                                               actionListener="#{configurationBean.saveConfiguration()}">
-                                                                    <f:param name="validate" value="true"/>
+														</div>
+													</f:facet>
+													<f:facet name="start">
+														<div class='alert alert-warning' align="center">
+															<div class="spinner-border" role="status">
+																<span class="sr-only">Procesando...</span>
+															</div>
+															Procesando...
+														</div>
+													</f:facet>
+													<f:facet name="complete">
+														<div class="col-lg my-2">
+															<p:commandLink styleClass="btn btn-primary btn-lg"
+																disabled="false" validateClient="true"
+																oncomplete="removeUIClasess();"
+																update="dayConfigurationForm"
+																actionListener="#{configurationBean.saveConfiguration()}">
+																<f:param name="validate" value="true" />
 
-                                                                    <i class="fas fa-user-cog"></i> Guardar parámetros
+																<i class="fas fa-user-cog"></i> Guardar parámetros
                                                                 </p:commandLink>
-                                                            </div>
-                                                        </f:facet>
-                                                    </p:ajaxStatus>
+														</div>
+													</f:facet>
+												</p:ajaxStatus>
 
 
-                                                </div>
-                                                <div class="form-row align-items-center">
-                                                    <div class="col-sm-3 my-1">
-                                                        <label for="inlineFormInputGroupUsername">Prórroga</label>
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <div class="input-group-text">Días</div>
-                                                            </div>
-                                                            <p:inputNumber 
-                                                                value="#{configurationBean.defermentDays}"
-                                                                decimalPlaces="0" maxValue="100" class="form-control" id="prorroga"/>                                                        
-                                                        </div>
-                                                        <span class="input-group-text">
-                                                            <p:selectBooleanCheckbox value="#{configurationBean.defermentBusinessDay}"/>
-                                                            <p:outputLabel>Hábiles / Calendario</p:outputLabel>
-                                                        </span> 
-                                                    </div>
-                                                    <div class="col-sm-3 my-1">
-                                                        <label for="inlineFormInputGroupUsername">Plazo para el pago</label>
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <div class="input-group-text">Días</div>
-                                                            </div>
-                                                            <p:inputNumber 
-                                                                value="#{configurationBean.paymentDays}"
-                                                                decimalPlaces="0" maxValue="100" class="form-control" id="plazoParaPago"/>                                                        
-                                                        </div>
-                                                        <span class="input-group-text">
-                                                            <p:selectBooleanCheckbox value="#{configurationBean.paymentBusinessDay}"/>
-                                                            <p:outputLabel>Hábiles / Calendario</p:outputLabel>
-                                                        </span> 
-                                                    </div>
-                                                    <div class="col-sm-3 my-1">
-                                                        <label for="inlineFormInputGroupUsername">Alertas al vencimiento</label>
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <div class="input-group-text">Días</div>
-                                                            </div>
-                                                            <p:inputNumber 
-                                                                value="#{configurationBean.alertDays}"
-                                                                decimalPlaces="0" maxValue="100" class="form-control" id="alertaAlVencimiento"/>                                                        
-                                                        </div>
-                                                        <span class="input-group-text">
-                                                            <p:selectBooleanCheckbox value="#{configurationBean.alertBusinessDay}"/>
-                                                            <p:outputLabel>Hábiles / Calendario</p:outputLabel>
-                                                        </span> 
-                                                    </div>
-                                                </div>
-                                                <p:messages id="msgCfg" />
-                                            </fieldset>
-                                        </h:panelGroup>
+											</div>
+											<div class="form-row align-items-center">
+												<div class="col-sm-3 my-1">
+													<label for="inlineFormInputGroupUsername">Prórroga</label>
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<div class="input-group-text">Días</div>
+														</div>
+														<p:inputNumber value="#{configurationBean.defermentDays}"
+															decimalPlaces="0" maxValue="100" class="form-control"
+															id="prorroga" />
+													</div>
+													<span class="input-group-text"> <p:selectBooleanCheckbox
+															value="#{configurationBean.defermentBusinessDay}" /> <p:outputLabel>Hábiles / Calendario</p:outputLabel>
+													</span>
+												</div>
+												<div class="col-sm-3 my-1">
+													<label for="inlineFormInputGroupUsername">Plazo
+														para el pago</label>
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<div class="input-group-text">Días</div>
+														</div>
+														<p:inputNumber value="#{configurationBean.paymentDays}"
+															decimalPlaces="0" maxValue="100" class="form-control"
+															id="plazoParaPago" />
+													</div>
+													<span class="input-group-text"> <p:selectBooleanCheckbox
+															value="#{configurationBean.paymentBusinessDay}" /> <p:outputLabel>Hábiles / Calendario</p:outputLabel>
+													</span>
+												</div>
+												<div class="col-sm-3 my-1">
+													<label for="inlineFormInputGroupUsername">Alertas
+														al vencimiento</label>
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<div class="input-group-text">Días</div>
+														</div>
+														<p:inputNumber value="#{configurationBean.alertDays}"
+															decimalPlaces="0" maxValue="100" class="form-control"
+															id="alertaAlVencimiento" />
+													</div>
+													<span class="input-group-text"> <p:selectBooleanCheckbox
+															value="#{configurationBean.alertBusinessDay}" /> <p:outputLabel>Hábiles / Calendario</p:outputLabel>
+													</span>
+												</div>
+											</div>
+											<p:messages id="msgCfg" />
+										</fieldset>
+									</h:panelGroup>
 
-                                    </div>
+								</div>
 
-                                </div>
-                            </h:form>
-                        </p:tab>
-                        <p:tab title="Roles">
-                            <h:form id="frmRolCfg">
-                                <div class="card shadow-sm-strong">
-                                    <div class="card-body">
-                                        <h:panelGroup id="pnlTabla">
-                                            <fieldset>
-                                                <div class="row">
-                                                    <div class="col-sm form-group">
-                                                        <label class="control-label">Dependencia</label>
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend required">
-                                                                <span class="input-group-text"><i class="fas fa-chevron-right fa-fw"></i></span>
-                                                            </div>
-                                                            <p:selectOneMenu  id="codigoDependencia" class="form-control" filter="true" filterMatchMode="contains" autoWidth="false" disabled="false"
-                                                                              value="#{configurationBean.codigoDependencia}">
-                                                                <p:ajax listener="#{configurationBean.onChangeDependency}" update="idFuncionario" process="@form" />
-                                                                <f:selectItem itemLabel="-- Seleccione opción --">
+							</div>
+						</h:form>
+					</p:tab>
+					<p:tab title="Roles">
+						<h:form id="frmRolCfg">
+							<div class="card shadow-sm-strong">
+								<div class="card-body">
+									<h:panelGroup id="pnlTabla">
+										<fieldset>
+											<div class="row">
+												<div class="col-sm form-group">
+													<label class="control-label">Dependencia</label>
+													<div class="input-group">
+														<div class="input-group-prepend required">
+															<span class="input-group-text"><i
+																class="fas fa-chevron-right fa-fw"></i></span>
+														</div>
+														<p:selectOneMenu id="codigoDependencia"
+															class="form-control" filter="true"
+															filterMatchMode="contains" autoWidth="false"
+															disabled="false"
+															value="#{configurationBean.codigoDependencia}">
+															<p:ajax
+																listener="#{configurationBean.onChangeDependency}"
+																update="idFuncionario" process="@form" />
+															<f:selectItem itemLabel="-- Seleccione opción --">
 
-                                                                </f:selectItem>
-                                                                <f:selectItems value="#{configurationBean.listaDependencias}" var="entry"
-                                                                               itemValue="#{entry.codi_depe}" itemLabel="#{entry.nomb_depe}">
-                                                                </f:selectItems>
-                                                            </p:selectOneMenu>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm form-group">
-                                                        <label class="control-label">Funcionario</label>
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend required">
-                                                                <span class="input-group-text"><i class="fas fa-chevron-right fa-fw"></i></span>
-                                                            </div>
-                                                            <p:selectOneMenu  id="idFuncionario" class="form-control" filter="true" filterMatchMode="contains" autoWidth="false" disabled="false"
-                                                                              value="#{configurationBean.idFuncionario}">
-                                                                <p:ajax listener="#{configurationBean.onChangeDependencyFuncionario}" update="pnlTabla" process="@form" />
-                                                                <f:selectItem itemLabel="-- Seleccione opción --">
+															</f:selectItem>
+															<f:selectItems
+																value="#{configurationBean.listaDependencias}"
+																var="entry" itemValue="#{entry.codi_depe}"
+																itemLabel="#{entry.nomb_depe}">
+															</f:selectItems>
+														</p:selectOneMenu>
+													</div>
+												</div>
+												<div class="col-sm form-group">
+													<label class="control-label">Funcionario</label>
+													<div class="input-group">
+														<div class="input-group-prepend required">
+															<span class="input-group-text"><i
+																class="fas fa-chevron-right fa-fw"></i></span>
+														</div>
+														<p:selectOneMenu id="idFuncionario" class="form-control"
+															filter="true" filterMatchMode="contains"
+															autoWidth="false" disabled="false"
+															value="#{configurationBean.idFuncionario}">
+															<p:ajax
+																listener="#{configurationBean.onChangeDependencyFuncionario}"
+																update="pnlTabla" process="@form" />
+															<f:selectItem itemLabel="-- Seleccione opción --">
 
-                                                                </f:selectItem>
-                                                                <f:selectItems value="#{configurationBean.listaAdscritos}" var="entry"
-                                                                               itemValue="#{entry.idenPers}" itemLabel="#{entry.nombre}">
-                                                                </f:selectItems>
-                                                            </p:selectOneMenu>
-                                                        </div>
-                                                    </div>
+															</f:selectItem>
+															<f:selectItems
+																value="#{configurationBean.listaAdscritos}" var="entry"
+																itemValue="#{entry.idenPers}"
+																itemLabel="#{entry.nombre}">
+															</f:selectItems>
+														</p:selectOneMenu>
+													</div>
+												</div>
 
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-sm form-group">
-                                                        <label class="control-label">Rol</label>
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend required">
-                                                                <span class="input-group-text"><i class="fas fa-chevron-right fa-fw"></i></span>
-                                                            </div>
-                                                            <p:selectOneMenu id="rol" 
-                                                                             value="#{configurationBean.rol}"
-                                                                             class="form-control"
-                                                                             filter="true"
-                                                                             filterMatchMode="contains"
-                                                                             autoWidth="false"
-                                                                             disabled="false">
-                                                                <f:selectItem itemLabel="-- Seleccione opción --"/>
-                                                                <f:selectItem itemLabel="Coordinador" itemValue="#{configurationBean.rolCoordinador()}" />
-                                                                <f:selectItem itemLabel="Funcionario" itemValue="#{configurationBean.rolFuncionario()}" />
-                                                                <f:selectItem itemLabel="Ventanilla" itemValue="#{configurationBean.rolVentanilla()}" />
+											</div>
+											<div class="row">
+												<div class="col-sm form-group">
+													<label class="control-label">Rol</label>
+													<div class="input-group">
+														<div class="input-group-prepend required">
+															<span class="input-group-text"><i
+																class="fas fa-chevron-right fa-fw"></i></span>
+														</div>
+														<p:selectOneMenu id="rol" value="#{configurationBean.rol}"
+															class="form-control" filter="true"
+															filterMatchMode="contains" autoWidth="false"
+															disabled="false">
+															<f:selectItem itemLabel="-- Seleccione opción --" />
+															<f:selectItem itemLabel="Coordinador"
+																itemValue="#{configurationBean.rolCoordinador()}" />
+															<f:selectItem itemLabel="Funcionario"
+																itemValue="#{configurationBean.rolFuncionario()}" />
+															<f:selectItem itemLabel="Ventanilla"
+																itemValue="#{configurationBean.rolVentanilla()}" />
 
-                                                            </p:selectOneMenu>
-                                                        </div>
-                                                    </div>
-                                                </div>
+														</p:selectOneMenu>
+													</div>
+												</div>
+											</div>
 
-                                                <p:ajaxStatus>
-                                                    <f:facet name="default">
-                                                        <div class="row">
-                                                            <div class="col form-group" align="right">
-                                                                <p:commandLink styleClass="btn btn-primary" disabled="#{not configurationBean.habilitaAsignarRol}"
-                                                                               validateClient="true" oncomplete="removeUIClasess();"
-                                                                               update="frmRolCfg"                                                                                                                      
-                                                                               actionListener="#{configurationBean.asignarRol}">
-                                                                    <f:param name="validate" value="true"/>
+											<p:ajaxStatus>
+												<f:facet name="default">
+													<div class="row">
+														<div class="col form-group" align="right">
+															<p:commandLink styleClass="btn btn-primary"
+																disabled="#{not configurationBean.habilitaAsignarRol}"
+																validateClient="true" oncomplete="removeUIClasess();"
+																update="frmRolCfg"
+																actionListener="#{configurationBean.asignarRol}">
+																<f:param name="validate" value="true" />
 
-                                                                    <i class="fas fa-user-cog"></i> Asignar Rol
+																<i class="fas fa-user-cog"></i> Asignar Rol
                                                                 </p:commandLink>
-                                                            </div>
-                                                        </div>
-                                                    </f:facet>
-                                                    <f:facet name="start">
-                                                        <div class='alert alert-warning' align="center">
-                                                            <div class="spinner-border" role="status">
-                                                                <span class="sr-only">Procesando...</span>
-                                                            </div> Procesando...
-                                                        </div>
-                                                    </f:facet>
-                                                    <f:facet name="complete">
-                                                        <div class="row">
-                                                            <div class="col form-group" align="right">
-                                                                <p:commandLink styleClass="btn btn-primary" disabled="#{not configurationBean.habilitaAsignarRol}"
-                                                                               validateClient="true" oncomplete="removeUIClasess();"
-                                                                               update="frmRolCfg"                                                                                                                      
-                                                                               actionListener="#{configurationBean.asignarRol}">
-                                                                    <f:param name="validate" value="true"/>
+														</div>
+													</div>
+												</f:facet>
+												<f:facet name="start">
+													<div class='alert alert-warning' align="center">
+														<div class="spinner-border" role="status">
+															<span class="sr-only">Procesando...</span>
+														</div>
+														Procesando...
+													</div>
+												</f:facet>
+												<f:facet name="complete">
+													<div class="row">
+														<div class="col form-group" align="right">
+															<p:commandLink styleClass="btn btn-primary"
+																disabled="#{not configurationBean.habilitaAsignarRol}"
+																validateClient="true" oncomplete="removeUIClasess();"
+																update="frmRolCfg"
+																actionListener="#{configurationBean.asignarRol}">
+																<f:param name="validate" value="true" />
 
-                                                                    <i class="fas fa-user-cog"></i> Asignar Rol
+																<i class="fas fa-user-cog"></i> Asignar Rol
                                                                 </p:commandLink>
-                                                            </div>
-                                                        </div>
-                                                    </f:facet>
-                                                </p:ajaxStatus>
-                                                <p:messages id="msgAsignarRol" />
-                                            </fieldset>
-                                        </h:panelGroup>
-                                    </div>
-                                </div>
-                            </h:form>
-                        </p:tab>
-                        
-                        <p:tab title="Micelaneos">
-                            <h:form id="frmMicelaneos">
-                                <div class="card shadow-sm-strong">
-                                    <h:panelGroup layout="block"
-                                                  styleClass="col" id="pnlMicelaneos">
-                                        <div class="row">
-                                            <div class="col-sm-3 form-group">
-                                                <label class="control-label">Codigo copias</label>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fas fa-code"></i></span>
-                                                    </div>
-                                                    <p:inputText class="form-control" readonly="false" value="#{configurationBean.codigoExpCopias}"></p:inputText>
-                                                </div>
-                                            </div>
+														</div>
+													</div>
+												</f:facet>
+											</p:ajaxStatus>
+											<p:messages id="msgAsignarRol" />
+										</fieldset>
+									</h:panelGroup>
+								</div>
+							</div>
+						</h:form>
+					</p:tab>
 
-                                            <div class="col-sm-3 form-group">
-                                                <label class="control-label">Link encuesta</label>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fas fa-link"></i></span>
-                                                    </div>
-                                                    <p:inputText class="form-control" readonly="false" value="#{configurationBean.linkEncuesta}"></p:inputText>
-                                                </div>
-                                            </div>
+					<p:tab title="Micelaneos">
+						<h:form id="frmMicelaneos">
+							<div class="card shadow-sm-strong">
+								<h:panelGroup layout="block" styleClass="col" id="pnlMicelaneos">
+									<div class="row">
+										<div class="col-sm-3 form-group">
+											<label class="control-label">Codigo copias</label>
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<span class="input-group-text"><i
+														class="fas fa-code"></i></span>
+												</div>
+												<p:inputText class="form-control" readonly="false"
+													value="#{configurationBean.codigoExpCopias}"></p:inputText>
+											</div>
+										</div>
+
+										<div class="col-sm-3 form-group">
+											<label class="control-label">Link encuesta</label>
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<span class="input-group-text"><i
+														class="fas fa-link"></i></span>
+												</div>
+												<p:inputText class="form-control" readonly="false"
+													value="#{configurationBean.linkEncuesta}"></p:inputText>
+											</div>
+										</div>
 
 
-                                        </div>
+									</div>
 
-                                        <div class="row">
-                                            <div class="col-lg-12 form-group">
-                                                <p:ajaxStatus>
-                                                    <f:facet name="default">
-                                                       
-                                                        <div class="col form-group" align="center">
-                                                                <p:commandLink styleClass="btn btn-primary" disabled="false"
-                                                                               validateClient="true" oncomplete="removeUIClasess();"
-                                                                               update="frmMicelaneos"                                                                                                                      
-                                                                               actionListener="#{configurationBean.guardarMicelaneos}">
-                                                                    <f:param name="validate" value="true"/>
+									<div class="row">
+										<div class="col-lg-12 form-group">
+											<p:ajaxStatus>
+												<f:facet name="default">
 
-                                                                    <i class="fas fa-user-cog"></i> Guardar
+													<div class="col form-group" align="center">
+														<p:commandLink styleClass="btn btn-primary"
+															disabled="false" validateClient="true"
+															oncomplete="removeUIClasess();" update="frmMicelaneos"
+															actionListener="#{configurationBean.guardarMicelaneos}">
+															<f:param name="validate" value="true" />
+
+															<i class="fas fa-user-cog"></i> Guardar
                                                                 </p:commandLink>
-                                                            </div>
-                                                        
-                                                    </f:facet>
-                                                    <f:facet name="start">
-                                                        <div class='alert alert-warning' align="center">
-                                                            <div class="spinner-border" role="status">
-                                                                <span class="sr-only">Procesando...</span>
-                                                            </div> Procesando...
-                                                        </div>
-                                                    </f:facet>
-                                                    <f:facet name="complete">
-                                                        <div class="col form-group" align="center">
-                                                                <p:commandLink styleClass="btn btn-primary" disabled="false"
-                                                                               validateClient="true" oncomplete="removeUIClasess();"
-                                                                               update="frmMicelaneos"                                                                                                                      
-                                                                               actionListener="#{configurationBean.guardarMicelaneos}">
-                                                                    <f:param name="validate" value="true"/>
+													</div>
 
-                                                                    <i class="fas fa-user-cog"></i> Guardar
+												</f:facet>
+												<f:facet name="start">
+													<div class='alert alert-warning' align="center">
+														<div class="spinner-border" role="status">
+															<span class="sr-only">Procesando...</span>
+														</div>
+														Procesando...
+													</div>
+												</f:facet>
+												<f:facet name="complete">
+													<div class="col form-group" align="center">
+														<p:commandLink styleClass="btn btn-primary"
+															disabled="false" validateClient="true"
+															oncomplete="removeUIClasess();" update="frmMicelaneos"
+															actionListener="#{configurationBean.guardarMicelaneos}">
+															<f:param name="validate" value="true" />
+
+															<i class="fas fa-user-cog"></i> Guardar
                                                                 </p:commandLink>
-                                                            </div>
-                                                    </f:facet>
-                                                </p:ajaxStatus>
-                                                 <p:messages id="msgMiselaneos" />
-                                                <br></br>
-                                            </div>
-                                        </div>
-                                    </h:panelGroup>
+													</div>
+												</f:facet>
+											</p:ajaxStatus>
+											<p:messages id="msgMiselaneos" />
+											<br></br>
+										</div>
+									</div>
+								</h:panelGroup>
 
 
 
 
-                                </div>
-                            </h:form>
-                        </p:tab>
+							</div>
+						</h:form>
+					</p:tab>
 
-                    </p:tabView>
-                </h:panelGroup>
-            </ui:define>
-        </ui:composition>
-    </body>
+				</p:tabView>
+			</h:panelGroup>
+		</ui:define>
+	</ui:composition>
+</body>
 </html>

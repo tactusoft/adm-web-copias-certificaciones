@@ -10,11 +10,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FlowEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import co.gov.sic.copiasycertificaciones.dataaccess.Dal;
 import co.gov.sic.copiasycertificaciones.entities.CamaraComercio;
@@ -205,7 +204,7 @@ public class CCParametrosBean extends CCParametrosBaseBean implements Serializab
             onChangeCiudadCamara();
 
             //listaFuncionarios = Dal.getAllPersonascamara(personaCamara.getId());
-        } catch (NullPointerException ex) {
+        } catch (Exception ex) {
             this.AddErrorMessage("El numero de documento es requerido");
         }
 

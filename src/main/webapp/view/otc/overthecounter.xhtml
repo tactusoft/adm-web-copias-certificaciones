@@ -1,440 +1,509 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <body>         
-        <ui:composition template="./../../WEB-INF/webparts/otcmain.xhtml">
-            <ui:param name="title" value="Expedición Copias" />
-            <ui:define name="mainContent">
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:c="jakarta.tags.core"
+	xmlns:p="http://primefaces.org/ui">
+<body>
+	<ui:composition template="./../../WEB-INF/webparts/otcmain.xhtml">
+		<ui:param name="title" value="Expedición Copias" />
+		<ui:define name="mainContent">
 
-                <table class="tableTitle">
-                    <tbody>
-                        <tr>
-                            <td class="tableTitle-icon">
-                                <div class="card-small card-yellow d-inline-block">
-                                    <div class="card-icon-icon">
-                                        <i class="far fa-copy"></i>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="tableTitle-text">
-                                <h3><h:outputText value="Solicitud de #{overTheCounterBean.tipoTramite.descripcion}"/></h3>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <h:form id="frmWizard">
-                    <div class="six-steps yellow current-step step-1" id="divStepMenu">
-                        <p:steps activeIndex="0" id="stepsMenu">
-                            <p:menuitem value="Consulta" id="stepsMenuItem1" />
-                            <p:menuitem value="Aviso Legal" id="stepsMenuItem2" />
-                            <p:menuitem value="Datos Personales" id="stepsMenuItem3" />
-                            <p:menuitem value="Datos Solicitud" id="stepsMenuItem4"/>
-                            <p:menuitem value="Confirmación" id="stepsMenuItem5"/>
-                            <p:menuitem value="Resultado" id="stepsMenuItem6"/>
-                        </p:steps>
-                    </div>
-                    <p:wizard id="wizardDemanda" onback="onback()" flowListener="#{overTheCounterBean.procesoFlujoOTC}" showNavBar="false" showStepStatus="false" backLabel="Anterior" nextLabel="Siguiente" widgetVar="wizardwv">
-                        <p:tab id="consulta">
-                            <ui:include src="./../../WEB-INF/webparts/consultadatosCopias.xhtml"  />
-                            <div class="row">
-                                <div class="col">  <p:messages/>
-                                </div>
-                            </div>
-                        </p:tab>
-                        <p:tab id="legal">
-                            <ui:include src="./../../WEB-INF/webparts/avisoLegalDatosPersonales.xhtml"  />
-                            <div class="row">
-                                <div class="col">  <p:messages/>
-                                </div>
-                            </div>
-                        </p:tab>
-                        <p:tab id="personal" >
-                            <ui:include src="fetchuserdata.xhtml"  />
-                            <div class="row">
-                                <div class="col"> <p:messages id="msgUserData"/>
-                                </div>
-                            </div>                            
-                        </p:tab>
+			<table class="tableTitle">
+				<tbody>
+					<tr>
+						<td class="tableTitle-icon">
+							<div class="card-small card-yellow d-inline-block">
+								<div class="card-icon-icon">
+									<i class="far fa-copy"></i>
+								</div>
+							</div>
+						</td>
+						<td class="tableTitle-text">
+							<h3>
+								<h:outputText
+									value="Solicitud de #{overTheCounterBean.tipoTramite.descripcion}" />
+							</h3>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<h:form id="frmWizard">
+				<div class="six-steps yellow current-step step-1" id="divStepMenu">
+					<p:steps activeIndex="0" id="stepsMenu">
+						<p:menuitem value="Consulta" id="stepsMenuItem1" />
+						<p:menuitem value="Aviso Legal" id="stepsMenuItem2" />
+						<p:menuitem value="Datos Personales" id="stepsMenuItem3" />
+						<p:menuitem value="Datos Solicitud" id="stepsMenuItem4" />
+						<p:menuitem value="Confirmación" id="stepsMenuItem5" />
+						<p:menuitem value="Resultado" id="stepsMenuItem6" />
+					</p:steps>
+				</div>
+				<p:wizard id="wizardDemanda" onback="onback()"
+					flowListener="#{overTheCounterBean.procesoFlujoOTC}"
+					showNavBar="false" showStepStatus="false" backLabel="Anterior"
+					nextLabel="Siguiente" widgetVar="wizardwv">
+					<p:tab id="consulta">
+						<ui:include
+							src="./../../WEB-INF/webparts/consultadatosCopias.xhtml" />
+						<div class="row">
+							<div class="col">
+								<p:messages />
+							</div>
+						</div>
+					</p:tab>
+					<p:tab id="legal">
+						<ui:include
+							src="./../../WEB-INF/webparts/avisoLegalDatosPersonales.xhtml" />
+						<div class="row">
+							<div class="col">
+								<p:messages />
+							</div>
+						</div>
+					</p:tab>
+					<p:tab id="personal">
+						<ui:include src="fetchuserdata.xhtml" />
+						<div class="row">
+							<div class="col">
+								<p:messages id="msgUserData" />
+							</div>
+						</div>
+					</p:tab>
 
 
 
 
-                        <p:tab id="solicitudes" >
-                            <div class="row">
-                                <div class="col">
-                                    <div class="alert alert-warning">
-                                        <i class="fas fa-info-circle fa-fw fa-lg mr-2"></i>Puede agregar hasta un <strong>máximo de #{overTheCounterBean.numMaxSolicitudes} solicitudes</strong>. Si requiere solicitudes adicionales debe realizar una nuevo proceso.<br/>
-                                        <ui:include src="./../../WEB-INF/webparts/avisoCamposRequeridos.xhtml"  />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="py-3 px-1">
-                                <div class="row">
-                                    <div class="col-xl-5 col-md-4 col-sm-3 form-group">
-                                        <label class="control-label">Tipo de Copia</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend required">
-                                                <span class="input-group-text"><i class="far fa-copy fa-fw"></i></span>
-                                            </div>
-                                            <p:selectOneMenu id="tipoCopia" class="form-control" required="#{request.getParameter('validate')}" autoWidth="false" disabled="#{not overTheCounterBean.showPanelAgregar}"
-                                                             requiredMessage="El tipo de copia es requerido." value="#{overTheCounterBean.tipoCopia}">
-                                                <p:ajax listener="#{overTheCounterBean.onTipoCopiaChange}" update="wizardDemanda" process="@form" />
-                                                <f:selectItem itemLabel="-- Seleccione opción --"></f:selectItem>
-                                                <f:selectItems value="#{overTheCounterBean.listaTiposSolicitudes}" var="entry"
-                                                               itemValue="#{entry.codigo}" itemLabel="#{entry.valor}"></f:selectItems>
-                                            </p:selectOneMenu>
-                                        </div>
-                                    </div>
-                                    <div class="col form-group">
-                                        <label class="control-label">Tipo de Acto</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-chevron-right fa-fw"></i></span>
-                                            </div>
-                                            <p:focus for="tipoActo" />
-                                            <p:selectOneMenu id="tipoActo" class="form-control" filter="true" filterMatchMode="contains" autoWidth="false" disabled="#{not overTheCounterBean.showPanelAgregar}"
-                                                             value="#{overTheCounterBean.tipoActo}">
-                                                <p:ajax listener="#{overTheCounterBean.onTipoCopiaChange}" update="wizardDemanda" process="@form" />
-                                                <f:selectItem itemLabel="-- Seleccione opción --"></f:selectItem>
-                                                <f:selectItems value="#{overTheCounterBean.listaTiposActo}" var="entry"
-                                                               itemValue="#{entry.codigo}" itemLabel="#{entry.valor}"></f:selectItems>
-                                            </p:selectOneMenu>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-2 col-sm-3 form-group">
-                                        <label class="control-label">Número de Acto</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-hashtag fa-fw"></i></span>
-                                            </div>
-                                            <p:inputText id="tbNumActo" class="form-control" maxlength="6" disabled="#{not overTheCounterBean.showPanelAgregar}"
-                                                         value="#{overTheCounterBean.numeActo}">
-                                                <p:ajax listener="#{overTheCounterBean.onTipoCopiaChange}" update="wizardDemanda" process="@form" />
-                                            </p:inputText>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-2 col-sm-3 form-group">
-                                        <label class="control-label">Fecha de Acto</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="far fa-calendar-alt fa-fw"></i></span>
-                                            </div>
-                                            <p:calendar id="tbFechaActo" showOtherMonths="true" autocomplete="off"
-                                                        pattern="dd/MM/yyyy" placeholder="dd/mm/aaaa" disabled="#{not overTheCounterBean.showPanelAgregar}"
-                                                        locale="es" class="form-control"
-                                                        value="#{overTheCounterBean.fechaActo}" >
-                                                <p:ajax listener="#{overTheCounterBean.onTipoCopiaChange}" update="wizardDemanda" process="@form" />
-                                            </p:calendar>
-                                            <h:outputScript>$( function() {
+					<p:tab id="solicitudes">
+						<div class="row">
+							<div class="col">
+								<div class="alert alert-warning">
+									<i class="fas fa-info-circle fa-fw fa-lg mr-2"></i>Puede
+									agregar hasta un <strong>máximo de
+										#{overTheCounterBean.numMaxSolicitudes} solicitudes</strong>. Si
+									requiere solicitudes adicionales debe realizar una nuevo
+									proceso.<br />
+									<ui:include
+										src="./../../WEB-INF/webparts/avisoCamposRequeridos.xhtml" />
+								</div>
+							</div>
+						</div>
+						<div class="py-3 px-1">
+							<div class="row">
+								<div class="col-xl-5 col-md-4 col-sm-3 form-group">
+									<label class="control-label">Tipo de Copia</label>
+									<div class="input-group">
+										<div class="input-group-prepend required">
+											<span class="input-group-text"><i
+												class="far fa-copy fa-fw"></i></span>
+										</div>
+										<p:selectOneMenu id="tipoCopia" class="form-control"
+											required="#{request.getParameter('validate')}"
+											autoWidth="false"
+											disabled="#{not overTheCounterBean.showPanelAgregar}"
+											requiredMessage="El tipo de copia es requerido."
+											value="#{overTheCounterBean.tipoCopia}">
+											<p:ajax listener="#{overTheCounterBean.onTipoCopiaChange}"
+												update="wizardDemanda" process="@form" />
+											<f:selectItem itemLabel="-- Seleccione opción --"></f:selectItem>
+											<f:selectItems
+												value="#{overTheCounterBean.listaTiposSolicitudes}"
+												var="entry" itemValue="#{entry.codigo}"
+												itemLabel="#{entry.valor}"></f:selectItems>
+										</p:selectOneMenu>
+									</div>
+								</div>
+								<div class="col form-group">
+									<label class="control-label">Tipo de Acto</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><i
+												class="fas fa-chevron-right fa-fw"></i></span>
+										</div>
+										<p:focus for="tipoActo" />
+										<p:selectOneMenu id="tipoActo" class="form-control"
+											filter="true" filterMatchMode="contains" autoWidth="false"
+											disabled="#{not overTheCounterBean.showPanelAgregar}"
+											value="#{overTheCounterBean.tipoActo}">
+											<p:ajax listener="#{overTheCounterBean.onTipoCopiaChange}"
+												update="wizardDemanda" process="@form" />
+											<f:selectItem itemLabel="-- Seleccione opción --"></f:selectItem>
+											<f:selectItems value="#{overTheCounterBean.listaTiposActo}"
+												var="entry" itemValue="#{entry.codigo}"
+												itemLabel="#{entry.valor}"></f:selectItems>
+										</p:selectOneMenu>
+									</div>
+								</div>
+								<div class="col-xl-2 col-sm-3 form-group">
+									<label class="control-label">Número de Acto</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><i
+												class="fas fa-hashtag fa-fw"></i></span>
+										</div>
+										<p:inputText id="tbNumActo" class="form-control" maxlength="6"
+											disabled="#{not overTheCounterBean.showPanelAgregar}"
+											value="#{overTheCounterBean.numeActo}">
+											<p:ajax listener="#{overTheCounterBean.onTipoCopiaChange}"
+												update="wizardDemanda" process="@form" />
+										</p:inputText>
+									</div>
+								</div>
+								<div class="col-xl-2 col-sm-3 form-group">
+									<label class="control-label">Fecha de Acto</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><i
+												class="far fa-calendar-alt fa-fw"></i></span>
+										</div>
+										<p:calendar id="tbFechaActo" showOtherMonths="true"
+											autocomplete="off" pattern="dd/MM/yyyy"
+											placeholder="dd/mm/aaaa"
+											disabled="#{not overTheCounterBean.showPanelAgregar}"
+											locale="es" class="form-control"
+											value="#{overTheCounterBean.fechaActo}">
+											<p:ajax listener="#{overTheCounterBean.onTipoCopiaChange}"
+												update="wizardDemanda" process="@form" />
+										</p:calendar>
+										<h:outputScript>$( function() {
                                                 $("input[name$='tbFechaActo_input']").datepicker("option", "maxDate", +0);
                                                 });  </h:outputScript>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col form-group">
-                                        <label class="control-label">Descripción de la Solicitud</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend required">
-                                                <span class="input-group-text"><i class="fab fa-stack-exchange fa-fw"></i></span>
-                                            </div>
-                                            <p:inputTextarea requiredMessage="La Descripción de la Solicitud es requerida." required="#{request.getParameter('validate')}" rows="3" id="tbObservaciones" class="form-control" maxlength="600" autoResize="false" disabled="#{not overTheCounterBean.showPanelAgregar}"
-                                                             value="#{overTheCounterBean.observaciones}">
-                                            </p:inputTextarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-4 form-group">
-                                        <label class="control-label">Folios</label>
-                                        <h:panelGroup layout="block" styleClass="input-group mb-2" id="pnlRango">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">Rango</span>
-                                            </div>
-                                            <p:inputText id="tbRango" class="form-control" maxlength="30" disabled="#{not overTheCounterBean.showPanelAgregar or overTheCounterBean.expedienteCompleto}"
-                                                         value="#{overTheCounterBean.rangoFolios}">
-                                            </p:inputText>
-                                        </h:panelGroup>
-                                        <div class="custom-control custom-checkbox mt-3">
-                                            <h:selectBooleanCheckbox id="expedienteCompleto" class="custom-control-input" disabled="#{not overTheCounterBean.showPanelAgregar}" value="#{overTheCounterBean.expedienteCompleto}">
-                                                <p:ajax event="change" update="pnlRango" />
-                                            </h:selectBooleanCheckbox>
-                                            <label class="custom-control-label" for="frmWizard:expedienteCompleto">Copia de todo el expediente</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <h:panelGroup layout="block" id="pnlPersonas"
-                                              styleClass="row" rendered="#{overTheCounterBean.constanciaEjecutoria}">
-                                    <div class="col-12 form-group">
-                                        <div class="alert alert-warning">
-                                            <i class="fas fa-info-circle fa-fw fa-lg mr-2"></i> Debe introducir tipo, número y fecha de acto para poder seleccionar por lo menos una persona a la que reqiere emitir la ejecutoria.
-                                        </div>
-                                    </div>
-                                    <div class="col-12 form-group">
-                                        <p:ajaxStatus>
-                                            <f:facet name="default">
-                                                <fieldset>
-                                                    <legend>
-                                                        Personas Vinculadas al Acto Administrativo (#{overTheCounterBean.personasEjecutoria.size()})
-                                                    </legend>
-                                                    <p:dataTable resizableColumns="false"
-                                                                 emptyMessage="No existen registros." rowIndexVar="_row" 
-                                                                 id="tblPersonas" selection="#{overTheCounterBean.selectedPersonas}"
-                                                                 var="pers" rowKey="#{pers.idenPers}"
-                                                                 value="#{overTheCounterBean.personasEjecutoria}"
-                                                                 >
-                                                        <p:column headerText="#" width="3%"
-                                                                  class="row-index" exportable="false">
-                                                            <h:outputText value="#{_row + 1}" />
-                                                        </p:column>
-                                                        <p:column selectionMode="multiple" style="width:32px;text-align:center;"/>
-                                                        <p:column headerText="Documento" class="text-center" width="20%">
-                                                            <h:outputText value="#{pers.tipoDocumento} " /> <h:outputText value="#{pers.numeroDocumento}" />
-                                                        </p:column>
-                                                        <p:column headerText="Nombre" class="text-center">
-                                                            <h:outputText value="#{pers.nombrePersona}" />
-                                                        </p:column>
-                                                        <p:column headerText="Expediente" class="text-center" width="15%">
-                                                            <h:outputText value="#{pers.anioRadicado}" />-<h:outputText value="#{pers.numeroRadicado}" /> 
-                                                        </p:column>
-                                                        <p:column headerText="Fecha Ejecutoria" class="text-center" width="15%">
-                                                            <h:outputText value="#{pers.fechaEjecutoria}" />
-                                                        </p:column>
-                                                        <p:column headerText="Constancia Ejecutoria" class="text-center" width="15%">
-                                                            <h:outputText value="#{pers.constanciaEjecutoria}" />
-                                                        </p:column>
-                                                    </p:dataTable>
-                                                </fieldset>
-                                            </f:facet>
-                                            <f:facet name="start">
-                                                <div class='alert alert-warning text-center'>
-                                                    <div class="spinner-border" role="status">
-                                                        <span class="sr-only">Procesando...</span>
-                                                    </div> Procesando...
-                                                </div>
-                                            </f:facet>
-                                        </p:ajaxStatus>
-                                    </div>
-                                </h:panelGroup>
-                                
-
-                                <div class="row">
-
-                                    <h:panelGroup layout="block"
-                                                  styleClass="col" id="attachmentsTable">
-                                      
-
-                                            <div class="row">   
-                                                <div class="col">  <p:messages id="msAttachmentsStep3"/>
-                                                </div>
-                                            </div>
-                                            <fieldset>
-                                                <legend>
-                                                    Total adjuntos (#{overTheCounterBean.listaAdjuntos.size()}) - Tamaño total  (#{overTheCounterBean.totalAttachmentSize} MB)
-                                                </legend>
-                                                <p:outputPanel id="uploadAdjuntosQuejaStep3"
-                                                               styleClass="text-center text-primary">
-                                                    <p:fileUpload listener="#{solicitudCopiasBean.handleFileUpload}" 
-                                                                  mode="advanced"                                                              
-                                                                  dragDropSupport="false"
-                                                                  multiple="true"
-                                                                  rendered="true"
-                                                                  sizeLimit="10485760"
-                                                                  update="attachmentsTable"
-                                                                  fileLimit="3"
-                                                                  auto="true"
-                                                                  uploadLabel="Subir Archivos"
-                                                                  cancelLabel="Cancelar" label="Seleccionar Archivos"
-                                                                  invalidFileMessage="Tipo de Archivo no permitido."
-                                                                  invalidSizeMessage="Tamaño de Archivo no permitido."
-                                                                  skinSimple="true"
-                                                                  fileLimitMessage="Se ha excedido el máximo número de archivos."
-                                                                  allowTypes="/(\.|\/)(pdf)$/" />
-                                                </p:outputPanel>
-
-                                                <p:dataTable resizableColumns="false"
-                                                             emptyMessage="No se han adjuntado archivo."
-                                                             rowIndexVar="_row"
-                                                             id="tblAttachmentsStep3"
-                                                             var="listaAttachments"
-                                                             value="#{overTheCounterBean.listaAdjuntos}">
-                                                    <p:column headerText="#" width="3%"
-                                                              class="row-index" exportable="false">
-                                                        <h:outputText value="#{_row + 1}" />
-                                                    </p:column>
-
-                                                    <p:column headerText="Archivo" class="text-center" width="35%">
-                                                        <h:outputText value="#{listaAttachments.fileName}" />
-                                                    </p:column>
-                                                    <p:column headerText="Tipo" class="text-center" width="35%">
-                                                        <h:outputText value="#{listaAttachments.fileExtension}" />
-                                                    </p:column>
-
-                                                    <p:column headerText="Tamaño" class="text-center" width="25%">
-                                                        <h:outputText value="#{listaAttachments.fileSize} MB" />
-                                                    </p:column>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col form-group">
+									<label class="control-label">Descripción de la
+										Solicitud</label>
+									<div class="input-group">
+										<div class="input-group-prepend required">
+											<span class="input-group-text"><i
+												class="fab fa-stack-exchange fa-fw"></i></span>
+										</div>
+										<p:inputTextarea
+											requiredMessage="La Descripción de la Solicitud es requerida."
+											required="#{request.getParameter('validate')}" rows="3"
+											id="tbObservaciones" class="form-control" maxlength="600"
+											autoResize="false"
+											disabled="#{not overTheCounterBean.showPanelAgregar}"
+											value="#{overTheCounterBean.observaciones}">
+										</p:inputTextarea>
+									</div>
+								</div>
+								<div class="col-4 form-group">
+									<label class="control-label">Folios</label>
+									<h:panelGroup layout="block" styleClass="input-group mb-2"
+										id="pnlRango">
+										<div class="input-group-prepend">
+											<span class="input-group-text">Rango</span>
+										</div>
+										<p:inputText id="tbRango" class="form-control" maxlength="30"
+											disabled="#{not overTheCounterBean.showPanelAgregar or overTheCounterBean.expedienteCompleto}"
+											value="#{overTheCounterBean.rangoFolios}">
+										</p:inputText>
+									</h:panelGroup>
+									<div class="custom-control custom-checkbox mt-3">
+										<h:selectBooleanCheckbox id="expedienteCompleto"
+											class="custom-control-input"
+											disabled="#{not overTheCounterBean.showPanelAgregar}"
+											value="#{overTheCounterBean.expedienteCompleto}">
+											<p:ajax event="change" update="pnlRango" />
+										</h:selectBooleanCheckbox>
+										<label class="custom-control-label"
+											for="frmWizard:expedienteCompleto">Copia de todo el
+											expediente</label>
+									</div>
+								</div>
+							</div>
+							<h:panelGroup layout="block" id="pnlPersonas" styleClass="row"
+								rendered="#{overTheCounterBean.constanciaEjecutoria}">
+								<div class="col-12 form-group">
+									<div class="alert alert-warning">
+										<i class="fas fa-info-circle fa-fw fa-lg mr-2"></i> Debe
+										introducir tipo, número y fecha de acto para poder seleccionar
+										por lo menos una persona a la que reqiere emitir la
+										ejecutoria.
+									</div>
+								</div>
+								<div class="col-12 form-group">
+									<p:ajaxStatus>
+										<f:facet name="default">
+											<fieldset>
+												<legend> Personas Vinculadas al Acto Administrativo
+													(#{overTheCounterBean.personasEjecutoria.size()}) </legend>
+												<p:dataTable resizableColumns="false"
+													emptyMessage="No existen registros." rowIndexVar="_row"
+													id="tblPersonas"
+													selection="#{overTheCounterBean.selectedPersonas}"
+													var="pers" rowKey="#{pers.idenPers}"
+													value="#{overTheCounterBean.personasEjecutoria}">
+													<p:column headerText="#" width="3%" class="row-index"
+														exportable="false">
+														<h:outputText value="#{_row + 1}" />
+													</p:column>
+													<p:column selectionMode="multiple"
+														style="width:32px;text-align:center;" />
+													<p:column headerText="Documento" class="text-center"
+														width="20%">
+														<h:outputText value="#{pers.tipoDocumento} " />
+														<h:outputText value="#{pers.numeroDocumento}" />
+													</p:column>
+													<p:column headerText="Nombre" class="text-center">
+														<h:outputText value="#{pers.nombrePersona}" />
+													</p:column>
+													<p:column headerText="Expediente" class="text-center"
+														width="15%">
+														<h:outputText value="#{pers.anioRadicado}" />-<h:outputText
+															value="#{pers.numeroRadicado}" />
+													</p:column>
+													<p:column headerText="Fecha Ejecutoria" class="text-center"
+														width="15%">
+														<h:outputText value="#{pers.fechaEjecutoria}" />
+													</p:column>
+													<p:column headerText="Constancia Ejecutoria"
+														class="text-center" width="15%">
+														<h:outputText value="#{pers.constanciaEjecutoria}" />
+													</p:column>
+												</p:dataTable>
+											</fieldset>
+										</f:facet>
+										<f:facet name="start">
+											<div class='alert alert-warning text-center'>
+												<div class="spinner-border" role="status">
+													<span class="sr-only">Procesando...</span>
+												</div>
+												Procesando...
+											</div>
+										</f:facet>
+									</p:ajaxStatus>
+								</div>
+							</h:panelGroup>
 
 
-                                                    <p:column headerText="Acciones" width="7%"
-                                                              class="text-center align-middle">
-                                                        <p:commandLink
-                                                            styleClass="btn btn-outline-danger btn-sm btn-block border-0 no-shadow"
-                                                            title="Eliminar adjunto" process="@this"
-                                                            action="#{overTheCounterBean.EliminarAdjunto(listaAttachments)}"
-                                                            update=":frmWizard:attachmentsTable">
-                                                            <i class="fas fa-times"></i>
-                                                        </p:commandLink>
-                                                    </p:column>
+							<div class="row">
 
-                                                </p:dataTable>
+								<h:panelGroup layout="block" styleClass="col"
+									id="attachmentsTable">
 
-                                            </fieldset>
-                                        </h:panelGroup>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col"></div>
-                                    <div class="col form-group">
-                                        <p:commandLink styleClass="btn btn-warning btn-block mt-3" disabled="#{not overTheCounterBean.showPanelAgregar}"
-                                                       validateClient="true" oncomplete="removeUIClasess();"
-                                                       update="wizardDemanda"
-                                                       actionListener="#{overTheCounterBean.addRowTable}">
-                                            <f:param name="validate" value="true"/>
-                                            Agregar Solicitud <i class="fas fa-level-down-alt ml-3"></i>
-                                        </p:commandLink>
-                                    </div>
-                                    <div class="col"></div>
-                                </div>
-                                <div class="row">
-                                    <h:panelGroup layout="block"
-                                                  styleClass="col" id="pnlTabla">
-                                        <fieldset>
-                                            <legend>
-                                                Solicitudes Agregadas (#{overTheCounterBean.listaDetalles.size()})
-                                            </legend>
-                                            <p:dataTable resizableColumns="false"
-                                                         emptyMessage="No se han agregado solicitudes." rowIndexVar="_row"
-                                                         id="datosListFormularioCertificaciones"
-                                                         var="listaCertifica"
-                                                         value="#{overTheCounterBean.listaDetalles}"
-                                                         >
-                                                <p:column headerText="#" width="3%"
-                                                          class="row-index" exportable="false">
-                                                    <h:outputText value="#{_row + 1}" />
-                                                </p:column>
-                                                <p:column headerText="Tipo de Copia" class="text-center" width="35%">
-                                                    <h:outputText value="#{listaCertifica.tipo_certifica_descripcion}" />
-                                                </p:column>
-                                                <p:column headerText="Descripción" class="text-center">
-                                                    <h:outputText escape="false" value="#{utility.replaceNewLines(listaCertifica.observaciones)}" />
-                                                </p:column>
-                                                <p:column headerText="Acto" class="text-center" width="15%">
-                                                    <h:outputText value="#{listaCertifica.variableAdicional1} " /> <h:outputText value="#{listaCertifica.variableAdicional2} " /> <h:outputText value="#{listaCertifica.fechaAdicional1}" />
-                                                </p:column>
-                                                <p:column headerText="Acciones" width="7%"
-                                                          class="text-center align-middle">
-                                                    <p:commandLink
-                                                        styleClass="btn btn-outline-danger btn-sm btn-block border-0 no-shadow"
-                                                        title="Eliminar esta solicitud" process="@this"
-                                                        action="#{overTheCounterBean.eliminarDetalle(listaCertifica)}"
-                                                        update=":frmWizard:wizardDemanda">
-                                                        <i class="fas fa-times"></i>
-                                                    </p:commandLink>
-                                                </p:column>
-                                            </p:dataTable>
-                                        </fieldset>
-                                    </h:panelGroup>
-                                </div>
-                            </div>
-                        </p:tab>
 
-                        <p:tab id="confirmacion">
-                            <div class="row">
-                                <div class="col">  <p:messages/>
-                                </div>
-                            </div>
-                            <div class="py-0 px-1">
-                                <div class="row">
-                                    <div class="col">
-                                        <fieldset>
-                                            <legend>
-                                                Identificaciones Agregadas (#{overTheCounterBean.listaDetalles.size()})
-                                            </legend>
-                                            <p:dataTable resizableColumns="false"
-                                                         emptyMessage="No se han agregado solicitudes." rowIndexVar="_row"
-                                                         id="confirmListFormularioCertificaciones"
-                                                         var="listaCertifica"
-                                                         value="#{overTheCounterBean.listaDetalles}"
-                                                         >
-                                                <p:column headerText="#" width="3%"
-                                                          class="row-index" exportable="false">
-                                                    <h:outputText value="#{_row + 1}" />
-                                                </p:column>
-                                                <p:column headerText="Tipo de Copia" class="text-center" width="30%">
-                                                    <h:outputText value="#{listaCertifica.tipo_certifica_descripcion}" />
-                                                </p:column>
-                                                <p:column headerText="Descripción" class="text-center">
-                                                    <h:outputText escape="false" value="#{utility.replaceNewLines(listaCertifica.observaciones)}" />
-                                                </p:column>
-                                                <p:column headerText="Acto" class="text-center" width="20%">
-                                                    <h:outputText value="#{listaCertifica.variableAdicional1} " /> <h:outputText value="#{listaCertifica.variableAdicional2} " /> <h:outputText value="#{listaCertifica.fechaAdicional1}" />
-                                                </p:column>
-                                            </p:dataTable>
-                                        </fieldset>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col text-center mt-4"> 
-                                        <div class="alert alert-warning">
-                                            <div class="custom-control custom-checkbox">
-                                                <h:selectBooleanCheckbox id="aceptoSolicitud" class="custom-control-input" value="#{overTheCounterBean.aceptoSolicitud}">
-                                                </h:selectBooleanCheckbox>
-                                                <label class="custom-control-label font-weight-bolder" for="frmWizard:aceptoSolicitud">Confirmo que los datos solicitados son correctos</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </p:tab>
-                        <p:tab id="pago">
-                            <div class="row mt-3">
-                                <div class="offset-2 col-8">
-                                    <div class="card border-success shadow-sm bg-success-light">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col text-center"> 
-                                                    <h4 class="text-success mb-2">
-                                                        <i class="fas fa-check-circle fa-2x mb-3"></i><br/>
-                                                        El registro de su solicitud se ha realizado de manera exitosa.
-                                                    </h4>
-                                                    <div class="text-center mt-3">
-                                                        <strong>Número de Radicación</strong>
-                                                        <div class="font-weight-bolder color-money mb-2" style="font-size: 32px;">
-                                                            #{overTheCounterBean.numeroRadicacion}
-                                                        </div>
+									<div class="row">
+										<div class="col">
+											<p:messages id="msAttachmentsStep3" />
+										</div>
+									</div>
+									<fieldset>
+										<legend> Total adjuntos
+											(#{overTheCounterBean.listaAdjuntos.size()}) - Tamaño total
+											(#{overTheCounterBean.totalAttachmentSize} MB) </legend>
+										<p:outputPanel id="uploadAdjuntosQuejaStep3"
+											styleClass="text-center text-primary">
+											<p:fileUpload
+												listener="#{solicitudCopiasBean.handleFileUpload}"
+												mode="advanced" dragDropSupport="false" multiple="true"
+												rendered="true" sizeLimit="10485760"
+												update="attachmentsTable" fileLimit="3" auto="true"
+												uploadLabel="Subir Archivos" cancelLabel="Cancelar"
+												label="Seleccionar Archivos"
+												invalidFileMessage="Tipo de Archivo no permitido."
+												invalidSizeMessage="Tamaño de Archivo no permitido."
+												skinSimple="true"
+												fileLimitMessage="Se ha excedido el máximo número de archivos."
+												allowTypes="/(\.|\/)(pdf)$/" />
+										</p:outputPanel>
 
-                                                    </div>
-                                                </div>
+										<p:dataTable resizableColumns="false"
+											emptyMessage="No se han adjuntado archivo."
+											rowIndexVar="_row" id="tblAttachmentsStep3"
+											var="listaAttachments"
+											value="#{overTheCounterBean.listaAdjuntos}">
+											<p:column headerText="#" width="3%" class="row-index"
+												exportable="false">
+												<h:outputText value="#{_row + 1}" />
+											</p:column>
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">  <p:messages/>
-                                </div>
-                            </div>
-                        </p:tab>
-                    </p:wizard>
-                    <ui:include src="./../../WEB-INF/webparts/botonesWizard.xhtml">
-                        <ui:param name="currentBean" value="#{overTheCounterBean}" />
-                    </ui:include>
-                </h:form>
-            </ui:define>
+											<p:column headerText="Archivo" class="text-center"
+												width="35%">
+												<h:outputText value="#{listaAttachments.fileName}" />
+											</p:column>
+											<p:column headerText="Tipo" class="text-center" width="35%">
+												<h:outputText value="#{listaAttachments.fileExtension}" />
+											</p:column>
 
-        </ui:composition>
+											<p:column headerText="Tamaño" class="text-center" width="25%">
+												<h:outputText value="#{listaAttachments.fileSize} MB" />
+											</p:column>
 
-    </body>
+
+											<p:column headerText="Acciones" width="7%"
+												class="text-center align-middle">
+												<p:commandLink
+													styleClass="btn btn-outline-danger btn-sm btn-block border-0 no-shadow"
+													title="Eliminar adjunto" process="@this"
+													action="#{overTheCounterBean.EliminarAdjunto(listaAttachments)}"
+													update=":frmWizard:attachmentsTable">
+													<i class="fas fa-times"></i>
+												</p:commandLink>
+											</p:column>
+
+										</p:dataTable>
+
+									</fieldset>
+								</h:panelGroup>
+							</div>
+							<div class="row mb-3">
+								<div class="col"></div>
+								<div class="col form-group">
+									<p:commandLink styleClass="btn btn-warning btn-block mt-3"
+										disabled="#{not overTheCounterBean.showPanelAgregar}"
+										validateClient="true" oncomplete="removeUIClasess();"
+										update="wizardDemanda"
+										actionListener="#{overTheCounterBean.addRowTable}">
+										<f:param name="validate" value="true" />
+                                            Agregar Solicitud <i
+											class="fas fa-level-down-alt ml-3"></i>
+									</p:commandLink>
+								</div>
+								<div class="col"></div>
+							</div>
+							<div class="row">
+								<h:panelGroup layout="block" styleClass="col" id="pnlTabla">
+									<fieldset>
+										<legend> Solicitudes Agregadas
+											(#{overTheCounterBean.listaDetalles.size()}) </legend>
+										<p:dataTable resizableColumns="false"
+											emptyMessage="No se han agregado solicitudes."
+											rowIndexVar="_row" id="datosListFormularioCertificaciones"
+											var="listaCertifica"
+											value="#{overTheCounterBean.listaDetalles}">
+											<p:column headerText="#" width="3%" class="row-index"
+												exportable="false">
+												<h:outputText value="#{_row + 1}" />
+											</p:column>
+											<p:column headerText="Tipo de Copia" class="text-center"
+												width="35%">
+												<h:outputText
+													value="#{listaCertifica.tipo_certifica_descripcion}" />
+											</p:column>
+											<p:column headerText="Descripción" class="text-center">
+												<h:outputText escape="false"
+													value="#{utility.replaceNewLines(listaCertifica.observaciones)}" />
+											</p:column>
+											<p:column headerText="Acto" class="text-center" width="15%">
+												<h:outputText value="#{listaCertifica.variableAdicional1} " />
+												<h:outputText value="#{listaCertifica.variableAdicional2} " />
+												<h:outputText value="#{listaCertifica.fechaAdicional1}" />
+											</p:column>
+											<p:column headerText="Acciones" width="7%"
+												class="text-center align-middle">
+												<p:commandLink
+													styleClass="btn btn-outline-danger btn-sm btn-block border-0 no-shadow"
+													title="Eliminar esta solicitud" process="@this"
+													action="#{overTheCounterBean.eliminarDetalle(listaCertifica)}"
+													update=":frmWizard:wizardDemanda">
+													<i class="fas fa-times"></i>
+												</p:commandLink>
+											</p:column>
+										</p:dataTable>
+									</fieldset>
+								</h:panelGroup>
+							</div>
+						</div>
+					</p:tab>
+
+					<p:tab id="confirmacion">
+						<div class="row">
+							<div class="col">
+								<p:messages />
+							</div>
+						</div>
+						<div class="py-0 px-1">
+							<div class="row">
+								<div class="col">
+									<fieldset>
+										<legend> Identificaciones Agregadas
+											(#{overTheCounterBean.listaDetalles.size()}) </legend>
+										<p:dataTable resizableColumns="false"
+											emptyMessage="No se han agregado solicitudes."
+											rowIndexVar="_row" id="confirmListFormularioCertificaciones"
+											var="listaCertifica"
+											value="#{overTheCounterBean.listaDetalles}">
+											<p:column headerText="#" width="3%" class="row-index"
+												exportable="false">
+												<h:outputText value="#{_row + 1}" />
+											</p:column>
+											<p:column headerText="Tipo de Copia" class="text-center"
+												width="30%">
+												<h:outputText
+													value="#{listaCertifica.tipo_certifica_descripcion}" />
+											</p:column>
+											<p:column headerText="Descripción" class="text-center">
+												<h:outputText escape="false"
+													value="#{utility.replaceNewLines(listaCertifica.observaciones)}" />
+											</p:column>
+											<p:column headerText="Acto" class="text-center" width="20%">
+												<h:outputText value="#{listaCertifica.variableAdicional1} " />
+												<h:outputText value="#{listaCertifica.variableAdicional2} " />
+												<h:outputText value="#{listaCertifica.fechaAdicional1}" />
+											</p:column>
+										</p:dataTable>
+									</fieldset>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center mt-4">
+									<div class="alert alert-warning">
+										<div class="custom-control custom-checkbox">
+											<h:selectBooleanCheckbox id="aceptoSolicitud"
+												class="custom-control-input"
+												value="#{overTheCounterBean.aceptoSolicitud}">
+											</h:selectBooleanCheckbox>
+											<label class="custom-control-label font-weight-bolder"
+												for="frmWizard:aceptoSolicitud">Confirmo que los
+												datos solicitados son correctos</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</p:tab>
+					<p:tab id="pago">
+						<div class="row mt-3">
+							<div class="offset-2 col-8">
+								<div class="card border-success shadow-sm bg-success-light">
+									<div class="card-body">
+										<div class="row">
+											<div class="col text-center">
+												<h4 class="text-success mb-2">
+													<i class="fas fa-check-circle fa-2x mb-3"></i><br /> El
+													registro de su solicitud se ha realizado de manera exitosa.
+												</h4>
+												<div class="text-center mt-3">
+													<strong>Número de Radicación</strong>
+													<div class="font-weight-bolder color-money mb-2"
+														style="font-size: 32px;">
+														#{overTheCounterBean.numeroRadicacion}</div>
+
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<p:messages />
+							</div>
+						</div>
+					</p:tab>
+				</p:wizard>
+				<ui:include src="./../../WEB-INF/webparts/botonesWizard.xhtml">
+					<ui:param name="currentBean" value="#{overTheCounterBean}" />
+				</ui:include>
+			</h:form>
+		</ui:define>
+
+	</ui:composition>
+
+</body>
 </html>

@@ -1,10 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="es" xmlns="https://www.w3.org/1999/xhtml"
-	xmlns:h="https://jakarta.ee/jsf/html"
-	xmlns:f="https://jakarta.ee/jsf/core"
-	xmlns:ui="https://jakarta.ee/jsf/facelets"
-	xmlns:c="https://jakarta.ee/jsp/jstl/core"
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:c="jakarta.tags.core"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<title>#{title} | Sistema de Solicitud de Copias y
@@ -71,8 +69,8 @@
 				href="#{navegaUsuarioMB.redirectToHome(true, request.contextPath)}"></a><a
 				class="navbar-brand-name" title="Ir a Inicio" data-toggle="tooltip"
 				data-placement="right"
-				href="#{navegaUsuarioMB.redirectToHome(true, request.contextPath)}">Solicitud de
-				Copias y Certificaciones <span class="subtitle"> <i
+				href="#{navegaUsuarioMB.redirectToHome(true, request.contextPath)}">Solicitud
+				de Copias y Certificaciones <span class="subtitle"> <i
 					class="fas fa-chevron-right"></i> #{title}
 			</span>
 			</a>

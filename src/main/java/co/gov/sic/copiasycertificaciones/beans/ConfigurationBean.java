@@ -83,9 +83,9 @@ public class ConfigurationBean implements Serializable {
             cfg = Dal.getDayConfigParameters();
         }
 
-        try ( Dal Dal = new Dal()) {
+        /*try ( Dal Dal = new Dal()) {
             listaTasas = Dal.getTasas();
-        }
+        }*/
 
         for (Cesl_config conf : cfg) {
             switch (conf.getLlave()) {

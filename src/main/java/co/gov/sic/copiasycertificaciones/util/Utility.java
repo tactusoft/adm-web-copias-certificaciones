@@ -253,7 +253,7 @@ public class Utility implements Serializable {
 		}
 
 		// Descompone los centavos
-		String valor = splitNumber[1];
+		//String valor = splitNumber[1];
 		/*
 		 * if (valor.length() == 1) {
 		 * converted.append(splitNumber[1]).append("0").append("/100 "); } else {
@@ -320,8 +320,9 @@ public class Utility implements Serializable {
 			if (date == null) {
 				return "";
 			}
-			String fecha = DD_MM_YYYY_HH_MM_AA.format(date);
-			return fecha;
+			SimpleDateFormat formatter = new SimpleDateFormat(Constantes.DATE_TIME_FORMAT_DD_MM_YYYY_AM_PM,
+					Constantes.LOCALE_ES_CO);
+			return formatter.format(date);
 		} catch (Exception e) {
 			return date.toString();
 		}
@@ -345,8 +346,10 @@ public class Utility implements Serializable {
 
 	public static String tryFormatCurrencyNumber(Object number, boolean withSign, boolean withDecimal) {
 		if (number != null) {
-			String result = withSign || withDecimal ? MONEY_FORMAT.format(number) : INTEGER_FORMAT.format(number);
-			// logger.info(String.format("%s = %s", number, result));
+			NumberFormat formatter = withSign || withDecimal ? NumberFormat.getCurrencyInstance(Constantes.LOCALE_ES_CO)
+					: NumberFormat.getIntegerInstance(Constantes.LOCALE_ES_CO);
+
+			String result = formatter.format(number);
 			return withSign ? result : result.replace("$", Constantes.STR_EMPTY);
 		} else {
 			return Constantes.STR_EMPTY;
@@ -557,14 +560,14 @@ public class Utility implements Serializable {
 			return null;
 		}
 	}
-	
+
 	public static byte[] getImageCodeQRAsBytes(String url) throws Exception {
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        BitMatrix bitMatrix = qrCodeWriter.encode(url, BarcodeFormat.QR_CODE, 250, 250);
-        
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            MatrixToImageWriter.writeToStream(bitMatrix, "PNG", baos);
-            return baos.toByteArray();
-        }
-    }
+		QRCodeWriter qrCodeWriter = new QRCodeWriter();
+		BitMatrix bitMatrix = qrCodeWriter.encode(url, BarcodeFormat.QR_CODE, 250, 250);
+
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			MatrixToImageWriter.writeToStream(bitMatrix, "PNG", baos);
+			return baos.toByteArray();
+		}
+	}
 }

@@ -157,7 +157,7 @@ public class TransfentidadBean implements Serializable {
 				logger.info("Tactu: " + directoryEmail);
 				radiAdjuntos.setControl(" ");
 				String fullPathRadicadoEntradaEntidad0 = directoryEmail + Functions.getRadicacionileName(radiAdjuntos);
-				System.out.println("Tactu: " + fullPathRadicadoEntradaEntidad0);
+				logger.info("Tactu: " + fullPathRadicadoEntradaEntidad0);
 
 				ResponseRadicacion responseRadicacionAdjuntos = wsInteropClient.radicacionAdjuntosRegistrar(radiSalida);
 				if (responseRadicacionAdjuntos.getCodigo() == 0) {

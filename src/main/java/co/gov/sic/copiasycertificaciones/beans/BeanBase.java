@@ -24,11 +24,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FlowEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import co.gov.sic.copiasycertificaciones.dataaccess.Dal;
 import co.gov.sic.copiasycertificaciones.entities.Cesl_detalleSolicitud;
@@ -40,6 +39,7 @@ import co.gov.sic.copiasycertificaciones.enums.EstadoTramite;
 import co.gov.sic.copiasycertificaciones.enums.TipoSancion;
 import co.gov.sic.copiasycertificaciones.enums.TipoTramite;
 import co.gov.sic.copiasycertificaciones.util.Constantes;
+import co.gov.sic.copiasycertificaciones.util.EncriptacionUtil;
 import co.gov.sic.copiasycertificaciones.util.Functions;
 import co.gov.sic.copiasycertificaciones.util.PDFGeneratorService;
 import co.gov.sic.copiasycertificaciones.util.TemplateContent;
@@ -76,9 +76,11 @@ public abstract class BeanBase {
 	private boolean showPanelAgregar;
 	protected final List<Cesl_detalleSolicitud> listaDetalles;
 	protected final Logger logger = LoggerFactory.getLogger(BeanBase.class);
+	protected static final Logger loggerStatic = LoggerFactory.getLogger(BeanBase.class);
 	private boolean attachmentError = false;
 	private String attachmentErrorMsg;
 	private String justificacion;
+	private String refPasarelaCache = null;
 
 	protected boolean conApostillaje;
 	protected boolean sinApostillaje;
@@ -284,7 +286,7 @@ public abstract class BeanBase {
 			rd.close();
 			return response.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
+			loggerStatic.error("executePost", e);
 			return null;
 		} finally {
 			if (connection != null) {

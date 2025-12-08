@@ -12,6 +12,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -111,7 +112,7 @@ public class SolicitudCopiasBean extends BeanBase implements Serializable {
 			Files.deleteIfExists(path);
 
 		} catch (IOException e) {
-			System.out.println(e.toString());
+			logger.error(e.getMessage());
 		}
 
 	}
@@ -129,13 +130,36 @@ public class SolicitudCopiasBean extends BeanBase implements Serializable {
 		Usuario usr = getDatosSesion();
 		String directory = String.format("%s/%s/", Constantes.PATH_ARCHIVOS_OTROS_FORMULARIOS, usr.getLogin());
 
-		if (totalAttachmentSize > Constantes.MAX_SIZE_ATTACHMENTS) {
-			FacesMessage msg = new FacesMessage("Error",
-					event.getFile().getFileName() + " no se puede adjuntar, se ha superado el tamaño maximo permitido");
-			FacesContext.getCurrentInstance().addMessage("msAttachments", msg);
+		if (getTotalAttachmentSize() > Constantes.MAX_SIZE_ATTACHMENTS) {
+			this.AddErrorMessage("Error: " + event.getFile().getFileName()
+					+ " no se puede adjuntar, se ha superado el tamaño máximo", "msgCotizacion");
+			return;
 		}
 
 		UploadedFile file = event.getFile();
+		String originalFileName = file.getFileName();
+
+		// Validar nombre de archivo
+		if (originalFileName == null || originalFileName.trim().isEmpty()) {
+			this.AddErrorMessage("Error: Nombre de archivo inválido", "msgCotizacion");
+			return;
+		}
+
+		// Prevenir path traversal
+		String sanitizedFileName = originalFileName.trim();
+		if (sanitizedFileName.contains("..") || sanitizedFileName.contains("/") || sanitizedFileName.contains("\\")
+				|| sanitizedFileName.contains("~")) {
+			this.AddErrorMessage("Error: Nombre de archivo contiene caracteres no permitidos", "msgCotizacion");
+			logger.warn("Intento de path traversal detectado: " + originalFileName);
+			return;
+		}
+
+		// Solo permitir caracteres seguros en el nombre
+		if (!sanitizedFileName.matches("^[a-zA-Z0-9._-]+$")) {
+			this.AddErrorMessage("Error: Nombre de archivo contiene caracteres inválidos", "msgCotizacion");
+			return;
+		}
+
 		Path targetLocation = Paths.get(directory);
 
 		try {
@@ -143,17 +167,31 @@ public class SolicitudCopiasBean extends BeanBase implements Serializable {
 				Files.createDirectories(targetLocation);
 			}
 
-			InputStream input = file.getInputStream();
-			Files.copy(input, new File(directory, file.getFileName()).toPath());
-			Attachment att = new Attachment(file.getFileName(), file.getContentType(), file.getSize(),
-					directory + file.getFileName());
+			// Normalizar y validar path final
+			Path targetFile = targetLocation.resolve(sanitizedFileName).normalize();
+
+			// Verificar que no salga del directorio permitido
+			if (!targetFile.startsWith(targetLocation.normalize())) {
+				this.AddErrorMessage("Error: Operación de archivo no permitida", "msgCotizacion");
+				logger.error("Path traversal detectado después de normalización: " + originalFileName);
+				return;
+			}
+
+			// Copiar archivo con try-with-resources para cerrar el stream
+			try (InputStream input = file.getInputStream()) {
+				Files.copy(input, targetFile, StandardCopyOption.REPLACE_EXISTING);
+			}
+
+			Attachment att = new Attachment(sanitizedFileName, file.getContentType(), file.getSize(),
+					targetFile.toString());
 
 			totalAttachmentSize += att.getFileSize();
 			totalAttachmentSize = att.roundFileSize(totalAttachmentSize, 3);
 			listaAdjuntos.add(att);
 
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			logger.error("handleFileUpload", e);
+			this.AddErrorMessage("Error al guardar el archivo", "msgCotizacion");
 		}
 	}
 
@@ -380,17 +418,17 @@ public class SolicitudCopiasBean extends BeanBase implements Serializable {
 	}
 
 	private ByteArrayOutputStream getFileContent(String fullFileName) throws FileNotFoundException, IOException {
-
 		byte[] buffer = new byte[4096];
-		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(fullFileName));
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-		int bytes = 0;
-		while ((bytes = bis.read(buffer, 0, buffer.length)) > 0) {
-			baos.write(buffer, 0, bytes);
+		try (FileInputStream fis = new FileInputStream(fullFileName);
+				BufferedInputStream bis = new BufferedInputStream(fis)) {
+
+			int bytes;
+			while ((bytes = bis.read(buffer, 0, buffer.length)) > 0) {
+				baos.write(buffer, 0, bytes);
+			}
 		}
-		baos.close();
-		bis.close();
 
 		return baos;
 	}

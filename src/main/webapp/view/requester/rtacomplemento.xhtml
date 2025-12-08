@@ -1,382 +1,373 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:c="jakarta.tags.core"
+	xmlns:p="http://primefaces.org/ui">
+<body>
+	<ui:composition template="./../../WEB-INF/webparts/principal.xhtml">
+		<ui:param name="title" value="Detalle solicitud" />
+		<ui:define name="mainContent">
+			<h:form id="frmRtaComple">
+				<h:panelGroup layout="block" styleClass="col" id="pnlTabla">
+					<fieldset>
+						<legend> Detalles de la solicitud -
+							#{requestManagementBean.tramiteSolicitud.ano_radi}-#{requestManagementBean.tramiteSolicitud.nume_radi}
+						</legend>
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-    <body>
-        <ui:composition template="./../../WEB-INF/webparts/principal.xhtml">
-            <ui:param name="title" value="Detalle solicitud" />
-            <ui:define name="mainContent">
-                <h:form id="frmRtaComple">       
-                    <h:panelGroup layout="block"
-                                  styleClass="col" id="pnlTabla">
-                        <fieldset>
-                            <legend>
-                                Detalles de la solicitud - #{requestManagementBean.tramiteSolicitud.ano_radi}-#{requestManagementBean.tramiteSolicitud.nume_radi}
-                            </legend>
+						<div class="row">
+							<div class="col-sm-3 form-group">
+								<label class="control-label">Tipo documento</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="far fa-address-book"></i></span>
+									</div>
+									<p:inputText class="form-control" readonly="true"
+										value="#{requestManagementBean.tramiteSolicitud.tipoDcoumento}"></p:inputText>
+								</div>
+							</div>
+							<div class="col-sm-3 form-group">
+								<label class="control-label">Número de documento</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-address-card"></i></span>
+									</div>
+									<p:inputText class="form-control" readonly="true"
+										value="#{requestManagementBean.tramiteSolicitud.numeroIdentificacion}">
+										<f:convertNumber type="number" groupingUsed="true"
+											minFractionDigits="0" pattern="#00000000" />
+									</p:inputText>
+								</div>
+							</div>
 
-                            <div class="row">
-                                <div class="col-sm-3 form-group">
-                                    <label class="control-label">Tipo documento</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="far fa-address-book"></i></span>
-                                        </div>
-                                        <p:inputText class="form-control" readonly="true" value="#{requestManagementBean.tramiteSolicitud.tipoDcoumento}"></p:inputText>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3 form-group">
-                                    <label class="control-label">Número de documento</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-address-card"></i></span>
-                                        </div>
-                                        <p:inputText class="form-control" readonly="true" value="#{requestManagementBean.tramiteSolicitud.numeroIdentificacion}">
-                                            <f:convertNumber type="number" groupingUsed="true"  minFractionDigits="0" pattern="#00000000"/>
-                                        </p:inputText>
-                                    </div>
-                                </div>
+							<div class="col form-group">
+								<label class="control-label">Solicitante</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-address-card"></i></span>
+									</div>
+									<p:inputText class="form-control" readonly="true"
+										value="#{requestManagementBean.tramiteSolicitud.nombreSolicitante}" />
+								</div>
+							</div>
 
-                                <div class="col form-group">
-                                    <label class="control-label">Solicitante</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-address-card"></i></span>
-                                        </div>
-                                        <p:inputText   class="form-control" readonly="true" value="#{requestManagementBean.tramiteSolicitud.nombreSolicitante}"/>
-                                    </div>
-                                </div>
+						</div>
 
-                            </div>
+						<div class="row">
+							<div class="col-sm-3 form-group">
+								<label class="control-label">Email</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"> <i
+											class="fas fa-envelope-square"></i>
+										</span>
+									</div>
+									<p:inputText class="form-control" readonly="true"
+										value="#{requestManagementBean.email}"></p:inputText>
+								</div>
+							</div>
+							<div class="col-sm-3 form-group">
+								<label class="control-label">Teléfono</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"> <i
+											class="fas fa-phone-square-alt"></i>
+										</span>
+									</div>
+									<p:inputText class="form-control" readonly="true"
+										value="#{requestManagementBean.telefono}"></p:inputText>
+								</div>
+							</div>
 
-                            <div class="row">
-                                <div class="col-sm-3 form-group">
-                                    <label class="control-label">Email</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="fas fa-envelope-square"></i>                                            
-                                            </span>
-                                        </div>
-                                        <p:inputText class="form-control" readonly="true" value="#{requestManagementBean.email}"></p:inputText>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3 form-group">
-                                    <label class="control-label">Teléfono</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="fas fa-phone-square-alt"></i>
-                                            </span>
-                                        </div>
-                                        <p:inputText class="form-control" readonly="true" value="#{requestManagementBean.telefono}"></p:inputText>
-                                    </div>
-                                </div>
+							<div class="col form-group">
+								<label class="control-label">Dirección</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"> <i
+											class="fas fa-map-marked-alt"></i>
+										</span>
+									</div>
+									<p:inputText class="form-control" readonly="true"
+										value="#{requestManagementBean.direccion}" />
+								</div>
+							</div>
+						</div>
 
-                                <div class="col form-group">
-                                    <label class="control-label">Dirección</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="fas fa-map-marked-alt"></i>
-                                            </span>
-                                        </div>
-                                        <p:inputText   class="form-control" readonly="true" value="#{requestManagementBean.direccion}"/>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col form-group">
-                                    <label class="control-label">Información adicional</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend required">
-                                            <span class="input-group-text">
-                                                <i class="fab fa-stack-exchange fa-fw"></i>
-                                            </span>
-                                        </div>
-                                        <p:inputTextarea rows="3" id="txtInfiAdicional" class="form-control" maxlength="600" autoResize="false" disabled="false"
-                                                         value="#{requestManagementBean.infoAdicional}">
-                                        </p:inputTextarea>
-                                    </div>
-                                </div>
-                                <div class="col form-group">
-                                    <label class="control-label">Observaciones</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend ">
-                                            <span class="input-group-text">
-                                                <i class="fab fa-stack-exchange fa-fw"></i>
-                                            </span>
-                                        </div>
-                                        <p:inputTextarea rows="3" id="txtObservaciones" class="form-control" maxlength="600" autoResize="false" disabled="true"
-                                                         value="#{requestManagementBean.observaciones}">
-                                            <p:keyFilter regEx="/[a-z0-9_\.\ñ\é\á\í\ó\ú\!\=\(\)\{\}\[\]\?]/i"/>  
-                                        </p:inputTextarea>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <p:messages id="msgRtaSolicitante" />
-                        </fieldset>
-                    </h:panelGroup>
-                    <br/>
-                    <div class="row">
-                        <div class="col form-group">
-                            <h:panelGroup layout="block"
-                                          styleClass="col" id="attachmentsTable">
-                                <p:fileUpload listener="#{requestManagementBean.handleFileUpload}" 
-                                              mode="advanced"                                                              
-                                              dragDropSupport="false"
-                                              multiple="true"
-                                              rendered="true"
-                                              sizeLimit="10485760"
-                                              update="attachmentsTable"
-                                              fileLimit="3"
-                                              auto="true"
-                                              skinSimple="true"
-                                              value="Anexar"
-                                              label="Anexar"
-                                              allowTypes="/(\.|\/)(pdf)$/" />
-
-                                <fieldset>
-                                    <legend>
-                                        Total adjuntos (#{requestManagementBean.listaAdjuntoCompletarSolicitud.size()}) - Tamaño total  (#{requestManagementBean.totalAttachmentSize} MB)
-                                    </legend>
+						<div class="row">
+							<div class="col form-group">
+								<label class="control-label">Información adicional</label>
+								<div class="input-group">
+									<div class="input-group-prepend required">
+										<span class="input-group-text"> <i
+											class="fab fa-stack-exchange fa-fw"></i>
+										</span>
+									</div>
+									<p:inputTextarea rows="3" id="txtInfiAdicional"
+										class="form-control" maxlength="600" autoResize="false"
+										disabled="false"
+										value="#{requestManagementBean.infoAdicional}">
+									</p:inputTextarea>
+								</div>
+							</div>
+							<div class="col form-group">
+								<label class="control-label">Observaciones</label>
+								<div class="input-group">
+									<div class="input-group-prepend ">
+										<span class="input-group-text"> <i
+											class="fab fa-stack-exchange fa-fw"></i>
+										</span>
+									</div>
+									<p:inputTextarea rows="3" id="txtObservaciones"
+										class="form-control" maxlength="600" autoResize="false"
+										disabled="true" value="#{requestManagementBean.observaciones}">
+										<p:keyFilter
+											regEx="/[a-z0-9_\.\ñ\é\á\í\ó\ú\!\=\(\)\{\}\[\]\?]/i" />
+									</p:inputTextarea>
+								</div>
+							</div>
+						</div>
 
 
-                                    <p:dataTable resizableColumns="false"
-                                                 emptyMessage="No se han adjuntado archivo."
-                                                 rowIndexVar="_row"
-                                                 id="tblAttachments"
-                                                 var="listaAttachments"
-                                                 value="#{requestManagementBean.listaAdjuntoCompletarSolicitud}">
-                                        <p:column headerText="#" width="3%"
-                                                  class="row-index" exportable="false">
-                                            <h:outputText value="#{_row + 1}" />
-                                        </p:column>
+						<p:messages id="msgRtaSolicitante" />
+					</fieldset>
+				</h:panelGroup>
+				<br />
+				<div class="row">
+					<div class="col form-group">
+						<h:panelGroup layout="block" styleClass="col"
+							id="attachmentsTable">
+							<p:fileUpload
+								listener="#{requestManagementBean.handleFileUpload}"
+								mode="advanced" dragDropSupport="false" multiple="true"
+								rendered="true" sizeLimit="10485760" update="attachmentsTable"
+								fileLimit="3" auto="true" skinSimple="true" value="Anexar"
+								label="Anexar" allowTypes="/(\.|\/)(pdf)$/" />
 
-                                        <p:column headerText="Archivo" class="text-center" width="35%">
-                                            <h:outputText value="#{listaAttachments.fileName}" />
-                                        </p:column>
-                                        <p:column headerText="Tipo" class="text-center" width="35%">
-                                            <h:outputText value="#{listaAttachments.fileExtension}" />
-                                        </p:column>
-
-                                        <p:column headerText="Tamaño" class="text-center" width="25%">
-                                            <h:outputText value="#{listaAttachments.fileSize} MB" />
-                                        </p:column>
+							<fieldset>
+								<legend> Total adjuntos
+									(#{requestManagementBean.listaAdjuntoCompletarSolicitud.size()})
+									- Tamaño total (#{requestManagementBean.totalAttachmentSize}
+									MB) </legend>
 
 
-                                        <p:column headerText="Acciones" width="7%"
-                                                  class="text-center align-middle">
-                                            <p:commandLink
-                                                styleClass="btn btn-outline-danger btn-sm btn-block border-0 no-shadow"
-                                                title="Eliminar adjunto" process="@this"
-                                                action="#{requestManagementBean.EliminarAdjunto(listaAttachments)}"
-                                                update=":frmRtaComple:attachmentsTable">
-                                                <i class="fas fa-times"></i>
-                                            </p:commandLink>
-                                        </p:column>
+								<p:dataTable resizableColumns="false"
+									emptyMessage="No se han adjuntado archivo." rowIndexVar="_row"
+									id="tblAttachments" var="listaAttachments"
+									value="#{requestManagementBean.listaAdjuntoCompletarSolicitud}">
+									<p:column headerText="#" width="3%" class="row-index"
+										exportable="false">
+										<h:outputText value="#{_row + 1}" />
+									</p:column>
 
-                                    </p:dataTable>
-                                    <br/>
-                                    <p:ajaxStatus>
-                                        <f:facet name="default">
-                                            <div class="row">
-                                                <div class="col form-group" align="right">
-                                                    <p:commandLink styleClass="btn btn-primary " disabled="false"
-                                                                   update="frmRtaComple"     
-                                                                   validateClient="true" oncomplete="removeUIClasess();"
-                                                                   actionListener="#{requestManagementBean.rtaSolicitante}">
+									<p:column headerText="Archivo" class="text-center" width="35%">
+										<h:outputText value="#{listaAttachments.fileName}" />
+									</p:column>
+									<p:column headerText="Tipo" class="text-center" width="35%">
+										<h:outputText value="#{listaAttachments.fileExtension}" />
+									</p:column>
 
-                                                        <f:param name="validate" value="true"/>
+									<p:column headerText="Tamaño" class="text-center" width="25%">
+										<h:outputText value="#{listaAttachments.fileSize} MB" />
+									</p:column>
 
-                                                        <i class="fas fa-list"></i> Complem. Solicitud
+
+									<p:column headerText="Acciones" width="7%"
+										class="text-center align-middle">
+										<p:commandLink
+											styleClass="btn btn-outline-danger btn-sm btn-block border-0 no-shadow"
+											title="Eliminar adjunto" process="@this"
+											action="#{requestManagementBean.EliminarAdjunto(listaAttachments)}"
+											update=":frmRtaComple:attachmentsTable">
+											<i class="fas fa-times"></i>
+										</p:commandLink>
+									</p:column>
+
+								</p:dataTable>
+								<br />
+								<p:ajaxStatus>
+									<f:facet name="default">
+										<div class="row">
+											<div class="col form-group" align="right">
+												<p:commandLink styleClass="btn btn-primary "
+													disabled="false" update="frmRtaComple"
+													validateClient="true" oncomplete="removeUIClasess();"
+													actionListener="#{requestManagementBean.rtaSolicitante}">
+
+													<f:param name="validate" value="true" />
+
+													<i class="fas fa-list"></i> Complem. Solicitud
                                                     </p:commandLink>
-                                                </div>
-                                                <div class="col form-group" align="left">
-                                                    <p:commandLink ajax="true"
-                                                                   styleClass="btn btn-primary"
-                                                                   title="Volver"
-                                                                   process="@this"                                                           
-                                                                   action="/view/tramites/listado.xhtml?faces-redirect=true"
-                                                                   actionListener="#{requestManagementBean.limpiarForm}">
-                                                        <f:ajax render=":frmMyRequests:myRequestTable" />
-                                                        <i class="fa fa-backward"></i> Volver al blotter
+											</div>
+											<div class="col form-group" align="left">
+												<p:commandLink ajax="true" styleClass="btn btn-primary"
+													title="Volver" process="@this"
+													action="/view/tramites/listado.xhtml?faces-redirect=true"
+													actionListener="#{requestManagementBean.limpiarForm}">
+													<f:ajax render=":frmMyRequests:myRequestTable" />
+													<i class="fa fa-backward"></i> Volver al blotter
                                                     </p:commandLink>
-                                                </div>
-                                            </div>
-                                        </f:facet>
-                                        <f:facet name="start">
-                                            <div class='alert alert-warning' align="center">
-                                                <div class="spinner-border" role="status">
-                                                    <span class="sr-only">Procesando...</span>
-                                                </div> Procesando...
-                                            </div>
-                                        </f:facet>
-                                        <f:facet name="complete">
-                                            <div class="row">
-                                                <div class="col form-group" align="right">
-                                                    <p:commandLink styleClass="btn btn-primary " disabled="false"
-                                                                   update="frmRtaComple"     
-                                                                   validateClient="true" oncomplete="removeUIClasess();"
-                                                                   actionListener="#{requestManagementBean.rtaSolicitante}">
+											</div>
+										</div>
+									</f:facet>
+									<f:facet name="start">
+										<div class='alert alert-warning' align="center">
+											<div class="spinner-border" role="status">
+												<span class="sr-only">Procesando...</span>
+											</div>
+											Procesando...
+										</div>
+									</f:facet>
+									<f:facet name="complete">
+										<div class="row">
+											<div class="col form-group" align="right">
+												<p:commandLink styleClass="btn btn-primary "
+													disabled="false" update="frmRtaComple"
+													validateClient="true" oncomplete="removeUIClasess();"
+													actionListener="#{requestManagementBean.rtaSolicitante}">
 
-                                                        <f:param name="validate" value="true"/>
+													<f:param name="validate" value="true" />
 
-                                                        <i class="fas fa-list"></i> Complementar
+													<i class="fas fa-list"></i> Complementar
                                                     </p:commandLink>
-                                                </div>
-                                                <div class="col form-group" align="left">
-                                                    <p:commandLink ajax="true"
-                                                                   styleClass="btn btn-primary"
-                                                                   title="Volver"
-                                                                   process="@this"                                                           
-                                                                   action="/view/tramites/listado.xhtml?faces-redirect=true"
-                                                                   actionListener="#{requestManagementBean.limpiarForm}">                                                
-                                                        <i class="fa fa-backward"></i> Volver al blotter
+											</div>
+											<div class="col form-group" align="left">
+												<p:commandLink ajax="true" styleClass="btn btn-primary"
+													title="Volver" process="@this"
+													action="/view/tramites/listado.xhtml?faces-redirect=true"
+													actionListener="#{requestManagementBean.limpiarForm}">
+													<i class="fa fa-backward"></i> Volver al blotter
                                                     </p:commandLink>
-                                                </div>
-                                            </div>
-                                        </f:facet>
+											</div>
+										</div>
+									</f:facet>
 
-                                    </p:ajaxStatus>
-                                </fieldset>
-                            </h:panelGroup>
-                        </div>
-                    </div>
-                    <br></br>
+								</p:ajaxStatus>
+							</fieldset>
+						</h:panelGroup>
+					</div>
+				</div>
+				<br></br>
 
-                    <div class="row">
-                        <div class="col form-group">
-                            <fieldset>
-                                <legend>
-                                    Detalles de la solicitud
-                                </legend>
-                                <p:dataTable resizableColumns="false"
-                                             emptyMessage="No hay solicitudes pendientes."
-                                             rowIndexVar="_row"
-                                             paginator="true"
-                                             rows="5"
-                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
-                                             rowsPerPageTemplate="5,10,15"
-                                             id="inboxNotificationtable"
-                                             var="detallesSolicitud"
-                                             value="#{requestManagementBean.tramiteSolicitud.detalles}">
+				<div class="row">
+					<div class="col form-group">
+						<fieldset>
+							<legend> Detalles de la solicitud </legend>
+							<p:dataTable resizableColumns="false"
+								emptyMessage="No hay solicitudes pendientes." rowIndexVar="_row"
+								paginator="true" rows="5"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+								rowsPerPageTemplate="5,10,15" id="inboxNotificationtable"
+								var="detallesSolicitud"
+								value="#{requestManagementBean.tramiteSolicitud.detalles}">
 
-                                    <p:column headerText="#" width="5%"
-                                              class="row-index" exportable="false">
-                                        <h:outputText value="#{_row + 1}" />
-                                    </p:column>
+								<p:column headerText="#" width="5%" class="row-index"
+									exportable="false">
+									<h:outputText value="#{_row + 1}" />
+								</p:column>
 
-                                    <p:column headerText="Tipo de Copia" class="text-center" width="25%">
-                                        <h:outputText value="#{detallesSolicitud.tipo_certifica_descripcion}" />
-                                    </p:column>
-                                    <p:column headerText="Descripción" class="text-center">
-                                        <h:outputText escape="false" value="#{utility.replaceNewLines(detallesSolicitud.observaciones)}" />
-                                    </p:column>
-                                    <p:column headerText="Acto" class="text-center" width="15%">
-                                        <h:outputText value="#{detallesSolicitud.variableAdicional1} " /> 
-                                        <h:outputText value="#{detallesSolicitud.variableAdicional2} " />
-                                        <h:outputText value="#{detallesSolicitud.fechaAdicional1}" />
-                                    </p:column>
-                                </p:dataTable>
-                            </fieldset>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col form-group">
-                            <fieldset>
-                            <legend>
-                                Historial de la solicitud
-                            </legend>
-                            <p:dataTable resizableColumns="false"
-                                         emptyMessage="No hay adjuntos."
-                                         rowIndexVar="_row"
-                                         paginator="true"
-                                         rows="5"
-                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                         currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
-                                         rowsPerPageTemplate="5,10"
-                                         id="tableAdjuntos"
-                                         var="expediente"
-                                         value="#{requestManagementBean.listaExpedientes}">
+								<p:column headerText="Tipo de Copia" class="text-center"
+									width="25%">
+									<h:outputText
+										value="#{detallesSolicitud.tipo_certifica_descripcion}" />
+								</p:column>
+								<p:column headerText="Descripción" class="text-center">
+									<h:outputText escape="false"
+										value="#{utility.replaceNewLines(detallesSolicitud.observaciones)}" />
+								</p:column>
+								<p:column headerText="Acto" class="text-center" width="15%">
+									<h:outputText value="#{detallesSolicitud.variableAdicional1} " />
+									<h:outputText value="#{detallesSolicitud.variableAdicional2} " />
+									<h:outputText value="#{detallesSolicitud.fechaAdicional1}" />
+								</p:column>
+							</p:dataTable>
+						</fieldset>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col form-group">
+						<fieldset>
+							<legend> Historial de la solicitud </legend>
+							<p:dataTable resizableColumns="false"
+								emptyMessage="No hay adjuntos." rowIndexVar="_row"
+								paginator="true" rows="5"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+								rowsPerPageTemplate="5,10" id="tableAdjuntos" var="expediente"
+								value="#{requestManagementBean.listaExpedientes}">
 
-                                <p:column headerText="#" width="5%"
-                                          class="row-index" exportable="false">
-                                    <h:outputText value="#{_row + 1}" />
-                                </p:column>
-                                <p:column headerText="Año" class="text-center" width="6%">
-                                    <h:outputText value="#{expediente.anio}" />
-                                </p:column>
+								<p:column headerText="#" width="5%" class="row-index"
+									exportable="false">
+									<h:outputText value="#{_row + 1}" />
+								</p:column>
+								<p:column headerText="Año" class="text-center" width="6%">
+									<h:outputText value="#{expediente.anio}" />
+								</p:column>
 
-                                <p:column headerText="Número" class="text-center" width="9%">
-                                    <h:outputText value="#{expediente.numero}" />
-                                </p:column>
+								<p:column headerText="Número" class="text-center" width="9%">
+									<h:outputText value="#{expediente.numero}" />
+								</p:column>
 
-                                <p:column headerText="Ctrl" class="text-center" width="3%">
-                                    <h:outputText value="#{expediente.control}" />
-                                </p:column>
+								<p:column headerText="Ctrl" class="text-center" width="3%">
+									<h:outputText value="#{expediente.control}" />
+								</p:column>
 
-                                <p:column headerText="Cons Rad" class="text-center" width="8%">
-                                    <h:outputText value="#{expediente.consecutivo}" />
-                                </p:column>
+								<p:column headerText="Cons Rad" class="text-center" width="8%">
+									<h:outputText value="#{expediente.consecutivo}" />
+								</p:column>
 
-                                <p:column headerText="Evento" class="text-center" width="5%">
-                                    <h:outputText value="#{expediente.secuenciaEvento}" />
-                                </p:column>
+								<p:column headerText="Evento" class="text-center" width="5%">
+									<h:outputText value="#{expediente.secuenciaEvento}" />
+								</p:column>
 
 
-                                <p:column headerText="Trámite" class="text-center" width="17%">
-                                    <h:outputText value="#{expediente.perfil.nombreTramite}" />
-                                </p:column>
+								<p:column headerText="Trámite" class="text-center" width="17%">
+									<h:outputText value="#{expediente.perfil.nombreTramite}" />
+								</p:column>
 
-                                <p:column headerText="Evento" class="text-center" width="10%">
-                                    <h:outputText value="#{expediente.perfil.nombreEvento}" />
-                                </p:column>
+								<p:column headerText="Evento" class="text-center" width="10%">
+									<h:outputText value="#{expediente.perfil.nombreEvento}" />
+								</p:column>
 
-                                <p:column headerText="Actuación" class="text-center" width="13%">
-                                    <h:outputText value="#{expediente.perfil.nombreActuacion}" />
-                                </p:column>
+								<p:column headerText="Actuación" class="text-center" width="13%">
+									<h:outputText value="#{expediente.perfil.nombreActuacion}" />
+								</p:column>
 
-                                <p:column headerText="Tipo" class="text-center" width="5%">
-                                    <h:outputText value="#{expediente.tipoRadicacion}" />
-                                </p:column>
+								<p:column headerText="Tipo" class="text-center" width="5%">
+									<h:outputText value="#{expediente.tipoRadicacion}" />
+								</p:column>
 
-                                <p:column headerText="Fecha" class="text-center" width="15%">
-                                    <h:outputText value="#{expediente.fechaRadicacion}" />
-                                </p:column>
+								<p:column headerText="Fecha" class="text-center" width="15%">
+									<h:outputText value="#{expediente.fechaRadicacion}" />
+								</p:column>
 
-                                <p:column headerText="Adj." width="5%"
-                                          class="text-center align-middle">
+								<p:column headerText="Adj." width="5%"
+									class="text-center align-middle">
 
 
-                                    <p:commandLink ajax="false"
-                                                   styleClass="btn btn-outline-primary btn-sm btn-block border-0 no-shadow"
-                                                   title="Ver Adjuntos"
-                                                   process="@this"
-                                                   actionListener="#{requestManagementBean.setRadicado(expediente.consecutivo)}"          
-                                                   action="/view/requester/detalleadjuntosSolicitante.xhtml?faces-redirect=true">
-                                        <i class="fas fa-paperclip"></i>
-                                    </p:commandLink>
-                                </p:column>
+									<p:commandLink ajax="false"
+										styleClass="btn btn-outline-primary btn-sm btn-block border-0 no-shadow"
+										title="Ver Adjuntos" process="@this"
+										actionListener="#{requestManagementBean.setRadicado(expediente.consecutivo)}"
+										action="/view/requester/detalleadjuntosSolicitante.xhtml?faces-redirect=true">
+										<i class="fas fa-paperclip"></i>
+									</p:commandLink>
+								</p:column>
 
-                            </p:dataTable>
-                                </fieldset>
-                        </div>
+							</p:dataTable>
+						</fieldset>
+					</div>
 
-                    </div>
+				</div>
 
 
 
 
-                </h:form>
-            </ui:define>
-        </ui:composition>
-    </body>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
 </html>

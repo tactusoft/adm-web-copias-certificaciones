@@ -1,0 +1,4 @@
+<!-- src/main/webapp/WEB-INF/jboss-web.xml -->
+<jboss-web>
+    <context-root>CopiasyCertificaciones</context-root>
+</jboss-web>

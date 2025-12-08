@@ -24,6 +24,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -31,13 +32,11 @@ import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import co.gov.sic.copiasycertificaciones.dataaccess.Dal;
 import co.gov.sic.copiasycertificaciones.entities.Attachment;
@@ -58,6 +57,7 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
+import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import sic.ws.interop.api.InteropWSClient;
@@ -85,6 +85,7 @@ import sic.ws.interop.entities.response.radicacion.ResponseRadicacion;
  *
  * @author emosquera
  */
+@Named("requestManagementBean")
 @SessionScoped
 public class RequestManagementBean implements Serializable {
 
@@ -929,11 +930,61 @@ public class RequestManagementBean implements Serializable {
 	}
 
 	public String showAdjuntoENVisor() {
+		try {
+			if (tramiteSolicitud == null)
+				return "";
 
-		logger.info(String.format(Constantes.URL_VISOR, tramiteSolicitud.getAno_radi().toString(),
-				tramiteSolicitud.getNume_radi().toString(), "%20%20", tramiteSolicitud.getCons_radi().toString()));
-		return String.format(Constantes.URL_VISOR, tramiteSolicitud.getAno_radi().toString(),
-				tramiteSolicitud.getNume_radi().toString(), "%20%20", tramiteSolicitud.getCons_radi().toString());
+			String ano = String.valueOf(tramiteSolicitud.getAno_radi());
+			String nume = String.valueOf(tramiteSolicitud.getNume_radi());
+			String cons = String.valueOf(tramiteSolicitud.getCons_radi() != null ? tramiteSolicitud.getCons_radi() : 0);
+
+			String trama = obtenerTramaSoap(ano, nume, cons);
+
+			if (StringUtils.isBlank(trama))
+				return "";
+
+			return trama.trim();
+
+		} catch (Exception e) {
+			logger.error("Error construyendo URL del visor por trama SOAP", e);
+			return "";
+		}
+	}
+
+	private String obtenerTramaSoap(String anoRadi, String numeRadi, String consRadi) throws Exception {
+
+		String soapBody = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:bean=\"http://beanService/\">"
+				+ "<soapenv:Header/><soapenv:Body><bean:encrypt>" + "<anoRadi>" + anoRadi + "</anoRadi>" + "<numeRadi>"
+				+ numeRadi + "</numeRadi>" + "<contRadi></contRadi>" + "<consRadi>" + consRadi + "</consRadi>"
+				+ "<idenPers></idenPers>" + "<codiSist>Int3rOp.Int_Vis0r</codiSist>"
+				+ "</bean:encrypt></soapenv:Body></soapenv:Envelope>";
+
+		java.net.URL url = new java.net.URL(Constantes.URL_VISOR);
+		java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("POST");
+		conn.setDoOutput(true);
+		conn.setConnectTimeout(5000);
+		conn.setReadTimeout(10000);
+		conn.setRequestProperty("Content-Type", "text/xml; charset=UTF-8");
+
+		try (OutputStream os = conn.getOutputStream()) {
+			os.write(soapBody.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+		}
+
+		String response;
+		try (InputStream is = conn.getInputStream()) {
+			response = new String(is.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+		} finally {
+			conn.disconnect();
+		}
+
+		// Extraer <trama>
+		javax.xml.parsers.DocumentBuilderFactory factory = javax.xml.parsers.DocumentBuilderFactory.newInstance();
+		org.w3c.dom.Document doc = factory.newDocumentBuilder()
+				.parse(new org.xml.sax.InputSource(new java.io.StringReader(response)));
+
+		org.w3c.dom.NodeList list = doc.getElementsByTagName("trama");
+		return list.getLength() > 0 ? list.item(0).getTextContent() : "";
 	}
 
 	public void descargarAdjunto(String pathToFind, String fileName) {
@@ -952,17 +1003,17 @@ public class RequestManagementBean implements Serializable {
 	}
 
 	private ByteArrayOutputStream getFileContent(String fullFileName) throws FileNotFoundException, IOException {
-
 		byte[] buffer = new byte[4096];
-		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(fullFileName));
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-		int bytes = 0;
-		while ((bytes = bis.read(buffer, 0, buffer.length)) > 0) {
-			baos.write(buffer, 0, bytes);
+		try (FileInputStream fis = new FileInputStream(fullFileName);
+				BufferedInputStream bis = new BufferedInputStream(fis)) {
+
+			int bytes;
+			while ((bytes = bis.read(buffer, 0, buffer.length)) > 0) {
+				baos.write(buffer, 0, bytes);
+			}
 		}
-		baos.close();
-		bis.close();
 
 		return baos;
 	}
@@ -1286,11 +1337,34 @@ public class RequestManagementBean implements Serializable {
 
 		if (getTotalAttachmentSize() > Constantes.MAX_SIZE_ATTACHMENTS) {
 			this.AddErrorMessage("Error: " + event.getFile().getFileName()
-					+ " no se peude adjuntar, se ha sueperado el tamaño maximo", "msAttachments");
+					+ " no se puede adjuntar, se ha superado el tamaño máximo", "msgCotizacion");
 			return;
 		}
 
 		UploadedFile file = event.getFile();
+		String originalFileName = file.getFileName();
+
+		// Validar nombre de archivo
+		if (originalFileName == null || originalFileName.trim().isEmpty()) {
+			this.AddErrorMessage("Error: Nombre de archivo inválido", "msgCotizacion");
+			return;
+		}
+
+		// Prevenir path traversal
+		String sanitizedFileName = originalFileName.trim();
+		if (sanitizedFileName.contains("..") || sanitizedFileName.contains("/") || sanitizedFileName.contains("\\")
+				|| sanitizedFileName.contains("~")) {
+			this.AddErrorMessage("Error: Nombre de archivo contiene caracteres no permitidos", "msgCotizacion");
+			logger.warn("Intento de path traversal detectado: " + originalFileName);
+			return;
+		}
+
+		// Solo permitir caracteres seguros en el nombre
+		if (!sanitizedFileName.matches("^[a-zA-Z0-9._-]+$")) {
+			this.AddErrorMessage("Error: Nombre de archivo contiene caracteres inválidos", "msgCotizacion");
+			return;
+		}
+
 		Path targetLocation = Paths.get(directory);
 
 		try {
@@ -1298,17 +1372,31 @@ public class RequestManagementBean implements Serializable {
 				Files.createDirectories(targetLocation);
 			}
 
-			InputStream input = file.getInputStream();
-			Files.copy(input, new File(directory, file.getFileName()).toPath());
-			Attachment att = new Attachment(file.getFileName(), file.getContentType(), file.getSize(),
-					directory + file.getFileName());
+			// Normalizar y validar path final
+			Path targetFile = targetLocation.resolve(sanitizedFileName).normalize();
+
+			// Verificar que no salga del directorio permitido
+			if (!targetFile.startsWith(targetLocation.normalize())) {
+				this.AddErrorMessage("Error: Operación de archivo no permitida", "msgCotizacion");
+				logger.error("Path traversal detectado después de normalización: " + originalFileName);
+				return;
+			}
+
+			// Copiar archivo con try-with-resources para cerrar el stream
+			try (InputStream input = file.getInputStream()) {
+				Files.copy(input, targetFile, StandardCopyOption.REPLACE_EXISTING);
+			}
+
+			Attachment att = new Attachment(sanitizedFileName, file.getContentType(), file.getSize(),
+					targetFile.toString());
 
 			setTotalAttachmentSize(getTotalAttachmentSize() + att.getFileSize());
 			setTotalAttachmentSize(att.roundFileSize(getTotalAttachmentSize(), 3));
 			getListaAdjuntoCompletarSolicitud().add(att);
 
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			logger.error("handleFileUpload", e);
+			this.AddErrorMessage("Error al guardar el archivo", "msgCotizacion");
 		}
 	}
 
@@ -1435,7 +1523,8 @@ public class RequestManagementBean implements Serializable {
 									tramiteSolicitud.getIdtiposolicitud()));
 
 					fullPathRadicadoEntrada = Functions.saveFile(radiSalida, fileContent);
-					String fileName = String.format("%s.%s", radiSalida.getFullNumeroRadicacion(), Constantes.PDF_EXTENSION);
+					String fileName = String.format("%s.%s", radiSalida.getFullNumeroRadicacion(),
+							Constantes.PDF_EXTENSION);
 					String base64EncodedPdf = Base64.getEncoder().encodeToString(fileContent.toByteArray());
 					logger.info("PDF Radicacion Entrada Copias: " + fullPathRadicadoEntrada);
 					radiSalida.addAdjunto(base64EncodedPdf, fileName, true);
@@ -1450,7 +1539,7 @@ public class RequestManagementBean implements Serializable {
 							.radicacionAdjuntosRegistrar(radiSalida);
 
 					if (responseRadicacionAdjuntos.getCodigo() == 0) {
-						System.out.println(getTramiteSolicitud().getNume_radi());
+						logger.info(getTramiteSolicitud().getNume_radi().toString());
 						this.AddInfoMessage("Solicitud enviada correctamente", "msgRtaSolicitante");
 						enviarEmail(getTramiteSolicitud(), 444); // 444
 					}

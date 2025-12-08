@@ -6,7 +6,12 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class AuthenticityValidator {
+
+	protected static final Logger loggerStatic = LoggerFactory.getLogger(BeanBase.class);
 
 	public static boolean validateDocument(String originalDocumentPath, String storedHash) {
 		try {
@@ -19,23 +24,24 @@ public class AuthenticityValidator {
 			// Comparar el hash calculado con el hash almacenado
 			return storedHash.equals(calculatedHash);
 		} catch (IOException | NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			loggerStatic.error("validateDocument", e);
 			return false;
 		}
 	}
 
 	private static byte[] readFile(String filePath) throws IOException {
-		FileInputStream inputStream = new FileInputStream(filePath);
-		byte[] buffer = new byte[1024];
-		int bytesRead;
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		try (FileInputStream inputStream = new FileInputStream(filePath);
+				ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
-		while ((bytesRead = inputStream.read(buffer)) != -1) {
-			outputStream.write(buffer, 0, bytesRead);
+			byte[] buffer = new byte[1024];
+			int bytesRead;
+
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				outputStream.write(buffer, 0, bytesRead);
+			}
+
+			return outputStream.toByteArray();
 		}
-
-		inputStream.close();
-		return outputStream.toByteArray();
 	}
 
 	private static String calculateHash(byte[] data) throws NoSuchAlgorithmException {
@@ -49,18 +55,5 @@ public class AuthenticityValidator {
 		}
 
 		return hexHash.toString();
-	}
-
-	public static void main(String[] args) {
-		String originalDocumentPath = "/Users/carlossarmiento/Developer/SIC/copias/documentos/SL/Copias/PRUE23/23-000716/c0p14_23-000716- -00000-000.PDF";
-		String storedHash = "hash_almacenado_de_la_copia_autentica";
-
-		boolean isValid = validateDocument(originalDocumentPath, storedHash);
-
-		if (isValid) {
-			System.out.println("La copia es auténtica.");
-		} else {
-			System.out.println("La copia no es auténtica.");
-		}
 	}
 }
