@@ -615,6 +615,23 @@ span.form-control>input, .ui-column-filter {
     border-color: #d39e00;
 }
 
+/* Estilos para fileUpload con skinSimple - aplicación general */
+.ui-fileupload-simple .ui-fileupload-choose {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* Para fileUpload que usan Bootstrap btn-block */
+.ui-fileupload-simple.btn-block {
+    width: 100% !important;
+    display: block !important;
+}
+
+.ui-fileupload-simple.btn-block .ui-fileupload-choose {
+    width: 100% !important;
+}
+
 .btn {
     box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .475) !important;
 }
