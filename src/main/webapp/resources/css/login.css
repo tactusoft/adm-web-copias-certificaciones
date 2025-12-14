@@ -88,3 +88,21 @@
 .ui-fileupload-buttonbar {
     padding: 0em !important;
 }
+
+/* Estilos para el botón de validación de archivo */
+.fileupload-validar.ui-fileupload-simple .ui-fileupload-choose {
+    width: 100% !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.875rem !important;
+    line-height: 1.5 !important;
+    border-radius: 0.2rem !important;
+}
+
+/* Asegurar que el contenedor del fileUpload ocupe todo el ancho */
+.fileupload-validar.ui-fileupload-simple {
+    width: 100% !important;
+    display: block !important;
+}
