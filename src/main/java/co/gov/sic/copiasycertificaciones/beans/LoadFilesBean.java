@@ -255,6 +255,7 @@ public class LoadFilesBean implements Serializable {
 								logger.info("Memo: " + fullPathMemo);
 								dal.setCeslTramiteRutaMemo(tramiteDetalle.getIdtramite(), fullPathMemo);
 							}
+							listaAdjunto.clear();
 						} else {
 							logger.info("NOOOOOOOOO se cambio el estado en sistemas de copias");
 							this.AddErrorMessage(
@@ -277,6 +278,7 @@ public class LoadFilesBean implements Serializable {
 						EstadoTramite.RADICADO_FIRMA_ELECTRONICA.getValue())) {
 					if (Dal.setCeslTramiteEstadoFirmaElectronica(tramite.getIdtramite(), this.observaciones)) {
 						this.AddInfoMessage("Solicitud enviada correctamente", "mgComplementar");
+						listaAdjunto.clear();
 					}
 				}
 			} else {
@@ -409,6 +411,7 @@ public class LoadFilesBean implements Serializable {
 	public void setTramite(Cesl_tramite tramite) {
 		this.tramite = tramite;
 		this.fileContentSinFirma = null;
+		this.listaAdjunto.clear();
 		Dal Dal = new Dal();
 		try {
 			this.tramiteDetalle = Dal.getDetallesTramite(tramite.getIdtramite()).get(0);
